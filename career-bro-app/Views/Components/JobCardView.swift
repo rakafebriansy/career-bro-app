@@ -16,7 +16,7 @@ struct JobCardView: View {
             HStack {
                 Text(job.status.rawValue)
                     .font(.subheadline)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.baseWhite)
                 Spacer()
             }
             .padding(.vertical, 10)

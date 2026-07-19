@@ -16,7 +16,7 @@ struct Badge: View {
     init(
         _ text: String,
         color: Color = .blue,
-        textColor: Color = .white,
+        textColor: Color = .baseWhite,
         isOutlined: Bool = false
     ) {
         self.text = text
@@ -28,20 +28,18 @@ struct Badge: View {
     var body: some View {
         Text(text)
             .font(.system(size: 12, weight: .regular))
-            .foregroundColor(isOutlined ? color : textColor)
+            .foregroundStyle(isOutlined ? color : textColor)
             .padding(.horizontal, 10)
             .padding(.vertical, 5)
-            .background(
-                Group {
-                    if isOutlined {
-                        Capsule()
-                            .stroke(color, lineWidth: 1)
-                    } else {
-                        Capsule()
-                            .fill(color)
-                    }
+            .background {
+                if isOutlined {
+                    Capsule()
+                        .stroke(color, lineWidth: 1)
+                } else {
+                    Capsule()
+                        .fill(color)
                 }
-            )
+            }
     }
 }
 

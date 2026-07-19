@@ -16,7 +16,7 @@ enum Priority: String, Codable {
     var backgroundColor: Color {
         switch self {
         case .high:   return Color(hex: "FEE1E0")
-        case .medium: return Color(hex: "F39831")
+        case .medium: return Color(hex: "FEF5E0")
         case .low:    return Color(hex: "E6F7ED")
         }
     }

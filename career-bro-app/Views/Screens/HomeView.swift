@@ -10,60 +10,59 @@ import Charts
 
 struct HomeView: View {
     var body: some View {
-        VStack (alignment: .leading, spacing: 24) {
-            VStack (alignment: .leading) {
-                Text("Good Morning")
-                    .foregroundStyle(.baseText)
-                Text("Raka Febrian")
-                    .font(.title)
-                    .fontWeight(.semibold)
-            }
-            VStack(alignment: .leading) {
+        ScrollView {
+            VStack (alignment: .leading, spacing: 24) {
+                VStack (alignment: .leading) {
+                    Text("Good Morning")
+                        .foregroundStyle(.baseText)
+                    Text("Raka Febrian")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                }
                 Text("Journey Summary")
                     .fontWeight(.medium)
-                SummaryChartView(data: SummaryData.dummyData)
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(SummaryData.dummyData) {
-                            item in
-                            SummaryCardView(data: item)
-                        }
+                JourneySummaryView(JourneySummaryModel.dummyData)
+                HStack (alignment: .top, spacing: 12) {
+                    Image(systemName: "sparkles.2")
+                        .padding(8)
+                        .foregroundStyle(Color.baseWhite)
+                        .background(.bgPrimary)
+                        .clipShape(.circle)
+                    VStack (alignment: .leading) {
+                        Text("AI Insight")
+                            .fontWeight(.medium)
+                            .font(.callout)
+                            .foregroundStyle(.bgPrimary)
+                        Text("You’ve applied to 10 Product Designer roles. Consider expanding to UI/UX Designer opportunities")
+                            .font(.caption)
+                            .fontWeight(.light)
+                            .foregroundStyle(.bgPrimary)
                     }
                 }
-                .padding(.top, 4)
-            }
-            HStack (alignment: .top, spacing: 12) {
-                Image(systemName: "sparkles.2")
-                    .padding(8)
-                    .foregroundStyle(Color.white)
-                    .background(.bgPrimary)
-                    .clipShape(.circle)
-                VStack (alignment: .leading) {
-                    Text("AI Insight")
+                .padding(12)
+                .background(Color(hex: "EEECFE"))
+                .clipShape(
+                    RoundedRectangle(cornerRadius: 10)
+                )
+                
+                VStack{
+                    Text("Upcoming")
                         .fontWeight(.medium)
-                        .font(.callout)
-                        .foregroundStyle(.bgPrimary)
-                    Text("You’ve applied to 10 Product Designer roles. Consider expanding to UI/UX Designer opportunities")
-                        .font(.caption)
-                        .fontWeight(.light)
-                        .foregroundStyle(.bgPrimary)
+                    
                 }
-            }
-            .padding(12)
-            .background(Color(hex: "EEECFE"))
-            .clipShape(
-                RoundedRectangle(cornerRadius: 10)
-            )
-            
-            VStack{
-                Text("Upcoming")
+                ScrollView{
+                    ForEach(JobApplicationModel.dummyData[0..<3]) {
+                        jobCard in
+                        JobCardView(job: jobCard)
+                    }
+                }
+                Text("Career DNA")
                     .fontWeight(.medium)
+                CareerDNAView()
             }
-            
+            .padding(.horizontal)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        
     }
 }
 

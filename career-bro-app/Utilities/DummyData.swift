@@ -8,14 +8,14 @@
 import Foundation
 import SwiftUI
 
-extension SummaryData {
-    static var dummyData: [SummaryData] {
+extension JourneySummaryModel {
+    static var dummyData: [JourneySummaryModel] {
         return [
-            SummaryData(title: "To Apply", value: 30, color: Color(hex: "8E5CA6")), // Muted Purple
-            SummaryData(title: "Screening", value: 20, color: Color(hex: "2E9D7E")), // Mint Green
-            SummaryData(title: "Assessment", value: 25, color: Color(hex: "D9A21B")), // Mustard Yellow
-            SummaryData(title: "Interview", value: 15, color: Color(hex: "F27F1B")), // Warm Orange
-            SummaryData(title: "Offer", value: 10, color: Color(hex: "68BF30"))  // Lime Green
+            JourneySummaryModel(title: "To Apply", value: 30, color: Color(hex: "8E5CA6")), // Muted Purple
+            JourneySummaryModel(title: "Screening", value: 20, color: Color(hex: "2E9D7E")), // Mint Green
+            JourneySummaryModel(title: "Assessment", value: 25, color: Color(hex: "D9A21B")), // Mustard Yellow
+            JourneySummaryModel(title: "Interview", value: 15, color: Color(hex: "F27F1B")), // Warm Orange
+            JourneySummaryModel(title: "Offer", value: 10, color: Color(hex: "68BF30"))  // Lime Green
         ]
     }
 }
