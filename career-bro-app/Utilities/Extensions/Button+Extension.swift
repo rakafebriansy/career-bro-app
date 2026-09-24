@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func appButtonStyle(_ variant: ButtonVariant = .primary) -> some View {
+    func appButtonStyle(_ variant: ButtonVariantEnum = .primary) -> some View {
         self.buttonStyle(AppButtonStyle(variant: variant))
     }
 }

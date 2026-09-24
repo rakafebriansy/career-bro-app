@@ -1,5 +1,5 @@
 //
-//  Priority.swift
+//  PriorityEnum.swift
 //  career-bro-app
 //
 //  Created by Raka Febrian Syahputra on 12/07/26.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum Priority: String, Codable {
+enum PriorityEnum: String, Codable {
     case low = "Low"
     case medium = "Medium"
     case high = "High"

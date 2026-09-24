@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct AppButtonStyle: ButtonStyle {
-    var variant: ButtonVariant = .primary
+    var variant: ButtonVariantEnum = .primary
     
     func makeBody(configuration: Configuration) -> some View {
             HStack {

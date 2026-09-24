@@ -212,7 +212,7 @@ struct ApplicationView: View {
     private var kanbanBoardView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .top, spacing: 16) {
-                ForEach(JobStatus.allCases, id: \.self) { status in
+                ForEach(JobStatusEnum.allCases, id: \.self) { status in
                     kanbanColumn(for: status)
                 }
             }
@@ -221,7 +221,7 @@ struct ApplicationView: View {
         }
     }
     
-    private func kanbanColumn(for status: JobStatus) -> some View {
+    private func kanbanColumn(for status: JobStatusEnum) -> some View {
         let jobs = filteredJobs(for: status)
         
         return VStack(alignment: .leading, spacing: 12) {
@@ -274,7 +274,7 @@ struct ApplicationView: View {
     private var checklistView: some View {
         ScrollView(.vertical, showsIndicators: false) {
             LazyVStack(alignment: .leading, spacing: 20) {
-                ForEach(JobStatus.allCases, id: \.self) { status in
+                ForEach(JobStatusEnum.allCases, id: \.self) { status in
                     checklistSection(for: status)
                 }
             }
@@ -283,7 +283,7 @@ struct ApplicationView: View {
         }
     }
     
-    private func checklistSection(for status: JobStatus) -> some View {
+    private func checklistSection(for status: JobStatusEnum) -> some View {
         let jobs = filteredJobs(for: status)
         let isActionable = status != .offered && status != .accepted && status != .rejected && status != .ghosted
         
@@ -429,7 +429,7 @@ struct ApplicationView: View {
         }
     }
     
-    private func filteredJobs(for status: JobStatus) -> [JobApplicationModel] {
+    private func filteredJobs(for status: JobStatusEnum) -> [JobApplicationModel] {
         applications.filter { job in
             let matchesStatus = job.status == status
             if searchText.isEmpty {

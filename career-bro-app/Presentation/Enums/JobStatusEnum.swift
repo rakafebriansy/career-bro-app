@@ -1,5 +1,5 @@
 //
-//  JobStatus.swift
+//  JobStatusEnum.swift
 //  career-bro-app
 //
 //  Created by Raka Febrian Syahputra on 05/07/26.
@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum JobStatus: String, Codable, CaseIterable {
+enum JobStatusEnum: String, Codable, CaseIterable {
     case needToApply = "Need To Apply"
     case applied = "Applied"
     case assessment = "Assessment"
@@ -22,23 +22,23 @@ enum JobStatus: String, Codable, CaseIterable {
     var color: Color {
         switch self {
         case .needToApply:
-            return Color(hex: "8E5CA6") // Muted Purple (Initial planning)
+            return Color(hex: "8E5CA6")
         case .applied:
-            return Color(hex: "2E9D7E") // Mint/Teal Green (Submitted)
+            return Color(hex: "2E9D7E")
         case .assessment:
-            return Color(hex: "D9A21B") // Mustard Yellow (Test/Focus phase)
+            return Color(hex: "D9A21B")
         case .interview:
-            return Color(hex: "F27F1B") // Warm Orange (Interview phase)
+            return Color(hex: "F27F1B")
         case .postInterview:
-            return Color(hex: "FFBFF0") // Amber (After Interview phase)
+            return Color(hex: "FFBFF0")
         case .offered:
-            return Color(hex: "68BF30") // Lime Green (Good news)
+            return Color(hex: "68BF30")
         case .accepted:
-            return Color(hex: "1B8754") // Emerald Green (Job accepted)
+            return Color(hex: "1B8754")
         case .rejected:
-            return Color(hex: "D93838") // Bold Red (Rejected)
+            return Color(hex: "D93838")
         case .ghosted:
-            return Color(hex: "737373") // Slate Gray (No response)
+            return Color(hex: "737373")
         }
     }
 }

@@ -23,10 +23,10 @@ final class JobApplicationModel {
     // MARK: - Job Info
     var company: String
     var position: String
-    var workLocation: WorkLocationType
-    var employment: EmploymentType
-    var priority: Priority
-    var status: JobStatus
+    var workLocation: WorkLocationTypeEnum
+    var employment: EmploymentTypeEnum
+    var priority: PriorityEnum
+    var status: JobStatusEnum
     var salaryMin: Double?
     var salaryMax: Double?
     var currency: String = "IDR"
@@ -104,10 +104,10 @@ final class JobApplicationModel {
     init(
         company: String,
         position: String,
-        status: JobStatus,
-        workLocation: WorkLocationType,
-        employment: EmploymentType,
-        priority: Priority,
+        status: JobStatusEnum,
+        workLocation: WorkLocationTypeEnum,
+        employment: EmploymentTypeEnum,
+        priority: PriorityEnum,
         createdAt: Date = Date(),
         updatedAt: Date = Date(),
         dueDate: Date? = nil,
