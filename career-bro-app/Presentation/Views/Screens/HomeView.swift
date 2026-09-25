@@ -7,8 +7,11 @@
 
 import SwiftUI
 import Charts
+import SwiftData
 
 struct HomeView: View {
+    @Query(sort: \JobApplicationModel.createdAt, order: .reverse) private var applications: [JobApplicationModel]
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -20,9 +23,12 @@ struct HomeView: View {
                             .font(.title)
                             .fontWeight(.semibold)
                     }
+                    
                     Text("Journey Summary")
                         .fontWeight(.medium)
-                    JourneySummaryView(JourneySummaryModel.dummyData)
+                    
+                    JourneySummaryView(SwiftDataSeeder.computeJourneySummary(from: applications))
+                    
                     HStack (alignment: .top, spacing: 12) {
                         Image(systemName: "sparkles.2")
                             .padding(8)
@@ -46,19 +52,20 @@ struct HomeView: View {
                         RoundedRectangle(cornerRadius: 10)
                     )
                     
-                    VStack{
+                    VStack {
                         Text("Upcoming")
                             .fontWeight(.medium)
-                        
                     }
-                    ScrollView{
-                        ForEach(JobApplicationModel.dummyData.prefix(3)) { jobCard in
+                    
+                    ScrollView {
+                        ForEach(applications.prefix(3)) { jobCard in
                             NavigationLink(destination: ApplicationDetailView(job: jobCard)) {
                                 JobCardView(job: jobCard, showHeader: true)
                             }
                             .buttonStyle(.plain)
                         }
                     }
+                    
                     Text("Career DNA")
                         .fontWeight(.medium)
                     CareerDNAView()
@@ -72,4 +79,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .modelContainer(SwiftDataSeeder.previewContainer)
 }

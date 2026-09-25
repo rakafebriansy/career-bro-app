@@ -1,27 +1,77 @@
-//
-//  DummyData.swift
-//  career-bro-app
-//
-//  Created by Raka Febrian Syahputra on 05/07/26.
-//
-
 import Foundation
 import SwiftUI
+import SwiftData
 
-extension JourneySummaryModel {
-    static var dummyData: [JourneySummaryModel] {
+struct SwiftDataSeeder {
+    @MainActor
+    static let previewContainer: ModelContainer = {
+        do {
+            let container = try ModelContainer(
+                for: JobApplicationModel.self,
+                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+            )
+            seedIfNeeded(context: container.mainContext)
+            return container
+        } catch {
+            fatalError("Failed to initialize preview ModelContainer: \(error.localizedDescription)")
+        }
+    }()
+    
+    @MainActor
+    static func seedIfNeeded(context: ModelContext) {
+        let descriptor = FetchDescriptor<JobApplicationModel>()
+        let count = (try? context.fetchCount(descriptor)) ?? 0
+        if count == 0 {
+            for app in makeSampleApplications() {
+                context.insert(app)
+            }
+            try? context.save()
+        }
+    }
+    
+    @MainActor
+    static func resetAndReseed(context: ModelContext) {
+        let descriptor = FetchDescriptor<JobApplicationModel>()
+        if let existing = try? context.fetch(descriptor) {
+            for app in existing {
+                context.delete(app)
+            }
+            try? context.save()
+        }
+        for app in makeSampleApplications() {
+            context.insert(app)
+        }
+        try? context.save()
+    }
+    
+    @MainActor
+    static func fetchFirstSample(context: ModelContext) -> JobApplicationModel {
+        let descriptor = FetchDescriptor<JobApplicationModel>()
+        if let first = try? context.fetch(descriptor).first {
+            return first
+        }
+        let fallback = makeSampleApplications()[0]
+        context.insert(fallback)
+        return fallback
+    }
+    
+    static func computeJourneySummary(from applications: [JobApplicationModel]) -> [JourneySummaryModel] {
+        let toApplyCount = applications.filter { $0.status == .needToApply }.count
+        let appliedCount = applications.filter { $0.status == .applied }.count
+        let assessmentCount = applications.filter { $0.status == .assessment }.count
+        let interviewCount = applications.filter { $0.status == .interview || $0.status == .postInterview }.count
+        let offerCount = applications.filter { $0.status == .offered || $0.status == .accepted }.count
+        
         return [
-            JourneySummaryModel(title: "To Apply", value: 30, color: Color(hex: "8E5CA6")),
-            JourneySummaryModel(title: "Screening", value: 20, color: Color(hex: "2E9D7E")),
-            JourneySummaryModel(title: "Assessment", value: 25, color: Color(hex: "D9A21B")),
-            JourneySummaryModel(title: "Interview", value: 15, color: Color(hex: "F27F1B")),
-            JourneySummaryModel(title: "Offer", value: 10, color: Color(hex: "68BF30"))
+            JourneySummaryModel(title: "To Apply", value: toApplyCount, color: Color(hex: "8E5CA6")),
+            JourneySummaryModel(title: "Screening", value: appliedCount, color: Color(hex: "2E9D7E")),
+            JourneySummaryModel(title: "Assessment", value: assessmentCount, color: Color(hex: "D9A21B")),
+            JourneySummaryModel(title: "Interview", value: interviewCount, color: Color(hex: "F27F1B")),
+            JourneySummaryModel(title: "Offer", value: offerCount, color: Color(hex: "68BF30"))
         ]
     }
-}
-
-extension JobApplicationModel {
-    static var dummyData: [JobApplicationModel] {
+    
+    static func makeSampleApplications() -> [JobApplicationModel] {
         let now = Date()
         let calendar = Calendar.current
         
@@ -33,9 +83,9 @@ extension JobApplicationModel {
                 workLocation: .onsite,
                 employment: .fullTime,
                 priority: .low,
-                createdAt: calendar.date(byAdding: .day, value: -2, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -2, to: now)!,
-                announcementDate: calendar.date(byAdding: .day, value: 3, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -2, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -2, to: now) ?? now,
+                announcementDate: calendar.date(byAdding: .day, value: 3, to: now),
                 salaryMin: 15_000_000,
                 salaryMax: 22_000_000,
                 currency: "IDR",
@@ -69,9 +119,9 @@ extension JobApplicationModel {
                 workLocation: .hybrid,
                 employment: .fullTime,
                 priority: .high,
-                createdAt: calendar.date(byAdding: .day, value: -10, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -1, to: now)!,
-                dateInterview: calendar.date(byAdding: .day, value: 1, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -10, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -1, to: now) ?? now,
+                dateInterview: calendar.date(byAdding: .day, value: 1, to: now),
                 salaryMin: 18_000_000,
                 salaryMax: 25_000_000,
                 currency: "IDR",
@@ -104,8 +154,8 @@ extension JobApplicationModel {
                 workLocation: .remote,
                 employment: .internship,
                 priority: .medium,
-                createdAt: calendar.date(byAdding: .day, value: -14, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -2, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -14, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -2, to: now) ?? now,
                 salaryMin: 5_000_000,
                 salaryMax: 7_500_000,
                 currency: "IDR",
@@ -138,8 +188,8 @@ extension JobApplicationModel {
                 workLocation: .hybrid,
                 employment: .contract,
                 priority: .low,
-                createdAt: calendar.date(byAdding: .day, value: -20, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -5, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -20, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -5, to: now) ?? now,
                 salaryMin: 12_000_000,
                 salaryMax: 17_000_000,
                 currency: "IDR",
@@ -172,8 +222,8 @@ extension JobApplicationModel {
                 workLocation: .onsite,
                 employment: .fullTime,
                 priority: .low,
-                createdAt: calendar.date(byAdding: .day, value: -30, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -12, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -30, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -12, to: now) ?? now,
                 salaryMin: 5000,
                 salaryMax: 7500,
                 currency: "SGD",
@@ -208,7 +258,7 @@ extension JobApplicationModel {
                 priority: .low,
                 createdAt: now,
                 updatedAt: now,
-                dueDate: calendar.date(byAdding: .day, value: 5, to: now)!,
+                dueDate: calendar.date(byAdding: .day, value: 5, to: now),
                 salaryMin: 8_000_000,
                 salaryMax: 12_000_000,
                 currency: "IDR",
@@ -241,9 +291,9 @@ extension JobApplicationModel {
                 workLocation: .remote,
                 employment: .fullTime,
                 priority: .low,
-                createdAt: calendar.date(byAdding: .day, value: -15, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -3, to: now)!,
-                interviewAnnouncementDate: calendar.date(byAdding: .day, value: 7, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -15, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -3, to: now) ?? now,
+                interviewAnnouncementDate: calendar.date(byAdding: .day, value: 7, to: now),
                 salaryMin: 8000,
                 salaryMax: 11000,
                 currency: "USD",
@@ -276,9 +326,9 @@ extension JobApplicationModel {
                 workLocation: .onsite,
                 employment: .fullTime,
                 priority: .low,
-                createdAt: calendar.date(byAdding: .day, value: -1, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -1, to: now)!,
-                dateAssessment: calendar.date(byAdding: .day, value: 2, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -1, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -1, to: now) ?? now,
+                dateAssessment: calendar.date(byAdding: .day, value: 2, to: now),
                 salaryMin: 10_000_000,
                 salaryMax: 14_000_000,
                 currency: "IDR",
@@ -311,8 +361,8 @@ extension JobApplicationModel {
                 workLocation: .hybrid,
                 employment: .fullTime,
                 priority: .high,
-                createdAt: calendar.date(byAdding: .day, value: -45, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -45, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -45, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -45, to: now) ?? now,
                 salaryMin: 16_000_000,
                 salaryMax: 24_000_000,
                 currency: "IDR",
@@ -345,10 +395,10 @@ extension JobApplicationModel {
                 workLocation: .hybrid,
                 employment: .fullTime,
                 priority: .high,
-                createdAt: calendar.date(byAdding: .hour, value: -2, to: now)!,
-                updatedAt: calendar.date(byAdding: .hour, value: -2, to: now)!,
-                dueDate: calendar.date(byAdding: .day, value: 4, to: now)!,
-                dateInterview: calendar.date(byAdding: .day, value: 3, to: now)!,
+                createdAt: calendar.date(byAdding: .hour, value: -2, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .hour, value: -2, to: now) ?? now,
+                dueDate: calendar.date(byAdding: .day, value: 4, to: now),
+                dateInterview: calendar.date(byAdding: .day, value: 3, to: now),
                 salaryMin: 7_000_000,
                 salaryMax: 8_000_000,
                 currency: "IDR",
@@ -380,9 +430,9 @@ extension JobApplicationModel {
                 workLocation: .hybrid,
                 employment: .fullTime,
                 priority: .high,
-                createdAt: calendar.date(byAdding: .day, value: -1, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -1, to: now)!,
-                dueDate: calendar.date(byAdding: .day, value: 6, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -1, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -1, to: now) ?? now,
+                dueDate: calendar.date(byAdding: .day, value: 6, to: now),
                 salaryMin: 30_000_000,
                 salaryMax: 42_000_000,
                 currency: "IDR",
@@ -414,9 +464,9 @@ extension JobApplicationModel {
                 workLocation: .remote,
                 employment: .fullTime,
                 priority: .medium,
-                createdAt: calendar.date(byAdding: .day, value: -4, to: now)!,
-                updatedAt: calendar.date(byAdding: .day, value: -2, to: now)!,
-                dateAssessment: calendar.date(byAdding: .day, value: 4, to: now)!,
+                createdAt: calendar.date(byAdding: .day, value: -4, to: now) ?? now,
+                updatedAt: calendar.date(byAdding: .day, value: -2, to: now) ?? now,
+                dateAssessment: calendar.date(byAdding: .day, value: 4, to: now),
                 salaryMin: 8500,
                 salaryMax: 12000,
                 currency: "SGD",
@@ -440,9 +490,5 @@ extension JobApplicationModel {
                 ]
             )
         ]
-    }
-    
-    static var sampleDetail: JobApplicationModel {
-        return dummyData.first(where: { $0.company == "Astra International" }) ?? dummyData[0]
     }
 }

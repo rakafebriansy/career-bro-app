@@ -1,7 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct EditApplicationView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     let job: JobApplicationModel
     
     @State private var company: String
@@ -14,17 +16,25 @@ struct EditApplicationView: View {
     @State private var experience: String
     @State private var benefit: String
     
-    init(job: JobApplicationModel = JobApplicationModel.dummyData[0]) {
+    init(job: JobApplicationModel) {
         self.job = job
         _company = State(initialValue: job.company)
         _position = State(initialValue: job.position)
-        _location = State(initialValue: job.location ?? "Gading Serpong")
-        _earn = State(initialValue: "7-8M")
+        _location = State(initialValue: job.location ?? "")
+        
+        if let min = job.salaryMin, let max = job.salaryMax {
+            _earn = State(initialValue: "\(Int(min / 1_000_000))-\(Int(max / 1_000_000))M")
+        } else if let min = job.salaryMin {
+            _earn = State(initialValue: "\(Int(min / 1_000_000))M")
+        } else {
+            _earn = State(initialValue: "")
+        }
+        
         _jobType = State(initialValue: job.employment)
         _workType = State(initialValue: job.workLocation)
-        _education = State(initialValue: job.requirements?.first ?? "S1 Computer Science, Visual Communication, Art")
-        _experience = State(initialValue: job.requirements?.dropFirst().first ?? ">2 years")
-        _benefit = State(initialValue: "BPJS, THR, Tunjangan Makan")
+        _education = State(initialValue: job.requirements?.first ?? "")
+        _experience = State(initialValue: job.requirements?.dropFirst().first ?? "")
+        _benefit = State(initialValue: (job.attachments ?? []).joined(separator: ", "))
     }
     
     var body: some View {
@@ -137,12 +147,16 @@ struct EditApplicationView: View {
     private func saveChanges() {
         job.company = company
         job.position = position
-        job.location = location
+        job.location = location.isEmpty ? nil : location
         job.employment = jobType
         job.workLocation = workType
+        job.updatedAt = Date()
+        try? modelContext.save()
     }
 }
 
 #Preview {
-    EditApplicationView()
+    let sample = SwiftDataSeeder.fetchFirstSample(context: SwiftDataSeeder.previewContainer.mainContext)
+    return EditApplicationView(job: sample)
+        .modelContainer(SwiftDataSeeder.previewContainer)
 }

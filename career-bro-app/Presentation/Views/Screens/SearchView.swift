@@ -1,9 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct SearchView: View {
+    @Query(sort: \JobApplicationModel.createdAt, order: .reverse) private var applications: [JobApplicationModel]
     @State private var searchText: String = ""
     @State private var selectedStatus: JobStatusEnum? = nil
-    @State private var applications: [JobApplicationModel] = JobApplicationModel.dummyData
     
     var body: some View {
         NavigationStack {
@@ -163,4 +164,5 @@ struct SearchView: View {
 
 #Preview {
     SearchView()
+        .modelContainer(SwiftDataSeeder.previewContainer)
 }

@@ -1,8 +1,11 @@
 import SwiftUI
+import SwiftData
 
 struct ProfileView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var isNotificationEnabled: Bool = true
     @State private var showLogoutConfirmation: Bool = false
+    @State private var showResetDataConfirmation: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -25,6 +28,8 @@ struct ProfileView: View {
                             
                             settingsSection
                             
+                            dataSection
+                            
                             securitySection
                             
                             ProfileLogoutButtonView {
@@ -43,6 +48,14 @@ struct ProfileView: View {
                 Button("Logout", role: .destructive) { }
             } message: {
                 Text("Are you sure you want to log out of your account?")
+            }
+            .alert("Reset Data", isPresented: $showResetDataConfirmation) {
+                Button("Cancel", role: .cancel) { }
+                Button("Reset Data", role: .destructive) {
+                    SwiftDataSeeder.resetAndReseed(context: modelContext)
+                }
+            } message: {
+                Text("Are you sure you want to reset all data? This will clear all changes and restore the default sample applications.")
             }
         }
     }
@@ -91,6 +104,18 @@ struct ProfileView: View {
         }
     }
     
+    private var dataSection: some View {
+        ProfileMenuGroupView(title: "Data Management") {
+            ProfileMenuRowView(
+                iconName: "arrow.counterclockwise.circle",
+                title: "Reset SwiftData",
+                trailingType: .navigation
+            ) {
+                showResetDataConfirmation = true
+            }
+        }
+    }
+    
     private var securitySection: some View {
         ProfileMenuGroupView(title: "Security") {
             ProfileMenuRowView(
@@ -116,4 +141,5 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
+        .modelContainer(SwiftDataSeeder.previewContainer)
 }

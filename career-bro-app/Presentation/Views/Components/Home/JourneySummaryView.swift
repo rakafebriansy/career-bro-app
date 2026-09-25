@@ -16,11 +16,10 @@ struct JourneySummaryView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            JourneySummaryChartView(data: JourneySummaryModel.dummyData)
+            JourneySummaryChartView(data: data)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(data) {
-                        item in
+                    ForEach(data) { item in
                         JourneySummaryCardView(data: item)
                     }
                 }
@@ -63,12 +62,11 @@ struct JourneySummaryChartView: View {
     }
     
     var body: some View {
-        GeometryReader {
-            geometry in
+        GeometryReader { geometry in
             HStack (spacing: 4) {
-                ForEach(data) {
-                    item in
-                    let width = Double(item.value) / Double(totalValue) * geometry.size.width
+                ForEach(data) { item in
+                    let safeTotal = totalValue > 0 ? Double(totalValue) : 1.0
+                    let width = totalValue > 0 ? (Double(item.value) / safeTotal * geometry.size.width) : 0
                     item.color
                         .frame(width: max(0, width - 4))
                         .clipShape(.capsule)
@@ -79,7 +77,6 @@ struct JourneySummaryChartView: View {
     }
 }
 
-
 #Preview {
-    JourneySummaryView(JourneySummaryModel.dummyData)
+    JourneySummaryView(SwiftDataSeeder.computeJourneySummary(from: SwiftDataSeeder.makeSampleApplications()))
 }

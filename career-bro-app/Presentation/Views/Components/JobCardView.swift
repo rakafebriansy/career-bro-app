@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct JobCardView: View {
     let job: JobApplicationModel
@@ -186,9 +187,11 @@ struct JobCardView: View {
 }
 
 #Preview {
-    VStack(spacing: 20) {
-        JobCardView(job: JobApplicationModel.dummyData[0], showHeader: false)
-        JobCardView(job: JobApplicationModel.dummyData[0], showHeader: true)
+    let sample = SwiftDataSeeder.fetchFirstSample(context: SwiftDataSeeder.previewContainer.mainContext)
+    return VStack(spacing: 20) {
+        JobCardView(job: sample, showHeader: false)
+        JobCardView(job: sample, showHeader: true)
     }
     .padding()
+    .modelContainer(SwiftDataSeeder.previewContainer)
 }

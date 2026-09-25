@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct ApplicationView: View {
     enum ViewMode: String, CaseIterable {
@@ -6,9 +7,10 @@ struct ApplicationView: View {
         case checklist = "Checklist"
     }
     
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \JobApplicationModel.createdAt, order: .reverse) private var applications: [JobApplicationModel]
     @State private var selectedMode: ViewMode = .kanban
-    @State private var applications: [JobApplicationModel] = JobApplicationModel.dummyData
-    @State private var checkedJobIds: Set<UUID> = JobApplicationModel.dummyData.first.map { Set([$0.id]) } ?? []
+    @State private var checkedJobIds: Set<UUID> = []
     
     var body: some View {
         NavigationStack {
@@ -294,4 +296,5 @@ struct ApplicationView: View {
 
 #Preview {
     ApplicationView()
+        .modelContainer(SwiftDataSeeder.previewContainer)
 }

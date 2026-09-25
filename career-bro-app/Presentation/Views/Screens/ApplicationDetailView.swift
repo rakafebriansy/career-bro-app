@@ -6,13 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ApplicationDetailView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @State private var showDeleteConfirmation: Bool = false
     @State private var isEditingApplication: Bool = false
     
-    var job: JobApplicationModel = JobApplicationModel.sampleDetail
+    let job: JobApplicationModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -56,6 +58,8 @@ struct ApplicationDetailView: View {
         .alert("Delete Application", isPresented: $showDeleteConfirmation) {
             Button("Cancel", role: .cancel) { }
             Button("Delete", role: .destructive) {
+                modelContext.delete(job)
+                try? modelContext.save()
                 dismiss()
             }
         } message: {
@@ -184,7 +188,7 @@ struct ApplicationDetailView: View {
     
     private var moveStageButton: some View {
         Button(action: {
-            
+            advanceStage()
         }) {
             HStack(spacing: 8) {
                 Image(systemName: "arrow.right")
@@ -201,6 +205,27 @@ struct ApplicationDetailView: View {
         }
     }
     
+    private func advanceStage() {
+        switch job.status {
+        case .needToApply:
+            job.status = .applied
+        case .applied:
+            job.status = .assessment
+        case .assessment:
+            job.status = .interview
+        case .interview:
+            job.status = .postInterview
+        case .postInterview:
+            job.status = .offered
+        case .offered:
+            job.status = .accepted
+        case .accepted, .rejected, .ghosted:
+            break
+        }
+        job.updatedAt = Date()
+        try? modelContext.save()
+    }
+    
     private var nextStageTitle: String {
         switch job.status {
         case .needToApply:
@@ -210,7 +235,7 @@ struct ApplicationDetailView: View {
         case .assessment:
             return "Move Interview"
         case .interview:
-            return "Move Interview"
+            return "Move Post-Interview"
         case .postInterview:
             return "Move Offer"
         case .offered:
@@ -244,5 +269,7 @@ struct ApplicationDetailView: View {
 }
 
 #Preview {
-    ApplicationDetailView()
+    let sample = SwiftDataSeeder.fetchFirstSample(context: SwiftDataSeeder.previewContainer.mainContext)
+    return ApplicationDetailView(job: sample)
+        .modelContainer(SwiftDataSeeder.previewContainer)
 }
