@@ -10,58 +10,62 @@ import Charts
 
 struct HomeView: View {
     var body: some View {
-        ScrollView {
-            VStack (alignment: .leading, spacing: 24) {
-                VStack (alignment: .leading) {
-                    Text("Good Morning")
-                        .foregroundStyle(.baseText)
-                    Text("Raka Febrian")
-                        .font(.title)
-                        .fontWeight(.semibold)
-                }
-                Text("Journey Summary")
-                    .fontWeight(.medium)
-                JourneySummaryView(JourneySummaryModel.dummyData)
-                HStack (alignment: .top, spacing: 12) {
-                    Image(systemName: "sparkles.2")
-                        .padding(8)
-                        .foregroundStyle(Color.baseWhite)
-                        .background(.bgPrimary)
-                        .clipShape(.circle)
+        NavigationStack {
+            ScrollView {
+                VStack (alignment: .leading, spacing: 24) {
                     VStack (alignment: .leading) {
-                        Text("AI Insight")
-                            .fontWeight(.medium)
-                            .font(.callout)
-                            .foregroundStyle(.bgPrimary)
-                        Text("You’ve applied to 10 Product Designer roles. Consider expanding to UI/UX Designer opportunities")
-                            .font(.caption)
-                            .fontWeight(.light)
-                            .foregroundStyle(.bgPrimary)
+                        Text("Good Morning")
+                            .foregroundStyle(.baseText)
+                        Text("Raka Febrian")
+                            .font(.title)
+                            .fontWeight(.semibold)
                     }
-                }
-                .padding(12)
-                .background(Color(hex: "EEECFE"))
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 10)
-                )
-                
-                VStack{
-                    Text("Upcoming")
+                    Text("Journey Summary")
                         .fontWeight(.medium)
-                    
-                }
-                ScrollView{
-                    ForEach(JobApplicationModel.dummyData[0..<3]) {
-                        jobCard in
-                        JobCardView(job: jobCard)
+                    JourneySummaryView(JourneySummaryModel.dummyData)
+                    HStack (alignment: .top, spacing: 12) {
+                        Image(systemName: "sparkles.2")
+                            .padding(8)
+                            .foregroundStyle(Color.baseWhite)
+                            .background(.bgPrimary)
+                            .clipShape(.circle)
+                        VStack (alignment: .leading) {
+                            Text("AI Insight")
+                                .fontWeight(.medium)
+                                .font(.callout)
+                                .foregroundStyle(.bgPrimary)
+                            Text("You’ve applied to 10 Product Designer roles. Consider expanding to UI/UX Designer opportunities")
+                                .font(.caption)
+                                .fontWeight(.light)
+                                .foregroundStyle(.bgPrimary)
+                        }
                     }
+                    .padding(12)
+                    .background(Color(hex: "EEECFE"))
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 10)
+                    )
+                    
+                    VStack{
+                        Text("Upcoming")
+                            .fontWeight(.medium)
+                        
+                    }
+                    ScrollView{
+                        ForEach(JobApplicationModel.dummyData.prefix(3)) { jobCard in
+                            NavigationLink(destination: ApplicationDetailView(job: jobCard)) {
+                                JobCardView(job: jobCard, showHeader: true)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    Text("Career DNA")
+                        .fontWeight(.medium)
+                    CareerDNAView()
                 }
-                Text("Career DNA")
-                    .fontWeight(.medium)
-                CareerDNAView()
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
-            .padding(.horizontal)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
     }
 }

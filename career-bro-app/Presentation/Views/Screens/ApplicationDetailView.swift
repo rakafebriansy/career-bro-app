@@ -1,0 +1,248 @@
+//
+//  ApplicationDetailView.swift
+//  career-bro-app
+//
+//  Created by Raka Febrian Syahputra on 24/09/26.
+//
+
+import SwiftUI
+
+struct ApplicationDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var showDeleteConfirmation: Bool = false
+    @State private var isEditingApplication: Bool = false
+    
+    var job: JobApplicationModel = JobApplicationModel.sampleDetail
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            topNavigationBar
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 18) {
+                    ApplicationTimelineStepperView(status: job.status)
+                        .padding(.top, 8)
+                    
+                    JobOverviewCardView(job: job)
+                    
+                    if let deadlineInfo = job.deadlineInfo {
+                        JobDeadlineBannerView(deadlineInfo: deadlineInfo)
+                    }
+                    
+                    jobInformationSection
+                    
+                    if let suggestion = job.aiSuggestion {
+                        AISuggestionCardView(
+                            title: "AI Suggestion",
+                            message: suggestion
+                        )
+                    }
+                    
+                    attachmentSection
+                    
+                    moveStageButton
+                        .padding(.top, 10)
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 32)
+            }
+        }
+        .background(Color(.systemGroupedBackground).opacity(0.15))
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .tabBar)
+        .sheet(isPresented: $isEditingApplication) {
+            EditApplicationView(job: job)
+        }
+        .alert("Delete Application", isPresented: $showDeleteConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
+                dismiss()
+            }
+        } message: {
+            Text("Are you sure you want to delete this job application? This action cannot be undone.")
+        }
+    }
+    
+    private var topNavigationBar: some View {
+        HStack {
+            Button(action: {
+                dismiss()
+            }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color.black)
+                    .frame(width: 38, height: 38)
+                    .background(Color(.systemBackground))
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(Color.baseStroke, lineWidth: 1)
+                    )
+            }
+            
+            Spacer()
+            
+            Text("Application Detail")
+                .font(.system(size: 17, weight: .bold))
+                .foregroundStyle(Color.black)
+            
+            Spacer()
+            
+            Menu {
+                Button {
+                    isEditingApplication = true
+                } label: {
+                    Label("Edit Application", systemImage: "pencil")
+                }
+                
+                Divider()
+                
+                Button(role: .destructive) {
+                    showDeleteConfirmation = true
+                } label: {
+                    Label("Delete Application", systemImage: "trash")
+                }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color.black)
+                    .frame(width: 38, height: 38)
+                    .background(Color(.systemBackground))
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(Color.baseStroke, lineWidth: 1)
+                    )
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+    }
+    
+    private var jobInformationSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Job Information")
+                .font(.system(size: 17, weight: .bold))
+                .foregroundStyle(Color.black)
+            
+            VStack(alignment: .leading, spacing: 10) {
+                JobInfoRowView(icon: "briefcase", text: job.employment.rawValue)
+                JobInfoRowView(icon: "laptopcomputer", text: job.workLocation.rawValue)
+                
+                if let location = job.location {
+                    JobInfoRowView(icon: "laptopcomputer", text: location)
+                }
+                
+                if let requirements = job.requirements {
+                    ForEach(requirements.filter { !isDuplicateWorkLocation($0) }, id: \.self) { req in
+                        JobInfoRowView(icon: iconForRequirement(req), text: req)
+                    }
+                }
+            }
+            .padding(.top, 2)
+            
+            if let description = job.jobDescription {
+                Text(description)
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundStyle(Color.black.opacity(0.65))
+                    .lineSpacing(3)
+                    .padding(.top, 4)
+            }
+            
+            if let keywords = job.keywords, !keywords.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Key Word :")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(Color.black)
+                    
+                    KeywordChipsFlowView(keywords: keywords)
+                }
+                .padding(.top, 4)
+            }
+        }
+    }
+    
+    private var attachmentSection: some View {
+        let attachmentsList = [job.jobUrl].compactMap { $0 } + (job.attachments ?? [])
+        
+        return Group {
+            if !attachmentsList.isEmpty {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Attachment")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundStyle(Color.black)
+                    
+                    VStack(spacing: 8) {
+                        ForEach(attachmentsList, id: \.self) { item in
+                            AttachmentRowView(title: item)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private var moveStageButton: some View {
+        Button(action: {
+            
+        }) {
+            HStack(spacing: 8) {
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 16, weight: .semibold))
+                Text(nextStageTitle)
+                    .font(.system(size: 16, weight: .semibold))
+            }
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color.blue)
+            .clipShape(Capsule())
+            .shadow(color: Color.blue.opacity(0.25), radius: 6, y: 3)
+        }
+    }
+    
+    private var nextStageTitle: String {
+        switch job.status {
+        case .needToApply:
+            return "Move Applied"
+        case .applied:
+            return "Move Assessment"
+        case .assessment:
+            return "Move Interview"
+        case .interview:
+            return "Move Interview"
+        case .postInterview:
+            return "Move Offer"
+        case .offered:
+            return "Accept Offer"
+        case .accepted:
+            return "Completed"
+        case .rejected, .ghosted:
+            return "Archive"
+        }
+    }
+    
+    private func isDuplicateWorkLocation(_ req: String) -> Bool {
+        req.caseInsensitiveCompare(job.employment.rawValue) == .orderedSame ||
+        req.caseInsensitiveCompare(job.workLocation.rawValue) == .orderedSame
+    }
+    
+    private func iconForRequirement(_ req: String) -> String {
+        let lower = req.lowercased()
+        if lower.contains("s1") || lower.contains("degree") || lower.contains("bachelor") || lower.contains("art") || lower.contains("computer") {
+            return "graduationcap"
+        } else if lower.contains("year") || lower.contains("exp") {
+            return "clock"
+        } else if lower.contains("cv") || lower.contains("portfolio") || lower.contains("resume") {
+            return "doc.text"
+        } else if lower.contains("hybrid") || lower.contains("remote") || lower.contains("onsite") {
+            return "laptopcomputer"
+        } else {
+            return "checkmark.circle"
+        }
+    }
+}
+
+#Preview {
+    ApplicationDetailView()
+}

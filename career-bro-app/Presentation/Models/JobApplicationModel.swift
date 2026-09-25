@@ -27,9 +27,16 @@ final class JobApplicationModel {
     var employment: EmploymentTypeEnum
     var priority: PriorityEnum
     var status: JobStatusEnum
+    var location: String?
     var salaryMin: Double?
     var salaryMax: Double?
     var currency: String = "IDR"
+    var jobDescription: String?
+    var requirements: [String]?
+    var keywords: [String]?
+    var aiSuggestion: String?
+    var jobUrl: String?
+    var attachments: [String]?
     
     // MARK: - Explicit Flow Timelines
     var createdAt: Date
@@ -117,7 +124,14 @@ final class JobApplicationModel {
         interviewAnnouncementDate: Date? = nil,
         salaryMin: Double? = nil,
         salaryMax: Double? = nil,
-        currency: String = "IDR"
+        currency: String = "IDR",
+        location: String? = nil,
+        jobDescription: String? = nil,
+        requirements: [String]? = nil,
+        keywords: [String]? = nil,
+        aiSuggestion: String? = nil,
+        jobUrl: String? = nil,
+        attachments: [String]? = nil
     ) {
         self.id = UUID()
         self.company = company
@@ -136,5 +150,12 @@ final class JobApplicationModel {
         self.salaryMin = salaryMin
         self.salaryMax = salaryMax
         self.currency = currency
+        self.location = location
+        self.jobDescription = jobDescription
+        self.requirements = requirements
+        self.keywords = keywords
+        self.aiSuggestion = aiSuggestion
+        self.jobUrl = jobUrl
+        self.attachments = attachments
     }
 }
