@@ -68,7 +68,7 @@ struct HomeView: View {
                     
                     Text("Career DNA")
                         .fontWeight(.medium)
-                    CareerDNAView()
+                    CareerDNAStatsView()
                 }
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

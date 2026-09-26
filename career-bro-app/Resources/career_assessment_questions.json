@@ -1,0 +1,127 @@
+[
+  {
+    "id": 1,
+    "question": "Do you enjoy working in a collaborative team environment?",
+    "category": "Work Style"
+  },
+  {
+    "id": 2,
+    "question": "Do you prefer structured tasks over open-ended problem solving?",
+    "category": "Work Style"
+  },
+  {
+    "id": 3,
+    "question": "Are you energized by presenting ideas to large groups of people?",
+    "category": "Interests"
+  },
+  {
+    "id": 4,
+    "question": "Do you find deep analytical data investigation fulfilling?",
+    "category": "Strengths"
+  },
+  {
+    "id": 5,
+    "question": "Do you adapt quickly when project priorities change unexpectedly?",
+    "category": "Work Style"
+  },
+  {
+    "id": 6,
+    "question": "Is continuous learning and skill acquisition a core motivator for you?",
+    "category": "Experiences"
+  },
+  {
+    "id": 7,
+    "question": "Do you prefer leading projects and coordinating team members?",
+    "category": "Strengths"
+  },
+  {
+    "id": 8,
+    "question": "Do you thrive when tackling complex technical or logical puzzles?",
+    "category": "Interests"
+  },
+  {
+    "id": 9,
+    "question": "Are you comfortable making critical decisions with incomplete information?",
+    "category": "Strengths"
+  },
+  {
+    "id": 10,
+    "question": "Do you enjoy crafting creative visual concepts and designs?",
+    "category": "Interests"
+  },
+  {
+    "id": 11,
+    "question": "Do you prefer focused individual deep-work over frequent meetings?",
+    "category": "Work Style"
+  },
+  {
+    "id": 12,
+    "question": "Do you enjoy mentoring junior peers and sharing knowledge?",
+    "category": "Experiences"
+  },
+  {
+    "id": 13,
+    "question": "Are you motivated by fast-paced startup atmospheres with tight deadlines?",
+    "category": "Work Style"
+  },
+  {
+    "id": 14,
+    "question": "Do you excel at organizing documentation and standard operating procedures?",
+    "category": "Strengths"
+  },
+  {
+    "id": 15,
+    "question": "Do you prefer customer-facing interactions over backend operational tasks?",
+    "category": "Interests"
+  },
+  {
+    "id": 16,
+    "question": "Do you find satisfaction in optimizing workflows to improve efficiency?",
+    "category": "Strengths"
+  },
+  {
+    "id": 17,
+    "question": "Are you passionate about leveraging emerging technologies like AI tools?",
+    "category": "Interests"
+  },
+  {
+    "id": 18,
+    "question": "Do you perform best when given autonomous ownership of your deliverables?",
+    "category": "Work Style"
+  },
+  {
+    "id": 19,
+    "question": "Do you actively seek constructive feedback to improve your craft?",
+    "category": "Experiences"
+  },
+  {
+    "id": 20,
+    "question": "Are you comfortable negotiating requirements with cross-functional stakeholders?",
+    "category": "Strengths"
+  },
+  {
+    "id": 21,
+    "question": "Do you enjoy experimenting with unproven methodologies to find breakthroughs?",
+    "category": "Interests"
+  },
+  {
+    "id": 22,
+    "question": "Do you prioritize accuracy and detail orientation over rapid speed?",
+    "category": "Work Style"
+  },
+  {
+    "id": 23,
+    "question": "Are you energized by resolving conflicts and building team consensus?",
+    "category": "Strengths"
+  },
+  {
+    "id": 24,
+    "question": "Do you envision your career path transitioning into product leadership?",
+    "category": "Experiences"
+  },
+  {
+    "id": 25,
+    "question": "Do you find purpose in creating products with direct positive social impact?",
+    "category": "Interests"
+  }
+]

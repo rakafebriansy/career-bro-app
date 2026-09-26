@@ -1,10 +1,3 @@
-//
-//  ApplicationDetailView.swift
-//  career-bro-app
-//
-//  Created by Raka Febrian Syahputra on 24/09/26.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -42,7 +35,7 @@ struct ApplicationDetailView: View {
                     
                     attachmentSection
                     
-                    moveStageButton
+                    stageActionSection
                         .padding(.top, 10)
                 }
                 .padding(.horizontal, 16)
@@ -97,6 +90,25 @@ struct ApplicationDetailView: View {
                     isEditingApplication = true
                 } label: {
                     Label("Edit Application", systemImage: "pencil")
+                }
+                
+                Menu {
+                    Section("Active Pipeline") {
+                        statusMenuItem(for: .needToApply)
+                        statusMenuItem(for: .applied)
+                        statusMenuItem(for: .assessment)
+                        statusMenuItem(for: .interview)
+                        statusMenuItem(for: .postInterview)
+                    }
+                    
+                    Section("Outcomes & Decisions") {
+                        statusMenuItem(for: .offered)
+                        statusMenuItem(for: .accepted)
+                        statusMenuItem(for: .rejected)
+                        statusMenuItem(for: .ghosted)
+                    }
+                } label: {
+                    Label("Change Stage", systemImage: "arrow.left.arrow.right")
                 }
                 
                 Divider()
@@ -186,44 +198,107 @@ struct ApplicationDetailView: View {
         }
     }
     
-    private var moveStageButton: some View {
-        Button(action: {
-            advanceStage()
-        }) {
-            HStack(spacing: 8) {
-                Image(systemName: "arrow.right")
-                    .font(.system(size: 16, weight: .semibold))
-                Text(nextStageTitle)
-                    .font(.system(size: 16, weight: .semibold))
+    private var stageActionSection: some View {
+        HStack(spacing: 12) {
+            Menu {
+                Section("Active Pipeline") {
+                    statusMenuItem(for: .needToApply)
+                    statusMenuItem(for: .applied)
+                    statusMenuItem(for: .assessment)
+                    statusMenuItem(for: .interview)
+                    statusMenuItem(for: .postInterview)
+                }
+                
+                Section("Outcomes & Decisions") {
+                    statusMenuItem(for: .offered)
+                    statusMenuItem(for: .accepted)
+                    statusMenuItem(for: .rejected)
+                    statusMenuItem(for: .ghosted)
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "arrow.left.arrow.right")
+                        .font(.system(size: 13, weight: .semibold))
+                    Text("Change Stage")
+                        .font(.system(size: 14, weight: .semibold))
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 11, weight: .medium))
+                }
+                .foregroundStyle(Color.blue)
+                .padding(.horizontal, 14)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(Color.blue.opacity(0.08))
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule()
+                        .stroke(Color.blue.opacity(0.25), lineWidth: 1)
+                )
             }
-            .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color.blue)
-            .clipShape(Capsule())
-            .shadow(color: Color.blue.opacity(0.25), radius: 6, y: 3)
+            
+            Button(action: {
+                advanceStage()
+            }) {
+                HStack(spacing: 8) {
+                    Text(nextStageTitle)
+                        .font(.system(size: 15, weight: .semibold))
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 14, weight: .semibold))
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(isAtFinalStage ? Color.gray.opacity(0.6) : Color.blue)
+                .clipShape(Capsule())
+                .shadow(color: isAtFinalStage ? Color.clear : Color.blue.opacity(0.25), radius: 6, y: 3)
+            }
+            .disabled(isAtFinalStage)
+        }
+    }
+    
+    @ViewBuilder
+    private func statusMenuItem(for status: JobStatusEnum) -> some View {
+        Button {
+            setStage(status)
+        } label: {
+            HStack {
+                Text(status.rawValue)
+                if job.status == status {
+                    Image(systemName: "checkmark")
+                }
+            }
+        }
+    }
+    
+    private func setStage(_ newStatus: JobStatusEnum) {
+        withAnimation(.easeInOut(duration: 0.25)) {
+            job.status = newStatus
+            job.updatedAt = Date()
+            try? modelContext.save()
         }
     }
     
     private func advanceStage() {
         switch job.status {
         case .needToApply:
-            job.status = .applied
+            setStage(.applied)
         case .applied:
-            job.status = .assessment
+            setStage(.assessment)
         case .assessment:
-            job.status = .interview
+            setStage(.interview)
         case .interview:
-            job.status = .postInterview
+            setStage(.postInterview)
         case .postInterview:
-            job.status = .offered
+            setStage(.offered)
         case .offered:
-            job.status = .accepted
+            setStage(.accepted)
         case .accepted, .rejected, .ghosted:
             break
         }
-        job.updatedAt = Date()
-        try? modelContext.save()
+    }
+    
+    private var isAtFinalStage: Bool {
+        job.status == .accepted || job.status == .rejected || job.status == .ghosted
     }
     
     private var nextStageTitle: String {

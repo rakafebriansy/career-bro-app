@@ -15,6 +15,10 @@ struct ContentView: View {
                 SearchView()
             }
             
+            Tab("Career DNA", systemImage: "map") {
+                CareerDNAView()
+            }
+            
             Tab("Profile", systemImage: "person") {
                 ProfileView()
             }

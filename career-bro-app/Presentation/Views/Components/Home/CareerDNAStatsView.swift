@@ -1,13 +1,6 @@
-//
-//  CareerDNAView.swift
-//  career-bro-app
-//
-//  Created by Raka Febrian Syahputra on 19/07/26.
-//
-
 import SwiftUI
 
-struct CareerDNAView: View {
+struct CareerDNAStatsView: View {
     var body: some View {
         VStack (alignment: .leading, spacing: 0) {
             HStack {
@@ -90,7 +83,8 @@ struct CareerDNAView: View {
                             .font(.subheadline)
                     }
                     Spacer()
-                    Badge("96%", color: Color(hex: "E0F2FE"), textColor: .bgPrimary)                }
+                    Badge("96%", color: Color(hex: "E0F2FE"), textColor: .bgPrimary)
+                }
             }
             .padding()
             Rectangle()
@@ -99,7 +93,6 @@ struct CareerDNAView: View {
             CareerMilestoneView()
                 .padding()
             Button("View Full") {
-                //TODO: navigate into career dna
             }
             .appButtonStyle()
             .padding(.horizontal)
@@ -168,5 +161,5 @@ struct CareerMilestoneNodeView: View {
 }
 
 #Preview {
-    CareerDNAView()
+    CareerDNAStatsView()
 }
