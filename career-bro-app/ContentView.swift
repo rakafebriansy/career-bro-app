@@ -1,3 +1,10 @@
+//
+//  ContentView.swift
+//  career-bro-app
+//
+//  Created by Raka Febrian Syahputra on 28/09/26.
+//
+
 import SwiftUI
 
 struct ContentView: View {
@@ -11,8 +18,8 @@ struct ContentView: View {
                 ApplicationView()
             }
             
-            Tab(role: .search) {
-                SearchView()
+            Tab("Robo", systemImage: "sparkles") {
+                RoboChatView()
             }
             
             Tab("Career DNA", systemImage: "map") {
