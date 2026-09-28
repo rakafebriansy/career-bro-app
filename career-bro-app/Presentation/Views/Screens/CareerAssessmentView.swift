@@ -7,7 +7,8 @@ struct CareerAssessmentView: View {
     
     @State private var currentStageIndex: Int = 0
     @State private var answers: [Int: Int] = [:]
-    @State private var showExitAlert: Bool = false
+    @State private var showValidationErrors: Bool = false
+    @State private var navigateToResult: Bool = false
     
     private struct AssessmentStage: Identifiable {
         let id: String
@@ -83,8 +84,10 @@ struct CareerAssessmentView: View {
                             )
                             
                             VStack(spacing: 16) {
+                                let previousQuestionsCount = stages.prefix(currentStageIndex).reduce(0) { $0 + $1.questions.count }
+                                
                                 ForEach(Array(stage.questions.enumerated()), id: \.element.id) { qIndex, questionItem in
-                                    let globalNumber = (questions.firstIndex(where: { $0.id == questionItem.id }) ?? qIndex) + 1
+                                    let continuousNumber = previousQuestionsCount + qIndex + 1
                                     let binding = Binding<Int?>(
                                         get: { answers[questionItem.id] },
                                         set: { newValue in
@@ -97,10 +100,12 @@ struct CareerAssessmentView: View {
                                     )
                                     
                                     CareerAssessmentQuestionItemView(
-                                        questionNumber: globalNumber,
+                                        questionNumber: continuousNumber,
                                         question: questionItem.question,
+                                        showError: showValidationErrors && answers[questionItem.id] == nil,
                                         selectedScore: binding
                                     )
+                                    .id("question_\(questionItem.id)")
                                 }
                             }
                         }
@@ -115,24 +120,12 @@ struct CareerAssessmentView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .alert("Exit Assessment?", isPresented: $showExitAlert) {
-            Button("Keep Going", role: .cancel) {}
-            Button("Exit", role: .destructive) {
-                dismiss()
-            }
-        } message: {
-            Text("Your assessment progress will be lost if you leave now.")
-        }
     }
     
     private var topNavigationBar: some View {
         HStack {
             Button {
-                if !answers.isEmpty {
-                    showExitAlert = true
-                } else {
-                    dismiss()
-                }
+                dismiss()
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.body)
@@ -164,15 +157,16 @@ struct CareerAssessmentView: View {
     
     private func bottomActionsView(proxy: ScrollViewProxy) -> some View {
         let isLastStage = currentStageIndex >= stages.count - 1
-        let backTitle = currentStageIndex > 0 ? "Previous" : "Exit"
         let nextTitle = isLastStage ? "See Results" : "Next Stage"
         let nextIcon = isLastStage ? "sparkles" : "arrow.right"
         
         return CareerAssessmentBottomActionBarView(
-            backTitle: backTitle,
+            showBackButton: currentStageIndex > 0,
+            backTitle: "Previous",
             nextTitle: nextTitle,
             nextIcon: nextIcon,
             onBack: {
+                showValidationErrors = false
                 if currentStageIndex > 0 {
                     withAnimation(.easeInOut(duration: 0.25)) {
                         currentStageIndex -= 1
@@ -180,31 +174,50 @@ struct CareerAssessmentView: View {
                     withAnimation {
                         proxy.scrollTo("stage_top", anchor: .top)
                     }
-                } else {
-                    if !answers.isEmpty {
-                        showExitAlert = true
-                    } else {
-                        dismiss()
-                    }
                 }
             },
             onNext: {
-                if !isLastStage {
+                guard let stage = currentStage else { return }
+                let unanswered = stage.questions.filter { answers[$0.id] == nil }
+                
+                if let firstUnanswered = unanswered.first {
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.prepare()
+                    generator.notificationOccurred(.error)
+                    
                     withAnimation(.easeInOut(duration: 0.25)) {
-                        currentStageIndex += 1
+                        showValidationErrors = true
                     }
-                    withAnimation {
-                        proxy.scrollTo("stage_top", anchor: .top)
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        proxy.scrollTo("question_\(firstUnanswered.id)", anchor: .center)
                     }
                 } else {
-                    dismiss()
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.prepare()
+                    generator.impactOccurred()
+                    
+                    showValidationErrors = false
+                    if !isLastStage {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            currentStageIndex += 1
+                        }
+                        withAnimation {
+                            proxy.scrollTo("stage_top", anchor: .top)
+                        }
+                    } else {
+                        navigateToResult = true
+                    }
                 }
             }
         )
+        .navigationDestination(isPresented: $navigateToResult) {
+            CareerAssessmentResultView()
+        }
     }
 }
 
 #Preview {
     CareerAssessmentView()
 }
+
 

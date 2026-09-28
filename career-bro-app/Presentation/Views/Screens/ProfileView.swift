@@ -3,9 +3,14 @@ import SwiftData
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
+    @State private var profileName: String = "Raka Febrian"
+    @State private var profileEmail: String = "rakafebrian@mail.com"
     @State private var isNotificationEnabled: Bool = true
     @State private var showLogoutConfirmation: Bool = false
     @State private var showResetDataConfirmation: Bool = false
+    @State private var navigateToManageToken: Bool = false
+    @State private var navigateToEmailCenter: Bool = false
+    @State private var navigateToEditProfile: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -20,9 +25,10 @@ struct ProfileView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 24) {
                             ProfileHeaderCardView(
-                                name: "Raka Febrian",
-                                email: "wildanajii@gmail.com",
+                                name: profileName,
+                                email: profileEmail,
                                 onEditTapped: {
+                                    navigateToEditProfile = true
                                 }
                             )
                             
@@ -57,6 +63,18 @@ struct ProfileView: View {
             } message: {
                 Text("Are you sure you want to reset all data? This will clear all changes and restore the default sample applications.")
             }
+            .navigationDestination(isPresented: $navigateToManageToken) {
+                ManageTokenView()
+            }
+            .navigationDestination(isPresented: $navigateToEmailCenter) {
+                EmailCenterView()
+            }
+            .navigationDestination(isPresented: $navigateToEditProfile) {
+                EditProfileView(name: profileName, email: profileEmail) { updatedName, updatedEmail in
+                    profileName = updatedName
+                    profileEmail = updatedEmail
+                }
+            }
         }
     }
     
@@ -79,6 +97,7 @@ struct ProfileView: View {
                 title: "Manage Token",
                 trailingType: .navigation
             ) {
+                navigateToManageToken = true
             }
             
             Divider()
@@ -90,6 +109,7 @@ struct ProfileView: View {
                 title: "Email Center",
                 trailingType: .navigation
             ) {
+                navigateToEmailCenter = true
             }
             
             Divider()

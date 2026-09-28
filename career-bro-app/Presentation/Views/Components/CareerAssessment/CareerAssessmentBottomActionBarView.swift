@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CareerAssessmentBottomActionBarView: View {
+    var showBackButton: Bool = true
     var backTitle: String = "Back"
     var nextTitle: String = "Next"
     var nextIcon: String = "arrow.right"
@@ -10,23 +11,25 @@ struct CareerAssessmentBottomActionBarView: View {
     
     var body: some View {
         HStack(spacing: 14) {
-            Button {
-                onBack()
-            } label: {
-                Text(backTitle)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundStyle(Color.bgPrimary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 48)
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 99))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 99)
-                            .stroke(Color.bgPrimary, lineWidth: 1.5)
-                    )
+            if showBackButton {
+                Button {
+                    onBack()
+                } label: {
+                    Text(backTitle)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.bgPrimary)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 48)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 99))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 99)
+                                .stroke(Color.bgPrimary, lineWidth: 1.5)
+                        )
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
             
             Button {
                 if !isNextDisabled {
@@ -55,12 +58,21 @@ struct CareerAssessmentBottomActionBarView: View {
 }
 
 #Preview {
-    CareerAssessmentBottomActionBarView(
-        backTitle: "Previous",
-        nextTitle: "Next Stage",
-        onBack: {},
-        onNext: {}
-    )
+    VStack(spacing: 16) {
+        CareerAssessmentBottomActionBarView(
+            showBackButton: false,
+            nextTitle: "Next Stage",
+            onBack: {},
+            onNext: {}
+        )
+        CareerAssessmentBottomActionBarView(
+            showBackButton: true,
+            backTitle: "Previous",
+            nextTitle: "Next Stage",
+            onBack: {},
+            onNext: {}
+        )
+    }
     .padding()
 }
 

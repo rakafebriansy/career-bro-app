@@ -3,6 +3,7 @@ import SwiftUI
 struct CareerAssessmentQuestionItemView: View {
     var questionNumber: Int = 1
     let question: String
+    var showError: Bool = false
     @Binding var selectedScore: Int?
     
     private let circleSizes: [CGFloat] = [38, 30, 24, 18, 24, 30, 38]
@@ -11,16 +12,20 @@ struct CareerAssessmentQuestionItemView: View {
         selectedScore != nil
     }
     
+    private var isErrorState: Bool {
+        showError && !isAnswered
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .center) {
                 Text(String(format: "%02d", questionNumber))
                     .font(.caption)
                     .fontWeight(.bold)
-                    .foregroundStyle(isAnswered ? Color.bgPrimary : Color.baseText)
+                    .foregroundStyle(numberBadgeTextColor)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(isAnswered ? Color(hex: "#EEECFE") : Color(hex: "#F1F5F9"))
+                    .background(numberBadgeBgColor)
                     .clipShape(Capsule())
                 
                 Spacer()
@@ -29,12 +34,24 @@ struct CareerAssessmentQuestionItemView: View {
                     HStack(spacing: 4) {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.caption)
-                            .foregroundStyle(Color.bgPrimary)
+                            .foregroundStyle(Color(hex: "#16A34A"))
                         
                         Text("Answered")
                             .font(.caption2)
                             .fontWeight(.medium)
-                            .foregroundStyle(Color.bgPrimary)
+                            .foregroundStyle(Color(hex: "#16A34A"))
+                    }
+                    .transition(.opacity.combined(with: .scale))
+                } else if isErrorState {
+                    HStack(spacing: 4) {
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .font(.caption)
+                            .foregroundStyle(Color(hex: "#EF4444"))
+                        
+                        Text("Required")
+                            .font(.caption2)
+                            .fontWeight(.medium)
+                            .foregroundStyle(Color(hex: "#EF4444"))
                     }
                     .transition(.opacity.combined(with: .scale))
                 }
@@ -94,16 +111,60 @@ struct CareerAssessmentQuestionItemView: View {
             .padding(.top, 4)
         }
         .padding(16)
-        .background(Color.white)
+        .background(cardBackgroundColor)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .stroke(
-                    isAnswered ? Color.bgPrimary.opacity(0.35) : Color.baseStroke,
-                    lineWidth: isAnswered ? 1.5 : 1
-                )
+                .stroke(cardStrokeColor, lineWidth: cardStrokeWidth)
         )
         .animation(.easeInOut(duration: 0.2), value: isAnswered)
+        .animation(.easeInOut(duration: 0.2), value: isErrorState)
+    }
+    
+    private var numberBadgeTextColor: Color {
+        if isErrorState {
+            return Color(hex: "#DC2626")
+        } else if isAnswered {
+            return Color.bgPrimary
+        } else {
+            return Color.baseText
+        }
+    }
+    
+    private var numberBadgeBgColor: Color {
+        if isErrorState {
+            return Color(hex: "#FEE2E2")
+        } else if isAnswered {
+            return Color(hex: "#EEECFE")
+        } else {
+            return Color(hex: "#F1F5F9")
+        }
+    }
+    
+    private var cardBackgroundColor: Color {
+        if isErrorState {
+            return Color(hex: "#FEF2F2")
+        } else {
+            return Color.white
+        }
+    }
+    
+    private var cardStrokeColor: Color {
+        if isErrorState {
+            return Color(hex: "#EF4444")
+        } else if isAnswered {
+            return Color.bgPrimary.opacity(0.35)
+        } else {
+            return Color.baseStroke
+        }
+    }
+    
+    private var cardStrokeWidth: CGFloat {
+        if isErrorState || isAnswered {
+            return 1.5
+        } else {
+            return 1
+        }
     }
     
     @ViewBuilder
@@ -133,7 +194,10 @@ struct CareerAssessmentQuestionItemView: View {
                     .frame(width: size, height: size)
                     .overlay(
                         Circle()
-                            .stroke(Color(hex: "#D1D5DB"), lineWidth: 1.5)
+                            .stroke(
+                                isErrorState ? Color(hex: "#FCA5A5") : Color(hex: "#D1D5DB"),
+                                lineWidth: 1.5
+                            )
                     )
             }
         }
@@ -142,19 +206,26 @@ struct CareerAssessmentQuestionItemView: View {
 }
 
 #Preview {
-    PreviewWrapper()
+    VStack(spacing: 16) {
+        PreviewWrapper(score: 2, showError: false)
+        PreviewWrapper(score: nil, showError: true)
+        PreviewWrapper(score: nil, showError: false)
+    }
+    .padding()
 }
 
 private struct PreviewWrapper: View {
-    @State private var score: Int? = 0
+    @State var score: Int?
+    var showError: Bool = false
     
     var body: some View {
         CareerAssessmentQuestionItemView(
             questionNumber: 1,
             question: "Do you enjoy working in a collaborative team environment?",
+            showError: showError,
             selectedScore: $score
         )
-        .padding()
     }
 }
+
 
