@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import SwiftData
 
-struct EmailAttachmentItem: Identifiable, Hashable {
-    let id: UUID
+struct EmailAttachmentItem: Codable, Identifiable, Hashable {
+    var id: UUID
     var fileName: String
     var fileSizeString: String
     
@@ -19,8 +20,9 @@ struct EmailAttachmentItem: Identifiable, Hashable {
     }
 }
 
-struct EmailTemplateModel: Identifiable, Hashable {
-    let id: UUID
+@Model
+final class EmailTemplateModel {
+    @Attribute(.unique) var id: UUID
     var title: String
     var tags: [String]
     var subject: String
@@ -30,9 +32,9 @@ struct EmailTemplateModel: Identifiable, Hashable {
     init(
         id: UUID = UUID(),
         title: String,
-        tags: [String],
-        subject: String,
-        body: String,
+        tags: [String] = [],
+        subject: String = "",
+        body: String = "",
         attachments: [EmailAttachmentItem] = [
             EmailAttachmentItem(fileName: "CV.pdf", fileSizeString: "200 KB"),
             EmailAttachmentItem(fileName: "portfolio.pdf", fileSizeString: "200 KB")

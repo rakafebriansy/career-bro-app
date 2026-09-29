@@ -41,7 +41,8 @@ struct RoboChatView: View {
                                 }
                             )
                             
-                            ZStack {
+                            // Chat & Floating Input Area
+                            ZStack(alignment: .bottom) {
                                 Color.white
                                     .ignoresSafeArea()
                                 
@@ -52,31 +53,45 @@ struct RoboChatView: View {
                                 } else {
                                     chatMessagesScrollView
                                 }
-                            }
-                            
-                            RoboChatInputBarView(
-                                text: $inputText,
-                                attachedDocument: pendingAttachment,
-                                onRemoveAttachment: {
-                                    pendingAttachment = nil
-                                },
-                                onSend: {
-                                    let textToSend = inputText
-                                    let attachmentToSend = pendingAttachment
-                                    inputText = ""
-                                    pendingAttachment = nil
-                                    showAttachmentMenu = false
-                                    sendMessage(text: textToSend, attachment: attachmentToSend)
-                                },
-                                onAttachmentTap: {
-                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                        showAttachmentMenu.toggle()
+                                
+                                // Floating Input Bar
+                                RoboChatInputBarView(
+                                    text: $inputText,
+                                    attachedDocument: pendingAttachment,
+                                    onRemoveAttachment: {
+                                        pendingAttachment = nil
+                                    },
+                                    onSend: {
+                                        let textToSend = inputText
+                                        let attachmentToSend = pendingAttachment
+                                        inputText = ""
+                                        pendingAttachment = nil
+                                        showAttachmentMenu = false
+                                        sendMessage(text: textToSend, attachment: attachmentToSend)
+                                    },
+                                    onAttachmentTap: {
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+                                            showAttachmentMenu.toggle()
+                                        }
+                                    },
+                                    onProfileContextTap: {
+                                        showAttachmentMenu = false
+                                        showInterviewerSheet = true
                                     }
-                                },
-                                onProfileContextTap: {
-                                    showAttachmentMenu = false
-                                    showInterviewerSheet = true
-                                }
+                                )
+                                .padding(.bottom, 12)
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                hideKeyboard()
+                            }
+                            .simultaneousGesture(
+                                DragGesture(minimumDistance: 10)
+                                    .onChanged { value in
+                                        if abs(value.translation.height) > 8 {
+                                            hideKeyboard()
+                                        }
+                                    }
                             )
                         }
                         
@@ -110,7 +125,7 @@ struct RoboChatView: View {
                                 }
                             )
                             .padding(.leading, 16)
-                            .padding(.bottom, 68)
+                            .padding(.bottom, 78)
                             .transition(.scale(scale: 0.85, anchor: .bottomLeading).combined(with: .opacity))
                             .zIndex(10)
                         }
@@ -212,8 +227,18 @@ struct RoboChatView: View {
                             .id("typingIndicator")
                     }
                 }
-                .padding(.vertical, 16)
+                .padding(.top, 16)
+                .padding(.bottom, 84)
             }
+            .scrollDismissesKeyboard(.interactively)
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 10)
+                    .onChanged { value in
+                        if abs(value.translation.height) > 8 {
+                            hideKeyboard()
+                        }
+                    }
+            )
             .onChange(of: messages.count) {
                 if let lastMessage = messages.last {
                     withAnimation {
@@ -331,6 +356,10 @@ struct RoboChatView: View {
         } else {
             return "I understand you're looking for guidance on: *\"\(prompt)\"*\n\nI can help you break this down into actionable career steps, review your portfolio artefacts, or prepare tailored interview responses. How would you like to proceed?"
         }
+    }
+    
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

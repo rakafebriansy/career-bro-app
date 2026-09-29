@@ -15,6 +15,12 @@ struct SwiftDataSeeder {
         do {
             let container = try ModelContainer(
                 for: JobApplicationModel.self,
+                EmailTemplateModel.self,
+                ChatSessionModel.self,
+                ChatMessageItemModel.self,
+                UserProfileModel.self,
+                TokenBalanceModel.self,
+                CareerAssessmentResultModel.self,
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
             )
             seedIfNeeded(context: container.mainContext)
@@ -26,28 +32,91 @@ struct SwiftDataSeeder {
     
     @MainActor
     static func seedIfNeeded(context: ModelContext) {
-        let descriptor = FetchDescriptor<JobApplicationModel>()
-        let count = (try? context.fetchCount(descriptor)) ?? 0
-        if count == 0 {
+        // 1. Job Applications
+        let jobDescriptor = FetchDescriptor<JobApplicationModel>()
+        if ((try? context.fetchCount(jobDescriptor)) ?? 0) == 0 {
             for app in makeSampleApplications() {
                 context.insert(app)
             }
-            try? context.save()
         }
+        
+        // 2. Email Templates
+        let emailDescriptor = FetchDescriptor<EmailTemplateModel>()
+        if ((try? context.fetchCount(emailDescriptor)) ?? 0) == 0 {
+            for template in EmailTemplateModel.sampleTemplates {
+                context.insert(template)
+            }
+        }
+        
+        // 3. Chat Sessions
+        let sessionDescriptor = FetchDescriptor<ChatSessionModel>()
+        if ((try? context.fetchCount(sessionDescriptor)) ?? 0) == 0 {
+            for session in ChatSessionModel.sampleSessions {
+                context.insert(session)
+            }
+        }
+        
+        // 4. User Profile
+        let profileDescriptor = FetchDescriptor<UserProfileModel>()
+        if ((try? context.fetchCount(profileDescriptor)) ?? 0) == 0 {
+            context.insert(UserProfileModel())
+        }
+        
+        // 5. Token Balance
+        let tokenDescriptor = FetchDescriptor<TokenBalanceModel>()
+        if ((try? context.fetchCount(tokenDescriptor)) ?? 0) == 0 {
+            context.insert(TokenBalanceModel())
+        }
+        
+        // 6. Career Assessment Result
+        let assessmentDescriptor = FetchDescriptor<CareerAssessmentResultModel>()
+        if ((try? context.fetchCount(assessmentDescriptor)) ?? 0) == 0 {
+            context.insert(CareerAssessmentResultModel())
+        }
+        
+        try? context.save()
     }
     
     @MainActor
     static func resetAndReseed(context: ModelContext) {
-        let descriptor = FetchDescriptor<JobApplicationModel>()
-        if let existing = try? context.fetch(descriptor) {
-            for app in existing {
-                context.delete(app)
-            }
-            try? context.save()
+        // Delete all entities
+        if let existingJobs = try? context.fetch(FetchDescriptor<JobApplicationModel>()) {
+            for item in existingJobs { context.delete(item) }
         }
+        if let existingEmails = try? context.fetch(FetchDescriptor<EmailTemplateModel>()) {
+            for item in existingEmails { context.delete(item) }
+        }
+        if let existingSessions = try? context.fetch(FetchDescriptor<ChatSessionModel>()) {
+            for item in existingSessions { context.delete(item) }
+        }
+        if let existingMessages = try? context.fetch(FetchDescriptor<ChatMessageItemModel>()) {
+            for item in existingMessages { context.delete(item) }
+        }
+        if let existingProfiles = try? context.fetch(FetchDescriptor<UserProfileModel>()) {
+            for item in existingProfiles { context.delete(item) }
+        }
+        if let existingTokens = try? context.fetch(FetchDescriptor<TokenBalanceModel>()) {
+            for item in existingTokens { context.delete(item) }
+        }
+        if let existingAssessments = try? context.fetch(FetchDescriptor<CareerAssessmentResultModel>()) {
+            for item in existingAssessments { context.delete(item) }
+        }
+        try? context.save()
+        
+        // Re-seed all entities
         for app in makeSampleApplications() {
             context.insert(app)
         }
+        for template in EmailTemplateModel.sampleTemplates {
+            context.insert(template)
+        }
+        for session in ChatSessionModel.sampleSessions {
+            context.insert(session)
+        }
+        context.insert(UserProfileModel())
+        context.insert(TokenBalanceModel())
+        context.insert(CareerAssessmentResultModel())
+        
         try? context.save()
     }
     

@@ -14,7 +14,15 @@ struct career_bro_appApp: App {
     
     init() {
         do {
-            container = try ModelContainer(for: JobApplicationModel.self)
+            container = try ModelContainer(
+                for: JobApplicationModel.self,
+                EmailTemplateModel.self,
+                ChatSessionModel.self,
+                ChatMessageItemModel.self,
+                UserProfileModel.self,
+                TokenBalanceModel.self,
+                CareerAssessmentResultModel.self
+            )
             SwiftDataSeeder.seedIfNeeded(context: container.mainContext)
         } catch {
             fatalError("Failed to initialize ModelContainer: \(error.localizedDescription)")

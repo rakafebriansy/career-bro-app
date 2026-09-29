@@ -20,8 +20,9 @@ struct RoboChatPromptSuggestionsView: View {
             }
             .padding(.horizontal, 24)
             .padding(.top, 24)
-            .padding(.bottom, 24)
+            .padding(.bottom, 88)
         }
+        .scrollDismissesKeyboard(.interactively)
     }
     
     private func categorySection(for category: PromptCategoryModel) -> some View {

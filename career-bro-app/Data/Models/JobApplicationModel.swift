@@ -109,6 +109,7 @@ final class JobApplicationModel {
     // MARK: - Initializer
     // Updated Initializer in JobApplicationModel.swift
     init(
+        id: UUID = UUID(),
         company: String,
         position: String,
         status: JobStatusEnum,
@@ -133,7 +134,7 @@ final class JobApplicationModel {
         jobUrl: String? = nil,
         attachments: [String]? = nil
     ) {
-        self.id = UUID()
+        self.id = id
         self.company = company
         self.position = position
         self.workLocation = workLocation

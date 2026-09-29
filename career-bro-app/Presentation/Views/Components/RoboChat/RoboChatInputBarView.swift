@@ -93,10 +93,11 @@ struct RoboChatInputBarView: View {
                 Capsule()
                     .stroke(Color.baseStroke, lineWidth: 1)
             )
-            .shadow(color: Color.black.opacity(0.04), radius: 6, y: 2)
+            .shadow(color: Color.black.opacity(0.10), radius: 14, x: 0, y: 5)
+            .shadow(color: Color.black.opacity(0.04), radius: 4, x: 0, y: 1)
             .padding(.horizontal, 16)
         }
-        .padding(.bottom, 8)
+        .padding(.bottom, 6)
     }
 }
 
