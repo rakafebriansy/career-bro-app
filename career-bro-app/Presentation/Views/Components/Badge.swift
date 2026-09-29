@@ -12,7 +12,7 @@ struct Badge: View {
     let color: Color
     let textColor: Color
     let isOutlined: Bool
-    
+
     init(
         _ text: String,
         color: Color = .blue,
@@ -24,7 +24,7 @@ struct Badge: View {
         self.textColor = textColor
         self.isOutlined = isOutlined
     }
-    
+
     var body: some View {
         Text(text)
             .font(.system(size: 12, weight: .regular))

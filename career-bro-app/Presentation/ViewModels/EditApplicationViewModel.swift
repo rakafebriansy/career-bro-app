@@ -35,9 +35,9 @@ final class EditApplicationViewModel {
     var attachments: [String]
     var isSuccess: Bool = false
     var errorMessage: String? = nil
-    
+
     private let updateJobApplicationUseCase: UpdateJobApplicationUseCase
-    
+
     init(
         application: JobApplicationEntity,
         updateJobApplicationUseCase: UpdateJobApplicationUseCase = UpdateJobApplicationUseCase(repository: JobApplicationRepository())
@@ -66,7 +66,7 @@ final class EditApplicationViewModel {
         self.attachments = application.attachments ?? []
         self.updateJobApplicationUseCase = updateJobApplicationUseCase
     }
-    
+
     @MainActor
     func saveChanges() async {
         let updated = JobApplicationEntity(

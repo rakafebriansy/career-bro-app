@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ManageTokenView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var remainingTokens: Int = 4250
     @State private var totalQuota: Int = 5000
     @State private var isCustomKeyEnabled: Bool = false
@@ -20,11 +20,11 @@ struct ManageTokenView: View {
     @State private var showDailyBonusAlert: Bool = false
     @State private var isDailyBonusClaimed: Bool = false
     @State private var showInfoSheet: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
-            
+
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 24) {
                     TokenBalanceHeroCardView(
@@ -42,9 +42,9 @@ struct ManageTokenView: View {
                             showPurchaseAlert = true
                         }
                     )
-                    
+
                     TokenUsageBreakdownView()
-                    
+
                     TokenCustomApiKeyCardView(
                         isCustomKeyEnabled: $isCustomKeyEnabled,
                         selectedProvider: $selectedProvider,
@@ -52,12 +52,12 @@ struct ManageTokenView: View {
                         onSaveKey: { provider, key in
                         }
                     )
-                    
+
                     TokenTopUpPackagesView { package in
                         purchasedPackageName = "\(package.title) (\(package.tokenCount) Tokens)"
                         showPurchaseAlert = true
                     }
-                    
+
                     TokenTransactionHistoryView()
                 }
                 .padding(.horizontal, 16)
@@ -93,7 +93,7 @@ struct ManageTokenView: View {
             tokenInfoModalView
         }
     }
-    
+
     private var topNavigationBar: some View {
         HStack {
             Button {
@@ -112,16 +112,16 @@ struct ManageTokenView: View {
                     )
             }
             .buttonStyle(.plain)
-            
+
             Spacer()
-            
+
             Text("Manage Token")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             Button {
                 showInfoSheet = true
             } label: {
@@ -143,7 +143,7 @@ struct ManageTokenView: View {
         .padding(.vertical, 8)
         .background(Color.white)
     }
-    
+
     private var tokenInfoModalView: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 20) {
@@ -152,13 +152,13 @@ struct ManageTokenView: View {
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundStyle(.textPrimary)
-                    
+
                     Text("AI Tokens are credits used when generating cover letters, scanning resumes, and interacting with the AI Career Companion.")
                         .font(.subheadline)
                         .foregroundStyle(Color(hex: "#4B5563"))
                         .lineSpacing(3)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 14) {
                     infoRow(icon: "sparkles", title: "Chatbot Queries", desc: "15-25 tokens per conversation turn")
                     infoRow(icon: "doc.text.magnifyingglass", title: "Resume AI Review", desc: "50 tokens per document scan")
@@ -168,7 +168,7 @@ struct ManageTokenView: View {
                 .padding(16)
                 .background(Color(hex: "#F8FAFC"))
                 .clipShape(RoundedRectangle(cornerRadius: 14))
-                
+
                 Spacer()
             }
             .padding(20)
@@ -185,20 +185,20 @@ struct ManageTokenView: View {
         }
         .presentationDetents([.medium])
     }
-    
+
     private func infoRow(icon: String, title: String, desc: String) -> some View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(Color.bgPrimary)
                 .frame(width: 24)
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
                     .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.textPrimary)
-                
+
                 Text(desc)
                     .font(.caption)
                     .foregroundStyle(Color(hex: "#737373"))

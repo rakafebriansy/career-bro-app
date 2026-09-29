@@ -8,19 +8,17 @@
 import Foundation
 import SwiftData
 
-/// Helper struct to encapsulate unified schedule and expiration UI states
 struct JobDeadlineInfo {
-    let stageLabel: String       // e.g., "Due Date", "Interview", "Announcement"
-    let formattedDate: String    // e.g., "Oct 12, 2026 | 23.00"
-    let relativeStatus: String   // e.g., "5 days left", "Today", "Expired"
+    let stageLabel: String
+    let formattedDate: String
+    let relativeStatus: String
     let isExpired: Bool
 }
 
 @Model
 final class JobApplicationModel {
     @Attribute(.unique) var id: UUID
-    
-    // MARK: - Job Info
+
     var company: String
     var position: String
     var workLocation: WorkLocationTypeEnum
@@ -37,23 +35,20 @@ final class JobApplicationModel {
     var aiSuggestion: String?
     var jobUrl: String?
     var attachments: [String]?
-    
-    // MARK: - Explicit Flow Timelines
+
     var createdAt: Date
     var updatedAt: Date
-    var dueDate: Date?                   // Active during: .needToApply
-    var announcementDate: Date?          // Active during: .applied
-    var dateAssessment: Date?            // Active during: .assessment
-    var dateInterview: Date?             // Active during: .interview
-    var interviewAnnouncementDate: Date? // Active during: .postInterview
-    
-    // MARK: - Unified Computed Property (Upcoming + Expired)
+    var dueDate: Date?
+    var announcementDate: Date?
+    var dateAssessment: Date?
+    var dateInterview: Date?
+    var interviewAnnouncementDate: Date?
+
     @Transient
     var deadlineInfo: JobDeadlineInfo? {
         let targetDate: Date?
         let label: String
-        
-        // 1. Determine the target calendar date based on the active status
+
         switch status {
         case .needToApply:
             targetDate = dueDate
@@ -70,23 +65,20 @@ final class JobApplicationModel {
         case .postInterview:
             targetDate = interviewAnnouncementDate
             label = "Announcement"
-            
-        // 2. Final states DO NOT have a deadline or upcoming schedule
+
         case .accepted, .rejected, .ghosted, .offered:
             return nil
         }
-        
-        // Return nil if the user hasn't set a date for this specific stage yet
+
         guard let date = targetDate else { return nil }
-        
-        // 3. Calculate relative time status and expiration
+
         let now = Date()
         let calendar = Calendar.current
         let isPast = date < now
-        
+
         let components = calendar.dateComponents([.day], from: now, to: date)
         let daysLeft = components.day ?? 0
-        
+
         let relativeStr: String
         if isPast {
             relativeStr = "Expired"
@@ -97,7 +89,7 @@ final class JobApplicationModel {
         } else {
             relativeStr = "\(daysLeft) days left"
         }
-        
+
         return JobDeadlineInfo(
             stageLabel: label,
             formattedDate: date.toFormattedDatetime(),
@@ -105,9 +97,7 @@ final class JobApplicationModel {
             isExpired: isPast
         )
     }
-    
-    // MARK: - Initializer
-    // Updated Initializer in JobApplicationModel.swift
+
     init(
         id: UUID = UUID(),
         company: String,

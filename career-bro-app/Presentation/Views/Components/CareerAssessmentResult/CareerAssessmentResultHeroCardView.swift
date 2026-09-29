@@ -10,7 +10,7 @@ import SwiftUI
 struct CareerAssessmentResultHeroCardView: View {
     var title: String = "Analyst - Tech"
     var subtitle: String = "You thrive at the intersection of creativity and logic, turning complex problems into delightful, human centered solution"
-    
+
     var body: some View {
         ZStack(alignment: .trailing) {
             HStack {
@@ -19,7 +19,7 @@ struct CareerAssessmentResultHeroCardView: View {
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundStyle(.baseWhite)
-                    
+
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(.baseWhite.opacity(0.85))
@@ -27,12 +27,12 @@ struct CareerAssessmentResultHeroCardView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                
+
                 Spacer(minLength: 60)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
-            
+
             Image(systemName: "briefcase.fill")
                 .resizable()
                 .scaledToFit()

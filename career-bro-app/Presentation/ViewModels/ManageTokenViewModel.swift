@@ -18,11 +18,11 @@ final class ManageTokenViewModel {
     var isTopUpSuccessAlertPresented: Bool = false
     var isLoading: Bool = false
     var errorMessage: String? = nil
-    
+
     private let getTokenBalanceUseCase: GetTokenBalanceUseCase
     private let saveCustomApiKeyUseCase: SaveCustomApiKeyUseCase
     private let topUpTokensUseCase: TopUpTokensUseCase
-    
+
     init(
         getTokenBalanceUseCase: GetTokenBalanceUseCase = GetTokenBalanceUseCase(repository: TokenRepository()),
         saveCustomApiKeyUseCase: SaveCustomApiKeyUseCase = SaveCustomApiKeyUseCase(repository: TokenRepository()),
@@ -32,7 +32,7 @@ final class ManageTokenViewModel {
         self.saveCustomApiKeyUseCase = saveCustomApiKeyUseCase
         self.topUpTokensUseCase = topUpTokensUseCase
     }
-    
+
     @MainActor
     func loadTokenBalance() async {
         isLoading = true
@@ -47,7 +47,7 @@ final class ManageTokenViewModel {
         }
         isLoading = false
     }
-    
+
     @MainActor
     func saveApiKey(provider: String, key: String) async {
         do {
@@ -58,7 +58,7 @@ final class ManageTokenViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     @MainActor
     func topUp(count: Int) async {
         do {

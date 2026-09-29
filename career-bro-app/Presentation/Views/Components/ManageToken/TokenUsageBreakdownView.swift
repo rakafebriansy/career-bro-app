@@ -18,7 +18,7 @@ struct TokenUsageBreakdownView: View {
         let maxTokens: Int
         let countDescription: String
     }
-    
+
     var items: [FeatureUsageItem] = [
         FeatureUsageItem(
             name: "AI Career Chatbot",
@@ -57,14 +57,14 @@ struct TokenUsageBreakdownView: View {
             countDescription: "Unlimited in current plan"
         )
     ]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Usage by Feature")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             VStack(spacing: 12) {
                 ForEach(items) { item in
                     usageRow(item: item)
@@ -79,7 +79,7 @@ struct TokenUsageBreakdownView: View {
             )
         }
     }
-    
+
     private func usageRow(item: FeatureUsageItem) -> some View {
         VStack(spacing: 10) {
             HStack(spacing: 12) {
@@ -87,37 +87,37 @@ struct TokenUsageBreakdownView: View {
                     RoundedRectangle(cornerRadius: 10)
                         .fill(item.iconBgColor)
                         .frame(width: 40, height: 40)
-                    
+
                     Image(systemName: item.icon)
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(item.iconColor)
                 }
-                
+
                 VStack(alignment: .leading, spacing: 2) {
                     Text(item.name)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(.textPrimary)
-                    
+
                     Text(item.countDescription)
                         .font(.caption2)
                         .foregroundStyle(Color(hex: "#737373"))
                 }
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .trailing, spacing: 2) {
                     Text("\(item.tokensUsed)")
                         .font(.subheadline)
                         .fontWeight(.bold)
                         .foregroundStyle(item.tokensUsed > 0 ? .textPrimary : Color(hex: "#16A34A"))
-                    
+
                     Text("tokens")
                         .font(.caption2)
                         .foregroundStyle(Color(hex: "#737373"))
                 }
             }
-            
+
             if item.tokensUsed > 0 {
                 GeometryReader { geo in
                     let ratio = min(Double(item.tokensUsed) / Double(item.maxTokens), 1.0)
@@ -125,7 +125,7 @@ struct TokenUsageBreakdownView: View {
                         Capsule()
                             .fill(Color.baseStroke.opacity(0.6))
                             .frame(height: 4)
-                        
+
                         Capsule()
                             .fill(item.iconColor)
                             .frame(width: max(geo.size.width * CGFloat(ratio), 8), height: 4)

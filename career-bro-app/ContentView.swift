@@ -6,33 +6,38 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @State private var router = AppNavigationRouter()
+
     var body: some View {
-        TabView {
-            Tab("Home", systemImage: "house") {
+        TabView(selection: $router.selectedTab) {
+            Tab("Home", systemImage: "house", value: 0) {
                 HomeView()
             }
-            
-            Tab("Application", systemImage: "briefcase") {
-                ApplicationView()
+
+            Tab("Search", systemImage: "magnifyingglass", value: 1) {
+                SearchView()
             }
-            
-            Tab("Robo", systemImage: "sparkles") {
+
+            Tab("Robo", systemImage: "sparkles", value: 2) {
                 RoboChatView()
             }
-            
-            Tab("Career DNA", systemImage: "map") {
+
+            Tab("Career DNA", systemImage: "map", value: 3) {
                 CareerDNAView()
             }
-            
-            Tab("Profile", systemImage: "person") {
+
+            Tab("Profile", systemImage: "person", value: 4) {
                 ProfileView()
             }
         }
+        .environment(router)
     }
 }
 
 #Preview {
     ContentView()
+        .modelContainer(SwiftDataSeeder.previewContainer)
 }

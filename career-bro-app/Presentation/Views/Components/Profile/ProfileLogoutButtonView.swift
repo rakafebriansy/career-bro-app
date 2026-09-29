@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProfileLogoutButtonView: View {
     var onLogoutTapped: (() -> Void)? = nil
-    
+
     var body: some View {
         Button {
             onLogoutTapped?()
@@ -18,11 +18,11 @@ struct ProfileLogoutButtonView: View {
                 Image(systemName: "rectangle.portrait.and.arrow.right")
                     .font(.system(size: 17, weight: .medium))
                     .foregroundStyle(Color(hex: "DC2626"))
-                
+
                 Text("Logout")
                     .font(.system(size: 15, weight: .medium))
                     .foregroundStyle(Color(hex: "DC2626"))
-                
+
                 Spacer()
             }
             .padding(.horizontal, 16)

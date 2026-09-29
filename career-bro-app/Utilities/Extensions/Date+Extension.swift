@@ -15,7 +15,7 @@ extension Date {
         formatter.timeStyle = .none
         return formatter
     }()
-    
+
     private static let sharedTimeFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = .autoupdatingCurrent
@@ -23,11 +23,11 @@ extension Date {
         formatter.timeStyle = .short
         return formatter
     }()
-    
+
     func toFormattedDate() -> String {
         return Self.sharedDateFormatter.string(from: self)
     }
-    
+
     func toFormattedDatetime() -> String {
         let dateString = Self.sharedDateFormatter.string(from: self)
         let timeString = Self.sharedTimeFormatter.string(from: self)

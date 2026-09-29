@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AttachmentRowView: View {
     let title: String
-    
+
     var body: some View {
         HStack {
             Text(title)
@@ -17,7 +17,7 @@ struct AttachmentRowView: View {
                 .foregroundStyle(Color.black.opacity(0.7))
                 .lineLimit(1)
                 .truncationMode(.middle)
-            
+
             Spacer()
         }
         .padding(.horizontal, 14)

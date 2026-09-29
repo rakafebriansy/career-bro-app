@@ -9,21 +9,21 @@ import SwiftUI
 
 struct CareerAssessmentResultView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
-            
+
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 24) {
                     CareerAssessmentResultHeroCardView()
-                    
+
                     CareerAssessmentResultArchetypeCardView()
-                    
+
                     CareerAssessmentResultRadarChartView()
-                    
+
                     CareerAssessmentResultWorkPreferencesView()
-                    
+
                     CareerAssessmentResultRoadmapView()
                 }
                 .padding(.horizontal, 20)
@@ -34,7 +34,7 @@ struct CareerAssessmentResultView: View {
         .background(Color.white.ignoresSafeArea())
         .navigationBarBackButtonHidden(true)
     }
-    
+
     private var topNavigationBar: some View {
         HStack {
             Button(action: {
@@ -50,16 +50,16 @@ struct CareerAssessmentResultView: View {
                         Circle().stroke(Color.baseStroke, lineWidth: 1)
                     )
             }
-            
+
             Spacer()
-            
+
             Text("Your Career DNA")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             ShareLink(
                 item: "Here is my Career DNA result: Analyst - Tech (Casper archetype) on Career Bro!",
                 subject: Text("My Career DNA"),

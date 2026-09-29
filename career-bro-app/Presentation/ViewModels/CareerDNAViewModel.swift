@@ -14,15 +14,15 @@ final class CareerDNAViewModel {
     var result: CareerAssessmentResultEntity?
     var isLoading: Bool = false
     var errorMessage: String? = nil
-    
+
     private let getLatestResultUseCase: GetLatestCareerAssessmentResultUseCase
-    
+
     init(
         getLatestResultUseCase: GetLatestCareerAssessmentResultUseCase = GetLatestCareerAssessmentResultUseCase(repository: CareerAssessmentRepository())
     ) {
         self.getLatestResultUseCase = getLatestResultUseCase
     }
-    
+
     @MainActor
     func loadResult() async {
         isLoading = true

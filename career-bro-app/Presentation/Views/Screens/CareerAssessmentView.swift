@@ -9,20 +9,20 @@ import SwiftUI
 
 struct CareerAssessmentView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var questions: [CareerAssessmentQuestionModel] = CareerAssessmentLoader.loadQuestions()
-    
+
     @State private var currentStageIndex: Int = 0
     @State private var answers: [Int: Int] = [:]
     @State private var showValidationErrors: Bool = false
     @State private var navigateToResult: Bool = false
-    
+
     private struct AssessmentStage: Identifiable {
         let id: String
         let category: String
         let questions: [CareerAssessmentQuestionModel]
     }
-    
+
     private var stages: [AssessmentStage] {
         let orderedCategories = ["Work Style", "Interests", "Strengths", "Experiences"]
         var grouped: [AssessmentStage] = []
@@ -44,36 +44,36 @@ struct CareerAssessmentView: View {
         }
         return grouped.isEmpty ? [AssessmentStage(id: "General", category: "General", questions: questions)] : grouped
     }
-    
+
     private var currentStage: AssessmentStage? {
         guard !stages.isEmpty else { return nil }
         let index = min(max(currentStageIndex, 0), stages.count - 1)
         return stages[index]
     }
-    
+
     private var answeredCount: Int {
         answers.count
     }
-    
+
     private var stageAnsweredCount: Int {
         guard let stage = currentStage else { return 0 }
         return stage.questions.filter { answers[$0.id] != nil }.count
     }
-    
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
                 .padding(.horizontal)
                 .padding(.top, 8)
                 .padding(.bottom, 12)
-            
+
             ScrollViewReader { proxy in
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 20) {
                         Color.clear
                             .frame(height: 1)
                             .id("stage_top")
-                        
+
                         CareerAssessmentStageIndicatorView(
                             currentStage: currentStageIndex,
                             totalStages: max(stages.count, 1),
@@ -81,7 +81,7 @@ struct CareerAssessmentView: View {
                             totalQuestions: max(questions.count, 1)
                         )
                         .padding(.top, 4)
-                        
+
                         if let stage = currentStage {
                             CareerAssessmentStageHeaderView(
                                 stageTitle: stage.category,
@@ -89,10 +89,10 @@ struct CareerAssessmentView: View {
                                 answeredCount: stageAnsweredCount,
                                 totalInStage: stage.questions.count
                             )
-                            
+
                             VStack(spacing: 16) {
                                 let previousQuestionsCount = stages.prefix(currentStageIndex).reduce(0) { $0 + $1.questions.count }
-                                
+
                                 ForEach(Array(stage.questions.enumerated()), id: \.element.id) { qIndex, questionItem in
                                     let continuousNumber = previousQuestionsCount + qIndex + 1
                                     let binding = Binding<Int?>(
@@ -105,7 +105,7 @@ struct CareerAssessmentView: View {
                                             }
                                         }
                                     )
-                                    
+
                                     CareerAssessmentQuestionItemView(
                                         questionNumber: continuousNumber,
                                         question: questionItem.question,
@@ -116,7 +116,7 @@ struct CareerAssessmentView: View {
                                 }
                             }
                         }
-                        
+
                         bottomActionsView(proxy: proxy)
                             .padding(.top, 8)
                             .padding(.bottom, 32)
@@ -128,7 +128,7 @@ struct CareerAssessmentView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
     }
-    
+
     private var topNavigationBar: some View {
         HStack {
             Button {
@@ -147,26 +147,26 @@ struct CareerAssessmentView: View {
                     )
             }
             .buttonStyle(.plain)
-            
+
             Spacer()
-            
+
             Text("Assessment")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.baseText)
-            
+
             Spacer()
-            
+
             Color.clear
                 .frame(width: 40, height: 40)
         }
     }
-    
+
     private func bottomActionsView(proxy: ScrollViewProxy) -> some View {
         let isLastStage = currentStageIndex >= stages.count - 1
         let nextTitle = isLastStage ? "See Results" : "Next Stage"
         let nextIcon = isLastStage ? "sparkles" : "arrow.right"
-        
+
         return CareerAssessmentBottomActionBarView(
             showBackButton: currentStageIndex > 0,
             backTitle: "Previous",
@@ -186,12 +186,12 @@ struct CareerAssessmentView: View {
             onNext: {
                 guard let stage = currentStage else { return }
                 let unanswered = stage.questions.filter { answers[$0.id] == nil }
-                
+
                 if let firstUnanswered = unanswered.first {
                     let generator = UINotificationFeedbackGenerator()
                     generator.prepare()
                     generator.notificationOccurred(.error)
-                    
+
                     withAnimation(.easeInOut(duration: 0.25)) {
                         showValidationErrors = true
                     }
@@ -202,7 +202,7 @@ struct CareerAssessmentView: View {
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.prepare()
                     generator.impactOccurred()
-                    
+
                     showValidationErrors = false
                     if !isLastStage {
                         withAnimation(.easeInOut(duration: 0.25)) {
@@ -226,5 +226,3 @@ struct CareerAssessmentView: View {
 #Preview {
     CareerAssessmentView()
 }
-
-

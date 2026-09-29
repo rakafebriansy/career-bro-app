@@ -13,10 +13,10 @@ protocol AIServiceProtocol {
 
 final class AIService: AIServiceProtocol {
     init() {}
-    
+
     func generateChatResponse(for prompt: String, hasAttachment: Bool) async -> String {
         let lower = prompt.lowercased()
-        
+
         if hasAttachment || lower.contains("review") || lower.contains("cv") || lower.contains("resume") {
             return "Your CV is excellent, but let’s make it more perfect\n\npart of introduction better be like this\n“Hi, Im Maya, Digital Marketer for 5+ years experience……”"
         } else if lower.contains("practice interview with hr") || (lower.contains("interview") && lower.contains("hr")) {

@@ -14,15 +14,15 @@ protocol UserProfileRepositoryProtocol {
 
 final class UserProfileRepository: UserProfileRepositoryProtocol {
     private let dataSource: LocalUserProfileDataSourceProtocol
-    
+
     init(dataSource: LocalUserProfileDataSourceProtocol = LocalUserProfileDataSource()) {
         self.dataSource = dataSource
     }
-    
+
     func getUserProfile() async throws -> UserProfileEntity {
         return dataSource.getProfile()
     }
-    
+
     func updateUserProfile(_ profile: UserProfileEntity) async throws {
         dataSource.updateProfile(profile)
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EmailPlaceholderChipsToolbarView: View {
     var onInsertPlaceholder: ((String) -> Void)? = nil
-    
+
     let placeholders = [
         "[Company Name]",
         "[Job Title]",
@@ -18,20 +18,20 @@ struct EmailPlaceholderChipsToolbarView: View {
         "[Application Date]",
         "[Hiring Manager]"
     ]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
                 Image(systemName: "curlybraces")
                     .font(.caption2)
                     .foregroundStyle(Color.bgPrimary)
-                
+
                 Text("Insert Dynamic Variable")
                     .font(.caption2)
                     .fontWeight(.semibold)
                     .foregroundStyle(Color(hex: "#737373"))
             }
-            
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 6) {
                     ForEach(placeholders, id: \.self) { token in

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AppButtonStyle: ButtonStyle {
     var variant: ButtonVariantEnum = .primary
-    
+
     func makeBody(configuration: Configuration) -> some View {
             HStack {
                 Image(systemName: "arrow.right")

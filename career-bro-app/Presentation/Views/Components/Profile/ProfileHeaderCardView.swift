@@ -11,23 +11,23 @@ struct ProfileHeaderCardView: View {
     let name: String
     let email: String
     var onEditTapped: (() -> Void)? = nil
-    
+
     var body: some View {
         HStack(spacing: 14) {
             avatarView
-            
+
             VStack(alignment: .leading, spacing: 3) {
                 Text(name)
                     .font(.system(size: 17, weight: .bold))
                     .foregroundStyle(Color.black)
-                
+
                 Text(email)
                     .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(Color(hex: "737373"))
             }
-            
+
             Spacer()
-            
+
             Button {
                 onEditTapped?()
             } label: {
@@ -57,13 +57,13 @@ struct ProfileHeaderCardView: View {
         )
         .shadow(color: Color.black.opacity(0.04), radius: 8, y: 2)
     }
-    
+
     private var avatarView: some View {
         ZStack {
             Circle()
                 .fill(Color(hex: "E0E7FF"))
                 .frame(width: 54, height: 54)
-            
+
             Image(systemName: "person.crop.circle.fill")
                 .resizable()
                 .scaledToFit()

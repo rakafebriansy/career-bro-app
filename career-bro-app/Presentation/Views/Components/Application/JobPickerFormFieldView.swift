@@ -11,13 +11,13 @@ struct JobPickerFormFieldView<T: Hashable & RawRepresentable>: View where T.RawV
     let title: String
     let options: [T]
     @Binding var selection: T
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(Color.black)
-            
+
             Menu {
                 ForEach(options, id: \.self) { option in
                     Button {
@@ -36,9 +36,9 @@ struct JobPickerFormFieldView<T: Hashable & RawRepresentable>: View where T.RawV
                     Text(selection.rawValue)
                         .font(.system(size: 15, weight: .regular))
                         .foregroundStyle(Color(hex: "1F2937"))
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "chevron.up.chevron.down")
                         .font(.system(size: 13, weight: .medium))
                         .foregroundStyle(.secondary)

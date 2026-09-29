@@ -9,11 +9,11 @@ import Foundation
 
 struct GetUserProfileUseCase {
     private let repository: UserProfileRepositoryProtocol
-    
+
     init(repository: UserProfileRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute() async throws -> UserProfileEntity {
         try await repository.getUserProfile()
     }
@@ -21,11 +21,11 @@ struct GetUserProfileUseCase {
 
 struct UpdateUserProfileUseCase {
     private let repository: UserProfileRepositoryProtocol
-    
+
     init(repository: UserProfileRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ profile: UserProfileEntity) async throws {
         try await repository.updateUserProfile(profile)
     }

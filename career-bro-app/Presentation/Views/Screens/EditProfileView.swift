@@ -9,23 +9,23 @@ import SwiftUI
 
 struct EditProfileView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @State var name: String = "Raka Febrian"
     @State var email: String = "rakafebrian@mail.com"
     var onSave: ((String, String) -> Void)? = nil
-    
+
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
-    
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
-            
+
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 28) {
                     ProfileAvatarEditorView()
                         .padding(.top, 12)
-                    
+
                     VStack(spacing: 20) {
                         ProfileEditFormFieldView(
                             title: "Name",
@@ -34,7 +34,7 @@ struct EditProfileView: View {
                             textContentType: .name,
                             autocapitalization: .words
                         )
-                        
+
                         ProfileEditFormFieldView(
                             title: "Email",
                             text: $email,
@@ -50,9 +50,9 @@ struct EditProfileView: View {
                 .padding(.bottom, 24)
             }
             .background(Color.white)
-            
+
             Spacer()
-            
+
             bottomActionBar
         }
         .background(Color.white)
@@ -64,7 +64,7 @@ struct EditProfileView: View {
             Text(alertMessage)
         }
     }
-    
+
     private var topNavigationBar: some View {
         HStack {
             Button {
@@ -83,16 +83,16 @@ struct EditProfileView: View {
                     )
             }
             .buttonStyle(.plain)
-            
+
             Spacer()
-            
+
             Text("Edit Profile")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             Color.clear
                 .frame(width: 40, height: 40)
         }
@@ -100,7 +100,7 @@ struct EditProfileView: View {
         .padding(.vertical, 8)
         .background(Color.white)
     }
-    
+
     private var bottomActionBar: some View {
         HStack(spacing: 14) {
             Button {
@@ -120,7 +120,7 @@ struct EditProfileView: View {
                     )
             }
             .buttonStyle(.plain)
-            
+
             Button {
                 saveChanges()
             } label: {
@@ -140,23 +140,23 @@ struct EditProfileView: View {
         .padding(.bottom, 24)
         .background(Color.white)
     }
-    
+
     private func saveChanges() {
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         guard !trimmedName.isEmpty else {
             alertMessage = "Please enter your name."
             showAlert = true
             return
         }
-        
+
         guard !trimmedEmail.isEmpty, trimmedEmail.contains("@") else {
             alertMessage = "Please enter a valid email address."
             showAlert = true
             return
         }
-        
+
         onSave?(trimmedName, trimmedEmail)
         dismiss()
     }

@@ -16,10 +16,10 @@ final class ProfileViewModel {
     var isLogoutAlertPresented: Bool = false
     var isLoading: Bool = false
     var errorMessage: String? = nil
-    
+
     private let getUserProfileUseCase: GetUserProfileUseCase
     private let updateUserProfileUseCase: UpdateUserProfileUseCase
-    
+
     init(
         getUserProfileUseCase: GetUserProfileUseCase = GetUserProfileUseCase(repository: UserProfileRepository()),
         updateUserProfileUseCase: UpdateUserProfileUseCase = UpdateUserProfileUseCase(repository: UserProfileRepository())
@@ -27,7 +27,7 @@ final class ProfileViewModel {
         self.getUserProfileUseCase = getUserProfileUseCase
         self.updateUserProfileUseCase = updateUserProfileUseCase
     }
-    
+
     @MainActor
     func loadProfile() async {
         isLoading = true
@@ -39,7 +39,7 @@ final class ProfileViewModel {
         }
         isLoading = false
     }
-    
+
     @MainActor
     func toggleNotifications() async {
         profile.isNotificationsEnabled.toggle()
@@ -49,7 +49,7 @@ final class ProfileViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     @MainActor
     func toggleDarkMode() async {
         profile.isDarkModeEnabled.toggle()

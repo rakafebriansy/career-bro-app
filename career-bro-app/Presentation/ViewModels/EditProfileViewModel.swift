@@ -19,10 +19,10 @@ final class EditProfileViewModel {
     var bio: String
     var isSuccess: Bool = false
     var errorMessage: String? = nil
-    
+
     private let updateUserProfileUseCase: UpdateUserProfileUseCase
     private var originalProfile: UserProfileEntity
-    
+
     init(
         profile: UserProfileEntity,
         updateUserProfileUseCase: UpdateUserProfileUseCase = UpdateUserProfileUseCase(repository: UserProfileRepository())
@@ -36,14 +36,14 @@ final class EditProfileViewModel {
         self.bio = profile.bio
         self.updateUserProfileUseCase = updateUserProfileUseCase
     }
-    
+
     @MainActor
     func saveProfile() async {
         guard !fullName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             errorMessage = "Full name cannot be empty."
             return
         }
-        
+
         var updated = originalProfile
         updated.fullName = fullName
         updated.email = email
@@ -51,7 +51,7 @@ final class EditProfileViewModel {
         updated.location = location
         updated.currentRole = currentRole
         updated.bio = bio
-        
+
         do {
             try await updateUserProfileUseCase.execute(updated)
             isSuccess = true

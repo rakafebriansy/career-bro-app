@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RoboChatView: View {
+    @Environment(AppNavigationRouter.self) private var router: AppNavigationRouter?
     @State private var inputText: String = ""
     @State private var messages: [ChatMessageModel] = ChatMessageModel.sampleMockupConversation
     @State private var pendingAttachment: ChatAttachmentModel? = nil
@@ -19,12 +20,11 @@ struct RoboChatView: View {
     @State private var showTokenAlert: Bool = false
     @State private var isRoboTyping: Bool = false
     @State private var navigateToManageToken: Bool = false
-    
+
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    // Main Chat Screen
                     ZStack(alignment: .bottomLeading) {
                         VStack(spacing: 0) {
                             RoboChatTopBarView(
@@ -40,12 +40,11 @@ struct RoboChatView: View {
                                     showTokenAlert = true
                                 }
                             )
-                            
-                            // Chat & Floating Input Area
+
                             ZStack(alignment: .bottom) {
                                 Color.white
                                     .ignoresSafeArea()
-                                
+
                                 if messages.isEmpty {
                                     RoboChatPromptSuggestionsView { selectedPrompt in
                                         sendMessage(text: selectedPrompt, attachment: nil)
@@ -53,8 +52,7 @@ struct RoboChatView: View {
                                 } else {
                                     chatMessagesScrollView
                                 }
-                                
-                                // Floating Input Bar
+
                                 RoboChatInputBarView(
                                     text: $inputText,
                                     attachedDocument: pendingAttachment,
@@ -94,8 +92,7 @@ struct RoboChatView: View {
                                     }
                             )
                         }
-                        
-                        // Floating Attachment / Action Menu Popup
+
                         if showAttachmentMenu {
                             Color.black.opacity(0.001)
                                 .ignoresSafeArea()
@@ -104,7 +101,7 @@ struct RoboChatView: View {
                                         showAttachmentMenu = false
                                     }
                                 }
-                            
+
                             RoboChatAttachmentMenuView(
                                 onUpgradeToken: {
                                     navigateToManageToken = true
@@ -131,8 +128,7 @@ struct RoboChatView: View {
                         }
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    
-                    // Dimmed Backdrop Overlay
+
                     if isSidebarOpen {
                         Color.black.opacity(0.35)
                             .ignoresSafeArea()
@@ -142,8 +138,7 @@ struct RoboChatView: View {
                                     isSidebarOpen = false
                                 }
                             }
-                        
-                        // History Sidebar Drawer
+
                         RoboChatHistorySidebarView(
                             onNewChat: {
                                 withAnimation {
@@ -164,7 +159,6 @@ struct RoboChatView: View {
                                 }
                             },
                             onSearchTap: {
-                                // Search filter trigger
                             },
                             onMediaTap: { mediaType in
                                 sendMessage(text: "Tampilkan riwayat \(mediaType)", attachment: nil)
@@ -210,9 +204,21 @@ struct RoboChatView: View {
             .navigationDestination(isPresented: $navigateToManageToken) {
                 ManageTokenView()
             }
+            .onChange(of: router?.activeRoboPrompt) { _, prompt in
+                if let prompt = prompt, !prompt.isEmpty {
+                    sendMessage(text: prompt, attachment: nil)
+                    router?.activeRoboPrompt = nil
+                }
+            }
+            .onAppear {
+                if let prompt = router?.activeRoboPrompt, !prompt.isEmpty {
+                    sendMessage(text: prompt, attachment: nil)
+                    router?.activeRoboPrompt = nil
+                }
+            }
         }
     }
-    
+
     private var chatMessagesScrollView: some View {
         ScrollViewReader { proxy in
             ScrollView(showsIndicators: false) {
@@ -221,7 +227,7 @@ struct RoboChatView: View {
                         RoboChatMessageBubbleView(message: message)
                             .id(message.id)
                     }
-                    
+
                     if isRoboTyping {
                         typingIndicator
                             .id("typingIndicator")
@@ -255,19 +261,19 @@ struct RoboChatView: View {
             }
         }
     }
-    
+
     private var typingIndicator: some View {
         HStack(spacing: 10) {
             ZStack {
                 Circle()
                     .fill(Color.bgPrimary)
                     .frame(width: 32, height: 32)
-                
+
                 Image(systemName: "sparkles")
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.white)
             }
-            
+
             HStack(spacing: 4) {
                 ForEach(0..<3) { index in
                     Circle()
@@ -282,32 +288,32 @@ struct RoboChatView: View {
             .clipShape(
                 RoundedRectangle(cornerRadius: 20)
             )
-            
+
             Spacer()
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 4)
     }
-    
+
     private func sendMessage(text: String, attachment: ChatAttachmentModel?) {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty || attachment != nil else { return }
-        
+
         let userMessage = ChatMessageModel(
             text: trimmed,
             isUser: true,
             attachment: attachment
         )
-        
+
         withAnimation(.spring(duration: 0.3)) {
             messages.append(userMessage)
             if tokensUsed < totalTokens {
                 tokensUsed += 1
             }
         }
-        
+
         isRoboTyping = true
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             let replyText = generateRoboReply(for: trimmed, hasAttachment: attachment != nil)
             let roboMessage = ChatMessageModel(text: replyText, isUser: false)
@@ -317,7 +323,7 @@ struct RoboChatView: View {
             }
         }
     }
-    
+
     private func loadSession(_ session: ChatSessionModel) {
         withAnimation {
             messages = [
@@ -326,7 +332,7 @@ struct RoboChatView: View {
             ]
         }
     }
-    
+
     private func loadRecentChat(title: String) {
         withAnimation {
             messages = [
@@ -335,10 +341,10 @@ struct RoboChatView: View {
             ]
         }
     }
-    
+
     private func generateRoboReply(for prompt: String, hasAttachment: Bool) -> String {
         let lower = prompt.lowercased()
-        
+
         if hasAttachment || lower.contains("review") || lower.contains("cv") || lower.contains("resume") {
             return "Your CV is excellent, but let’s make it more perfect\n\npart of introduction better be like this\n“Hi, Im Maya, Digital Marketer for 5+ years experience……”"
         } else if lower.contains("practice interview with hr") || (lower.contains("interview") && lower.contains("hr")) {
@@ -357,7 +363,7 @@ struct RoboChatView: View {
             return "I understand you're looking for guidance on: *\"\(prompt)\"*\n\nI can help you break this down into actionable career steps, review your portfolio artefacts, or prepare tailored interview responses. How would you like to proceed?"
         }
     }
-    
+
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }

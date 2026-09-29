@@ -12,7 +12,7 @@ struct ChatAttachmentEntity: Identifiable, Equatable {
     var fileName: String
     var fileSize: String
     var fileType: String
-    
+
     init(
         id: UUID = UUID(),
         fileName: String,
@@ -32,7 +32,7 @@ struct ChatMessageEntity: Identifiable, Equatable {
     var isUser: Bool
     var timestamp: Date
     var attachment: ChatAttachmentEntity?
-    
+
     init(
         id: UUID = UUID(),
         text: String,
@@ -54,7 +54,7 @@ struct ChatSessionEntity: Identifiable, Equatable {
     var preview: String
     var date: Date
     var isPinned: Bool
-    
+
     init(
         id: UUID = UUID(),
         title: String,

@@ -18,7 +18,7 @@ struct UserProfileEntity: Identifiable, Equatable {
     var avatarImageName: String?
     var isNotificationsEnabled: Bool
     var isDarkModeEnabled: Bool
-    
+
     init(
         id: UUID = UUID(),
         fullName: String = "Raka Febrian Syahputra",

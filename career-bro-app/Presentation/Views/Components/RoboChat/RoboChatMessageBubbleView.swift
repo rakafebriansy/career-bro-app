@@ -9,18 +9,18 @@ import SwiftUI
 
 struct RoboChatMessageBubbleView: View {
     let message: ChatMessageModel
-    
+
     var body: some View {
         HStack(alignment: .bottom, spacing: 10) {
             if message.isUser {
                 Spacer(minLength: 48)
-                
+
                 VStack(alignment: .trailing, spacing: 8) {
                     if let attachment = message.attachment {
                         RoboChatAttachmentCardView(attachment: attachment)
                             .frame(maxWidth: 240)
                     }
-                    
+
                     if !message.text.isEmpty {
                         Text(message.text)
                             .font(.system(size: 15, weight: .regular))
@@ -40,12 +40,12 @@ struct RoboChatMessageBubbleView: View {
                             Circle()
                                 .fill(Color.bgPrimary)
                                 .frame(width: 32, height: 32)
-                            
+
                             Image(systemName: "sparkles")
                                 .font(.system(size: 14, weight: .bold))
                                 .foregroundStyle(.white)
                         }
-                        
+
                         Text(message.text)
                             .font(.system(size: 15, weight: .regular))
                             .foregroundStyle(Color(hex: "374151"))
@@ -58,7 +58,7 @@ struct RoboChatMessageBubbleView: View {
                             )
                     }
                 }
-                
+
                 Spacer(minLength: 48)
             }
         }

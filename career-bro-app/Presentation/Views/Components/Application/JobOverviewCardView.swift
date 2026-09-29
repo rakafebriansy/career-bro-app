@@ -14,7 +14,7 @@ struct JobOverviewCardView: View {
     let location: String
     let salaryText: String
     let addedTimeText: String
-    
+
     init(
         company: String = "Astra",
         position: String = "System Analyst",
@@ -30,13 +30,13 @@ struct JobOverviewCardView: View {
         self.salaryText = salaryText
         self.addedTimeText = addedTimeText
     }
-    
+
     init(job: JobApplicationModel) {
         self.company = job.company
         self.position = job.position
         self.priority = job.priority
         self.location = job.location ?? "Gading Serpong, Jakarta"
-        
+
         if let min = job.salaryMin, let max = job.salaryMax {
             if min >= 1_000_000 {
                 let minM = Int(min / 1_000_000)
@@ -53,7 +53,7 @@ struct JobOverviewCardView: View {
         } else {
             self.salaryText = "Salary Negotiable"
         }
-        
+
         let now = Date()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.hour, .day], from: job.createdAt, to: now)
@@ -65,7 +65,7 @@ struct JobOverviewCardView: View {
             self.addedTimeText = "Added recently"
         }
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .top) {
@@ -73,20 +73,20 @@ struct JobOverviewCardView: View {
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.baseText)
-                
+
                 Spacer()
-                
+
                 Badge(
                     priority.rawValue,
                     color: priority.backgroundColor,
                     textColor: priority.foregroundColor
                 )
             }
-            
+
             Text(position)
                 .font(.system(size: 18, weight: .bold))
                 .foregroundStyle(Color.blue)
-            
+
             HStack(spacing: 6) {
                 Image(systemName: "location")
                     .font(.subheadline)
@@ -95,7 +95,7 @@ struct JobOverviewCardView: View {
                     .font(.subheadline)
                     .foregroundStyle(.baseText)
             }
-            
+
             HStack(alignment: .center) {
                 HStack(spacing: 6) {
                     Image(systemName: "dollarsign.circle")
@@ -105,9 +105,9 @@ struct JobOverviewCardView: View {
                         .font(.subheadline)
                         .foregroundStyle(.baseText)
                 }
-                
+
                 Spacer()
-                
+
                 Text(addedTimeText)
                     .font(.footnote)
                     .foregroundStyle(.secondary)

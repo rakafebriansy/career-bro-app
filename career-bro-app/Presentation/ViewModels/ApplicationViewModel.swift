@@ -17,12 +17,12 @@ final class ApplicationViewModel {
     var isFilterPresented: Bool = false
     var isLoading: Bool = false
     var errorMessage: String? = nil
-    
+
     private let getJobApplicationsUseCase: GetJobApplicationsUseCase
     private let saveJobApplicationUseCase: SaveJobApplicationUseCase
     private let deleteJobApplicationUseCase: DeleteJobApplicationUseCase
     private let updateJobStageUseCase: UpdateJobStageUseCase
-    
+
     init(
         getJobApplicationsUseCase: GetJobApplicationsUseCase = GetJobApplicationsUseCase(repository: JobApplicationRepository()),
         saveJobApplicationUseCase: SaveJobApplicationUseCase = SaveJobApplicationUseCase(repository: JobApplicationRepository()),
@@ -34,7 +34,7 @@ final class ApplicationViewModel {
         self.deleteJobApplicationUseCase = deleteJobApplicationUseCase
         self.updateJobStageUseCase = updateJobStageUseCase
     }
-    
+
     @MainActor
     func fetchApplications() async {
         isLoading = true
@@ -46,7 +46,7 @@ final class ApplicationViewModel {
         }
         isLoading = false
     }
-    
+
     func filteredApplications(for status: JobStatusEnum) -> [JobApplicationEntity] {
         let statusFiltered = applications.filter { $0.status == status }
         guard !searchQuery.isEmpty else { return statusFiltered }
@@ -55,7 +55,7 @@ final class ApplicationViewModel {
             $0.company.localizedCaseInsensitiveContains(searchQuery)
         }
     }
-    
+
     @MainActor
     func deleteApplication(id: UUID) async {
         do {
@@ -65,7 +65,7 @@ final class ApplicationViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     @MainActor
     func advanceStage(for application: JobApplicationEntity) async {
         let statuses: [JobStatusEnum] = [.needToApply, .applied, .assessment, .interview, .postInterview]

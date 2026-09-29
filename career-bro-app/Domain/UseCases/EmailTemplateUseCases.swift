@@ -9,11 +9,11 @@ import Foundation
 
 struct GetEmailTemplatesUseCase {
     private let repository: EmailTemplateRepositoryProtocol
-    
+
     init(repository: EmailTemplateRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute() async throws -> [EmailTemplateEntity] {
         try await repository.getTemplates()
     }
@@ -21,11 +21,11 @@ struct GetEmailTemplatesUseCase {
 
 struct SaveEmailTemplateUseCase {
     private let repository: EmailTemplateRepositoryProtocol
-    
+
     init(repository: EmailTemplateRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ template: EmailTemplateEntity) async throws {
         try await repository.saveTemplate(template)
     }
@@ -33,11 +33,11 @@ struct SaveEmailTemplateUseCase {
 
 struct UpdateEmailTemplateUseCase {
     private let repository: EmailTemplateRepositoryProtocol
-    
+
     init(repository: EmailTemplateRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ template: EmailTemplateEntity) async throws {
         try await repository.updateTemplate(template)
     }
@@ -45,11 +45,11 @@ struct UpdateEmailTemplateUseCase {
 
 struct DeleteEmailTemplateUseCase {
     private let repository: EmailTemplateRepositoryProtocol
-    
+
     init(repository: EmailTemplateRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ id: UUID) async throws {
         try await repository.deleteTemplate(id)
     }
@@ -57,11 +57,11 @@ struct DeleteEmailTemplateUseCase {
 
 struct ToggleFavoriteEmailTemplateUseCase {
     private let repository: EmailTemplateRepositoryProtocol
-    
+
     init(repository: EmailTemplateRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ id: UUID) async throws {
         try await repository.toggleFavorite(id)
     }

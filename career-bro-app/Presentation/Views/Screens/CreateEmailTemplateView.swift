@@ -9,28 +9,28 @@ import SwiftUI
 
 struct CreateEmailTemplateView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var onSave: ((EmailTemplateModel) -> Void)? = nil
-    
+
     @State private var templateTitle: String = ""
     @State private var selectedTags: [String] = ["Fullstack"]
     @State private var subjectLine: String = ""
     @State private var bodyContent: String = ""
     @State private var activeFieldIsSubject: Bool = false
     @State private var showSaveToast: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
-            
+
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     titleInputField
-                    
+
                     EmailTemplateTagSelectorView(selectedTags: $selectedTags)
-                    
+
                     subjectInputField
-                    
+
                     EmailPlaceholderChipsToolbarView { placeholder in
                         if activeFieldIsSubject {
                             subjectLine += " " + placeholder
@@ -38,16 +38,16 @@ struct CreateEmailTemplateView: View {
                             bodyContent += " " + placeholder
                         }
                     }
-                    
+
                     bodyInputField
-                    
+
                     EmailTemplatePreviewCardView(
                         title: templateTitle,
                         tags: selectedTags,
                         subject: subjectLine,
                         bodyText: bodyContent
                     )
-                    
+
                     saveButton
                         .padding(.top, 8)
                         .padding(.bottom, 24)
@@ -60,7 +60,7 @@ struct CreateEmailTemplateView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
     }
-    
+
     private var topNavigationBar: some View {
         HStack {
             Button {
@@ -79,16 +79,16 @@ struct CreateEmailTemplateView: View {
                     )
             }
             .buttonStyle(.plain)
-            
+
             Spacer()
-            
+
             Text("Create Template")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             Button {
                 saveTemplate()
             } label: {
@@ -104,14 +104,14 @@ struct CreateEmailTemplateView: View {
         .padding(.vertical, 8)
         .background(Color.white)
     }
-    
+
     private var titleInputField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Template Title")
                 .font(.caption)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             TextField("e.g. Template Follow-Up HR", text: $templateTitle)
                 .font(.system(size: 14))
                 .padding(12)
@@ -123,14 +123,14 @@ struct CreateEmailTemplateView: View {
                 )
         }
     }
-    
+
     private var subjectInputField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Email Subject")
                 .font(.caption)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             TextField("e.g. Application for [Job Title] - [Your Name]", text: $subjectLine)
                 .font(.system(size: 14))
                 .padding(12)
@@ -145,7 +145,7 @@ struct CreateEmailTemplateView: View {
                 }
         }
     }
-    
+
     private var bodyInputField: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -153,14 +153,14 @@ struct CreateEmailTemplateView: View {
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundStyle(.textPrimary)
-                
+
                 Spacer()
-                
+
                 Text("\(bodyContent.count) chars")
                     .font(.caption2)
                     .foregroundStyle(Color(hex: "#737373"))
             }
-            
+
             TextEditor(text: $bodyContent)
                 .font(.system(size: 13))
                 .lineSpacing(4)
@@ -177,7 +177,7 @@ struct CreateEmailTemplateView: View {
                 }
         }
     }
-    
+
     private var saveButton: some View {
         Button {
             saveTemplate()
@@ -197,12 +197,12 @@ struct CreateEmailTemplateView: View {
         .buttonStyle(.plain)
         .disabled(!isFormValid)
     }
-    
+
     private var isFormValid: Bool {
         !templateTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         !bodyContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-    
+
     private func saveTemplate() {
         guard isFormValid else { return }
         let newTemplate = EmailTemplateModel(

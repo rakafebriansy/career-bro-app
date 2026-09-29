@@ -13,10 +13,9 @@ struct RoboChatAttachmentMenuView: View {
     var onOpenCamera: (() -> Void)? = nil
     var onSelectFile: (() -> Void)? = nil
     var onClose: (() -> Void)? = nil
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            // Upgrade Your Token
             menuRow(
                 iconName: "sparkles",
                 iconColor: Color.bgPrimary,
@@ -27,8 +26,7 @@ struct RoboChatAttachmentMenuView: View {
                 onUpgradeToken?()
                 onClose?()
             }
-            
-            // Photo
+
             menuRow(
                 iconName: "photo",
                 iconColor: Color(hex: "0F172A"),
@@ -39,8 +37,7 @@ struct RoboChatAttachmentMenuView: View {
                 onSelectPhoto?()
                 onClose?()
             }
-            
-            // Camera
+
             menuRow(
                 iconName: "camera",
                 iconColor: Color(hex: "0F172A"),
@@ -51,8 +48,7 @@ struct RoboChatAttachmentMenuView: View {
                 onOpenCamera?()
                 onClose?()
             }
-            
-            // File
+
             menuRow(
                 iconName: "paperclip",
                 iconColor: Color(hex: "0F172A"),
@@ -74,7 +70,7 @@ struct RoboChatAttachmentMenuView: View {
         )
         .shadow(color: Color.black.opacity(0.12), radius: 18, x: 0, y: 8)
     }
-    
+
     private func menuRow(
         iconName: String,
         iconColor: Color,
@@ -89,16 +85,16 @@ struct RoboChatAttachmentMenuView: View {
                     Circle()
                         .fill(Color(hex: "F1F5F9"))
                         .frame(width: 44, height: 44)
-                    
+
                     Image(systemName: iconName)
                         .font(.system(size: 19, weight: .regular))
                         .foregroundStyle(iconColor)
                 }
-                
+
                 Text(title)
                     .font(.system(size: 16, weight: fontWeight))
                     .foregroundStyle(titleColor)
-                
+
                 Spacer()
             }
         }

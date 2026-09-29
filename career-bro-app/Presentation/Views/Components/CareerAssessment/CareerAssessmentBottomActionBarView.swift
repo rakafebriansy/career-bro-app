@@ -15,7 +15,7 @@ struct CareerAssessmentBottomActionBarView: View {
     var isNextDisabled: Bool = false
     var onBack: () -> Void
     var onNext: () -> Void
-    
+
     var body: some View {
         HStack(spacing: 14) {
             if showBackButton {
@@ -37,7 +37,7 @@ struct CareerAssessmentBottomActionBarView: View {
                 }
                 .buttonStyle(.plain)
             }
-            
+
             Button {
                 if !isNextDisabled {
                     onNext()
@@ -47,7 +47,7 @@ struct CareerAssessmentBottomActionBarView: View {
                     Text(nextTitle)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    
+
                     Image(systemName: nextIcon)
                         .font(.footnote)
                         .fontWeight(.semibold)
@@ -82,4 +82,3 @@ struct CareerAssessmentBottomActionBarView: View {
     }
     .padding()
 }
-

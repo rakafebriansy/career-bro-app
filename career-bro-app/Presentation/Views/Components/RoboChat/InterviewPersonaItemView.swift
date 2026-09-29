@@ -11,7 +11,7 @@ struct InterviewPersonaItemView: View {
     let persona: InterviewerPersonaModel
     let isSelected: Bool
     var onSelect: (() -> Void)? = nil
-    
+
     var body: some View {
         Button {
             onSelect?()
@@ -21,7 +21,7 @@ struct InterviewPersonaItemView: View {
                     Circle()
                         .fill(Color(hex: persona.bgColorHex))
                         .frame(width: 72, height: 72)
-                    
+
                     Image(systemName: "person.crop.circle.fill")
                         .resizable()
                         .scaledToFit()
@@ -32,7 +32,7 @@ struct InterviewPersonaItemView: View {
                     Circle()
                         .stroke(isSelected ? Color.bgPrimary : Color.clear, lineWidth: 2)
                 )
-                
+
                 Text(persona.name)
                     .font(.system(size: 13, weight: isSelected ? .semibold : .medium))
                     .foregroundStyle(isSelected ? Color.bgPrimary : Color(hex: "4B5563"))

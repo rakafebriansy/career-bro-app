@@ -13,7 +13,7 @@ struct InterviewerPersonaModel: Identifiable, Equatable {
     let roleDescription: String
     let bgColorHex: String
     let iconName: String
-    
+
     init(
         id: UUID = UUID(),
         name: String,
@@ -27,7 +27,7 @@ struct InterviewerPersonaModel: Identifiable, Equatable {
         self.bgColorHex = bgColorHex
         self.iconName = iconName
     }
-    
+
     static let samplePersonas: [InterviewerPersonaModel] = [
         InterviewerPersonaModel(
             name: "Tech Lead",

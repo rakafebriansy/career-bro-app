@@ -14,7 +14,7 @@ struct ApplicationTimelineStepperView: View {
         let title: String
         let state: StepState
     }
-    
+
     enum StepState {
         case completed
         case current
@@ -22,9 +22,9 @@ struct ApplicationTimelineStepperView: View {
         case rejected
         case ghosted
     }
-    
+
     var status: JobStatusEnum = .interview
-    
+
     var progressiveStages: [JobStatusEnum] {
         [
             .needToApply,
@@ -36,7 +36,7 @@ struct ApplicationTimelineStepperView: View {
             .accepted
         ]
     }
-    
+
     var steps: [Step] {
         let currentIndex: Int
         switch status {
@@ -59,7 +59,7 @@ struct ApplicationTimelineStepperView: View {
         case .ghosted:
             currentIndex = 1
         }
-        
+
         return progressiveStages.enumerated().map { index, stage in
             let state: StepState
             if status == .rejected && index == currentIndex {
@@ -76,7 +76,7 @@ struct ApplicationTimelineStepperView: View {
             return Step(status: stage, title: stage.rawValue, state: state)
         }
     }
-    
+
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(alignment: .top, spacing: 0) {
@@ -96,11 +96,11 @@ struct ApplicationTimelineStepperView: View {
                                     )
                                 }
                             }
-                            
+
                             nodeView(for: step.state)
                         }
                         .frame(height: 22)
-                        
+
                         Text(step.title)
                             .font(.system(size: 11, weight: .medium))
                             .foregroundStyle(step.state == .upcoming ? Color.gray.opacity(0.8) : Color.black.opacity(0.85))
@@ -114,7 +114,7 @@ struct ApplicationTimelineStepperView: View {
             .padding(.vertical, 8)
         }
     }
-    
+
     @ViewBuilder
     private func nodeView(for state: StepState) -> some View {
         switch state {

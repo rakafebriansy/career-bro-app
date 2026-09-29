@@ -10,6 +10,7 @@ import SwiftData
 
 struct ProfileView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(AppNavigationRouter.self) private var router: AppNavigationRouter?
     @State private var profileName: String = "Raka Febrian"
     @State private var profileEmail: String = "rakafebrian@mail.com"
     @State private var isNotificationEnabled: Bool = true
@@ -18,17 +19,17 @@ struct ProfileView: View {
     @State private var navigateToManageToken: Bool = false
     @State private var navigateToEmailCenter: Bool = false
     @State private var navigateToEditProfile: Bool = false
-    
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
                 Color(hex: "2563EB")
                     .ignoresSafeArea(edges: .top)
                     .frame(height: 120)
-                
+
                 VStack(spacing: 0) {
                     headerBar
-                    
+
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: 24) {
                             ProfileHeaderCardView(
@@ -38,13 +39,13 @@ struct ProfileView: View {
                                     navigateToEditProfile = true
                                 }
                             )
-                            
+
                             settingsSection
-                            
+
                             dataSection
-                            
+
                             securitySection
-                            
+
                             ProfileLogoutButtonView {
                                 showLogoutConfirmation = true
                             }
@@ -82,9 +83,59 @@ struct ProfileView: View {
                     profileEmail = updatedEmail
                 }
             }
+            .onChange(of: router?.navigateToEditProfile) { _, shouldNav in
+                if shouldNav == true {
+                    DispatchQueue.main.async {
+                        navigateToEditProfile = true
+                        router?.navigateToEditProfile = false
+                    }
+                }
+            }
+            .onChange(of: router?.showResetDataConfirmation) { _, shouldShow in
+                if shouldShow == true {
+                    DispatchQueue.main.async {
+                        showResetDataConfirmation = true
+                        router?.showResetDataConfirmation = false
+                    }
+                }
+            }
+            .onChange(of: router?.navigateToManageToken) { _, shouldNav in
+                if shouldNav == true {
+                    navigateToManageToken = true
+                    router?.navigateToManageToken = false
+                }
+            }
+            .onChange(of: router?.navigateToEmailCenter) { _, shouldNav in
+                if shouldNav == true {
+                    navigateToEmailCenter = true
+                    router?.navigateToEmailCenter = false
+                }
+            }
+            .onAppear {
+                if router?.navigateToEditProfile == true {
+                    DispatchQueue.main.async {
+                        navigateToEditProfile = true
+                        router?.navigateToEditProfile = false
+                    }
+                }
+                if router?.showResetDataConfirmation == true {
+                    DispatchQueue.main.async {
+                        showResetDataConfirmation = true
+                        router?.showResetDataConfirmation = false
+                    }
+                }
+                if router?.navigateToManageToken == true {
+                    navigateToManageToken = true
+                    router?.navigateToManageToken = false
+                }
+                if router?.navigateToEmailCenter == true {
+                    navigateToEmailCenter = true
+                    router?.navigateToEmailCenter = false
+                }
+            }
         }
     }
-    
+
     private var headerBar: some View {
         HStack {
             Spacer()
@@ -96,7 +147,7 @@ struct ProfileView: View {
         .frame(height: 48)
         .background(Color(hex: "2563EB"))
     }
-    
+
     private var settingsSection: some View {
         ProfileMenuGroupView(title: "Settings") {
             ProfileMenuRowView(
@@ -106,11 +157,11 @@ struct ProfileView: View {
             ) {
                 navigateToManageToken = true
             }
-            
+
             Divider()
                 .foregroundStyle(Color.baseStroke)
                 .padding(.leading, 54)
-            
+
             ProfileMenuRowView(
                 iconName: "envelope",
                 title: "Email Center",
@@ -118,11 +169,11 @@ struct ProfileView: View {
             ) {
                 navigateToEmailCenter = true
             }
-            
+
             Divider()
                 .foregroundStyle(Color.baseStroke)
                 .padding(.leading, 54)
-            
+
             ProfileMenuRowView(
                 iconName: "bell",
                 title: "Notification",
@@ -130,7 +181,7 @@ struct ProfileView: View {
             )
         }
     }
-    
+
     private var dataSection: some View {
         ProfileMenuGroupView(title: "Data Management") {
             ProfileMenuRowView(
@@ -142,7 +193,7 @@ struct ProfileView: View {
             }
         }
     }
-    
+
     private var securitySection: some View {
         ProfileMenuGroupView(title: "Security") {
             ProfileMenuRowView(
@@ -151,11 +202,11 @@ struct ProfileView: View {
                 trailingType: .navigation
             ) {
             }
-            
+
             Divider()
                 .foregroundStyle(Color.baseStroke)
                 .padding(.leading, 54)
-            
+
             ProfileMenuRowView(
                 iconName: "envelope",
                 title: "Terms and Conditions",

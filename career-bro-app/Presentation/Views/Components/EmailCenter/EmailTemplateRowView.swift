@@ -10,7 +10,7 @@ import SwiftUI
 struct EmailTemplateRowView: View {
     let template: EmailTemplateModel
     var onSelect: (() -> Void)? = nil
-    
+
     var body: some View {
         Button {
             onSelect?()
@@ -21,7 +21,7 @@ struct EmailTemplateRowView: View {
                         Text(template.title)
                             .font(.system(size: 15, weight: .bold))
                             .foregroundStyle(Color.bgPrimary)
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
                                 ForEach(template.tags, id: \.self) { tag in
@@ -36,15 +36,15 @@ struct EmailTemplateRowView: View {
                             }
                         }
                     }
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: "chevron.right")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(Color(hex: "#9CA3AF"))
                 }
                 .padding(.vertical, 14)
-                
+
                 Divider()
                     .foregroundStyle(Color.baseStroke)
             }

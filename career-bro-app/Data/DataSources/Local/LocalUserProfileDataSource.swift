@@ -16,7 +16,7 @@ protocol LocalUserProfileDataSourceProtocol {
 final class LocalUserProfileDataSource: LocalUserProfileDataSourceProtocol {
     private let modelContext: ModelContext?
     private var inMemoryProfile: UserProfileEntity
-    
+
     init(modelContext: ModelContext? = nil) {
         self.modelContext = modelContext
         self.inMemoryProfile = UserProfileEntity(
@@ -31,7 +31,7 @@ final class LocalUserProfileDataSource: LocalUserProfileDataSourceProtocol {
             isDarkModeEnabled: false
         )
     }
-    
+
     func getProfile() -> UserProfileEntity {
         if let context = modelContext {
             let descriptor = FetchDescriptor<UserProfileModel>()
@@ -52,7 +52,7 @@ final class LocalUserProfileDataSource: LocalUserProfileDataSourceProtocol {
         }
         return inMemoryProfile
     }
-    
+
     func updateProfile(_ profile: UserProfileEntity) {
         inMemoryProfile = profile
         if let context = modelContext {

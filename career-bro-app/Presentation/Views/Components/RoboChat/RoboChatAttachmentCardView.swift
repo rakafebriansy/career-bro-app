@@ -10,23 +10,23 @@ import SwiftUI
 struct RoboChatAttachmentCardView: View {
     let attachment: ChatAttachmentModel
     var onRemove: (() -> Void)? = nil
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "doc")
                 .font(.system(size: 22, weight: .regular))
                 .foregroundStyle(Color(hex: "374151"))
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(attachment.fileName)
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color(hex: "1F2937"))
-                
+
                 Text(attachment.fileSize)
                     .font(.system(size: 12, weight: .regular))
                     .foregroundStyle(Color(hex: "9CA3AF"))
             }
-            
+
             if let onRemove = onRemove {
                 Spacer()
                 Button {

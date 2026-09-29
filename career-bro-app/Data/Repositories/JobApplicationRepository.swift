@@ -18,26 +18,26 @@ protocol JobApplicationRepositoryProtocol {
 
 final class JobApplicationRepository: JobApplicationRepositoryProtocol {
     private let dataSource: LocalJobDataSourceProtocol
-    
+
     init(dataSource: LocalJobDataSourceProtocol = LocalJobDataSource()) {
         self.dataSource = dataSource
     }
-    
+
     func getApplications() async throws -> [JobApplicationEntity] {
         let models = try dataSource.fetchApplications()
         return models.map { mapToEntity($0) }
     }
-    
+
     func getApplicationById(_ id: UUID) async throws -> JobApplicationEntity? {
         guard let model = try dataSource.fetchApplication(byId: id) else { return nil }
         return mapToEntity(model)
     }
-    
+
     func saveApplication(_ application: JobApplicationEntity) async throws {
         let model = mapToModel(application)
         try dataSource.insertApplication(model)
     }
-    
+
     func updateApplication(_ application: JobApplicationEntity) async throws {
         if let existing = try dataSource.fetchApplication(byId: application.id) {
             existing.company = application.company
@@ -65,16 +65,15 @@ final class JobApplicationRepository: JobApplicationRepositoryProtocol {
             try dataSource.save()
         }
     }
-    
+
     func deleteApplication(_ id: UUID) async throws {
         if let existing = try dataSource.fetchApplication(byId: id) {
             try dataSource.deleteApplication(existing)
         }
     }
-    
+
     func updateStageIndex(for applicationId: UUID, newIndex: Int) async throws {
         if let existing = try dataSource.fetchApplication(byId: applicationId) {
-            // Map stage index to JobStatusEnum
             let statuses: [JobStatusEnum] = [.needToApply, .applied, .assessment, .interview, .postInterview]
             if newIndex >= 0 && newIndex < statuses.count {
                 existing.status = statuses[newIndex]
@@ -83,8 +82,7 @@ final class JobApplicationRepository: JobApplicationRepositoryProtocol {
             }
         }
     }
-    
-    // MARK: - Mappers
+
     private func mapToEntity(_ model: JobApplicationModel) -> JobApplicationEntity {
         JobApplicationEntity(
             id: model.id,
@@ -113,7 +111,7 @@ final class JobApplicationRepository: JobApplicationRepositoryProtocol {
             attachments: model.attachments
         )
     }
-    
+
     private func mapToModel(_ entity: JobApplicationEntity) -> JobApplicationModel {
         JobApplicationModel(
             id: entity.id,

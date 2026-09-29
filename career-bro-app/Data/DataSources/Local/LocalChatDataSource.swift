@@ -22,11 +22,11 @@ final class LocalChatDataSource: LocalChatDataSourceProtocol {
         ChatSessionEntity(title: "System Architecture Mock Interview", preview: "Great explanation of clean architecture in iOS.", date: Calendar.current.date(byAdding: .day, value: -3, to: Date()) ?? Date(), isPinned: false),
         ChatSessionEntity(title: "Salary Negotiation Strategy", preview: "Always base your counter-offer on market value data.", date: Calendar.current.date(byAdding: .day, value: -5, to: Date()) ?? Date(), isPinned: false)
     ]
-    
+
     init(modelContext: ModelContext? = nil) {
         self.modelContext = modelContext
     }
-    
+
     func getChatSessions() -> [ChatSessionEntity] {
         if let context = modelContext {
             let descriptor = FetchDescriptor<ChatSessionModel>(sortBy: [SortDescriptor(\.date, order: .reverse)])
@@ -44,7 +44,7 @@ final class LocalChatDataSource: LocalChatDataSourceProtocol {
         }
         return inMemorySessions
     }
-    
+
     func saveSession(_ session: ChatSessionEntity) {
         if let context = modelContext {
             let targetId = session.id
@@ -73,7 +73,7 @@ final class LocalChatDataSource: LocalChatDataSourceProtocol {
             }
         }
     }
-    
+
     func getPersonas() -> [InterviewerPersonaEntity] {
         return [
             InterviewerPersonaEntity(name: "Tech Lead", roleDescription: "Technical architecture, iOS, Swift, and clean code deep dives.", avatarImageName: "person.crop.circle.badge.checkmark", systemPrompt: "You are a pragmatic Tech Lead conducting a rigorous iOS engineering interview."),

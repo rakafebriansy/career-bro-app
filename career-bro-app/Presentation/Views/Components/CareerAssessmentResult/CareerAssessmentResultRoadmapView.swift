@@ -16,7 +16,7 @@ struct CareerAssessmentResultRoadmapView: View {
         let salaryRange: String
         let requiredSkills: String
     }
-    
+
     var steps: [RoadmapStep] = [
         RoadmapStep(
             level: "Junior",
@@ -40,18 +40,18 @@ struct CareerAssessmentResultRoadmapView: View {
             requiredSkills: "Team Leadership, Design Vision, Stakeholder Management"
         )
     ]
-    
+
     @State private var selectedIndex: Int = 0
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Roadmap")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             stepperView
-            
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
                     ForEach(Array(steps.enumerated()), id: \.element.id) { index, step in
@@ -64,14 +64,14 @@ struct CareerAssessmentResultRoadmapView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var stepperView: some View {
         HStack(alignment: .top, spacing: 0) {
             ForEach(Array(steps.enumerated()), id: \.element.id) { index, step in
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 0) {
                         stepIndicator(for: index, isCurrent: step.isCurrent)
-                        
+
                         if index < steps.count - 1 {
                             Rectangle()
                                 .fill(Color.baseStroke)
@@ -80,12 +80,12 @@ struct CareerAssessmentResultRoadmapView: View {
                                 .padding(.horizontal, 4)
                         }
                     }
-                    
+
                     VStack(alignment: .leading, spacing: 2) {
                         Text(step.level)
                             .font(.caption2)
                             .foregroundStyle(Color(hex: "#737373"))
-                        
+
                         Text(step.title)
                             .font(.caption)
                             .fontWeight(.bold)
@@ -100,18 +100,18 @@ struct CareerAssessmentResultRoadmapView: View {
             }
         }
     }
-    
+
     private func stepIndicator(for index: Int, isCurrent: Bool) -> some View {
         ZStack {
             if isCurrent {
                 Circle()
                     .stroke(Color.bgPrimary.opacity(0.3), lineWidth: 3)
                     .frame(width: 28, height: 28)
-                
+
                 Circle()
                     .fill(Color.bgPrimary)
                     .frame(width: 20, height: 20)
-                
+
                 Image(systemName: "lock.fill")
                     .font(.system(size: 10, weight: .bold))
                     .foregroundStyle(.white)
@@ -119,7 +119,7 @@ struct CareerAssessmentResultRoadmapView: View {
                 Circle()
                     .stroke(Color.baseStroke, lineWidth: 1.5)
                     .frame(width: 24, height: 24)
-                
+
                 Image(systemName: "circle.grid.3x3.fill")
                     .font(.system(size: 9))
                     .foregroundStyle(Color(hex: "#737373"))
@@ -127,38 +127,38 @@ struct CareerAssessmentResultRoadmapView: View {
         }
         .frame(width: 28, height: 28)
     }
-    
+
     private func roadmapCard(step: RoadmapStep) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
                 Image(systemName: "briefcase.fill")
                     .foregroundStyle(Color.bgPrimary)
                     .font(.subheadline)
-                
+
                 Text(step.title)
                     .font(.subheadline)
                     .fontWeight(.bold)
                     .foregroundStyle(.textPrimary)
             }
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .top, spacing: 8) {
                     Image(systemName: "banknote")
                         .font(.caption)
                         .foregroundStyle(Color(hex: "#737373"))
                         .frame(width: 16)
-                    
+
                     Text("Earn : \(step.salaryRange)")
                         .font(.caption)
                         .foregroundStyle(Color(hex: "#737373"))
                 }
-                
+
                 HStack(alignment: .top, spacing: 8) {
                     Image(systemName: "laptopcomputer")
                         .font(.caption)
                         .foregroundStyle(Color(hex: "#737373"))
                         .frame(width: 16)
-                    
+
                     Text("Required Skill : \(step.requiredSkills)")
                         .font(.caption)
                         .foregroundStyle(Color(hex: "#737373"))

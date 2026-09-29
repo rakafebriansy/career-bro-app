@@ -17,29 +17,29 @@ final class CreateEmailTemplateViewModel {
     var body: String = ""
     var isSuccess: Bool = false
     var errorMessage: String? = nil
-    
+
     private let saveEmailTemplateUseCase: SaveEmailTemplateUseCase
-    
+
     init(
         saveEmailTemplateUseCase: SaveEmailTemplateUseCase = SaveEmailTemplateUseCase(repository: EmailTemplateRepository())
     ) {
         self.saveEmailTemplateUseCase = saveEmailTemplateUseCase
     }
-    
+
     @MainActor
     func saveTemplate() async {
         guard !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             errorMessage = "Please enter a template title."
             return
         }
-        
+
         let newTemplate = EmailTemplateEntity(
             title: title,
             tags: tags,
             subject: subject,
             body: body
         )
-        
+
         do {
             try await saveEmailTemplateUseCase.execute(newTemplate)
             isSuccess = true
@@ -47,7 +47,7 @@ final class CreateEmailTemplateViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     func insertPlaceholder(_ placeholder: String, isSubjectField: Bool) {
         if isSubjectField {
             subject += (subject.isEmpty ? "" : " ") + placeholder

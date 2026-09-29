@@ -12,7 +12,7 @@ struct CareerAssessmentStageIndicatorView: View {
     let totalStages: Int
     let totalAnswered: Int
     let totalQuestions: Int
-    
+
     var body: some View {
         VStack(spacing: 8) {
             HStack {
@@ -24,15 +24,15 @@ struct CareerAssessmentStageIndicatorView: View {
                     .padding(.vertical, 4)
                     .background(Color(hex: "#EEECFE"))
                     .clipShape(Capsule())
-                
+
                 Spacer()
-                
+
                 Text("\(totalAnswered)/\(totalQuestions) Answered")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(Color(hex: "#8E8E93"))
             }
-            
+
             HStack(spacing: 6) {
                 ForEach(0..<totalStages, id: \.self) { index in
                     Capsule()
@@ -43,7 +43,7 @@ struct CareerAssessmentStageIndicatorView: View {
             }
         }
     }
-    
+
     private func indicatorColor(for index: Int) -> Color {
         if index < currentStage {
             return Color.bgPrimary

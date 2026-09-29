@@ -15,7 +15,7 @@ struct TokenTransactionHistoryView: View {
         let tokenDelta: Int
         let iconName: String
     }
-    
+
     var transactions: [TokenTransactionItem] = [
         TokenTransactionItem(
             title: "Daily Login Bonus",
@@ -42,18 +42,18 @@ struct TokenTransactionHistoryView: View {
             iconName: "plus.circle.fill"
         )
     ]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Recent Token Activity")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             VStack(spacing: 0) {
                 ForEach(Array(transactions.enumerated()), id: \.element.id) { index, item in
                     transactionRow(item: item)
-                    
+
                     if index < transactions.count - 1 {
                         Divider()
                             .foregroundStyle(Color.baseStroke)
@@ -70,32 +70,32 @@ struct TokenTransactionHistoryView: View {
             )
         }
     }
-    
+
     private func transactionRow(item: TokenTransactionItem) -> some View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
                     .fill(item.tokenDelta > 0 ? Color(hex: "#F0FDF4") : Color(hex: "#F1F5F9"))
                     .frame(width: 38, height: 38)
-                
+
                 Image(systemName: item.iconName)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(item.tokenDelta > 0 ? Color(hex: "#16A34A") : Color(hex: "#4B5563"))
             }
-            
+
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.title)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.textPrimary)
-                
+
                 Text(item.dateString)
                     .font(.caption2)
                     .foregroundStyle(Color(hex: "#737373"))
             }
-            
+
             Spacer()
-            
+
             Text(item.tokenDelta > 0 ? "+\(item.tokenDelta)" : "\(item.tokenDelta)")
                 .font(.subheadline)
                 .fontWeight(.bold)

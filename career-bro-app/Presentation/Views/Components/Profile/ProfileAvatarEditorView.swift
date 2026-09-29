@@ -10,7 +10,7 @@ import SwiftUI
 struct ProfileAvatarEditorView: View {
     var imageName: String? = nil
     var onAvatarTap: (() -> Void)? = nil
-    
+
     var body: some View {
         Button {
             onAvatarTap?()
@@ -19,7 +19,7 @@ struct ProfileAvatarEditorView: View {
                 Circle()
                     .fill(Color(hex: "E0E7FF"))
                     .frame(width: 110, height: 110)
-                
+
                 Image(systemName: "person.crop.circle.fill")
                     .resizable()
                     .scaledToFill()

@@ -12,7 +12,7 @@ struct CareerAssessmentQuestionEntity: Identifiable, Codable, Equatable {
     let question: String
     let category: String?
     var selectedScore: Int?
-    
+
     init(id: Int, question: String, category: String? = nil, selectedScore: Int? = nil) {
         self.id = id
         self.question = question
@@ -30,7 +30,7 @@ struct CareerAssessmentResultEntity: Identifiable, Equatable {
     var recommendedRoadmap: [String]
     var workPreferences: [String]
     var completedDate: Date
-    
+
     init(
         id: UUID = UUID(),
         primaryArchetype: String = "The Strategic Builder",

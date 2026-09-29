@@ -11,13 +11,13 @@ struct JobFormFieldView: View {
     let title: String
     let placeholder: String
     @Binding var text: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(Color.black)
-            
+
             TextField(placeholder, text: $text)
                 .font(.system(size: 15, weight: .regular))
                 .foregroundStyle(Color(hex: "1F2937"))

@@ -17,7 +17,7 @@ struct TokenTopUpPackagesView: View {
         let badge: String?
         let isHighlighted: Bool
     }
-    
+
     var packages: [TokenPackage] = [
         TokenPackage(
             id: "starter_1k",
@@ -47,16 +47,16 @@ struct TokenTopUpPackagesView: View {
             isHighlighted: false
         )
     ]
-    
+
     var onSelectPackage: ((TokenPackage) -> Void)? = nil
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Top Up Packages")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             VStack(spacing: 12) {
                 ForEach(packages) { package in
                     packageCard(package: package)
@@ -64,7 +64,7 @@ struct TokenTopUpPackagesView: View {
             }
         }
     }
-    
+
     private func packageCard(package: TokenPackage) -> some View {
         Button {
             onSelectPackage?(package)
@@ -74,19 +74,19 @@ struct TokenTopUpPackagesView: View {
                     RoundedRectangle(cornerRadius: 12)
                         .fill(package.isHighlighted ? Color.bgPrimary.opacity(0.12) : Color(hex: "#F1F5F9"))
                         .frame(width: 46, height: 46)
-                    
+
                     Image(systemName: "sparkle")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundStyle(package.isHighlighted ? Color.bgPrimary : Color(hex: "#4B5563"))
                 }
-                
+
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 6) {
                         Text(package.title)
                             .font(.subheadline)
                             .fontWeight(.bold)
                             .foregroundStyle(.textPrimary)
-                        
+
                         if let badge = package.badge {
                             Text(badge)
                                 .font(.system(size: 9, weight: .bold))
@@ -97,14 +97,14 @@ struct TokenTopUpPackagesView: View {
                                 .clipShape(Capsule())
                         }
                     }
-                    
+
                     Text("\(package.tokenCount) Tokens • \(package.description)")
                         .font(.caption2)
                         .foregroundStyle(Color(hex: "#737373"))
                 }
-                
+
                 Spacer()
-                
+
                 Text(package.priceString)
                     .font(.caption)
                     .fontWeight(.bold)

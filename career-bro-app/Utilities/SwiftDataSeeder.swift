@@ -29,57 +29,50 @@ struct SwiftDataSeeder {
             fatalError("Failed to initialize preview ModelContainer: \(error.localizedDescription)")
         }
     }()
-    
+
     @MainActor
     static func seedIfNeeded(context: ModelContext) {
-        // 1. Job Applications
         let jobDescriptor = FetchDescriptor<JobApplicationModel>()
         if ((try? context.fetchCount(jobDescriptor)) ?? 0) == 0 {
             for app in makeSampleApplications() {
                 context.insert(app)
             }
         }
-        
-        // 2. Email Templates
+
         let emailDescriptor = FetchDescriptor<EmailTemplateModel>()
         if ((try? context.fetchCount(emailDescriptor)) ?? 0) == 0 {
             for template in EmailTemplateModel.sampleTemplates {
                 context.insert(template)
             }
         }
-        
-        // 3. Chat Sessions
+
         let sessionDescriptor = FetchDescriptor<ChatSessionModel>()
         if ((try? context.fetchCount(sessionDescriptor)) ?? 0) == 0 {
             for session in ChatSessionModel.sampleSessions {
                 context.insert(session)
             }
         }
-        
-        // 4. User Profile
+
         let profileDescriptor = FetchDescriptor<UserProfileModel>()
         if ((try? context.fetchCount(profileDescriptor)) ?? 0) == 0 {
             context.insert(UserProfileModel())
         }
-        
-        // 5. Token Balance
+
         let tokenDescriptor = FetchDescriptor<TokenBalanceModel>()
         if ((try? context.fetchCount(tokenDescriptor)) ?? 0) == 0 {
             context.insert(TokenBalanceModel())
         }
-        
-        // 6. Career Assessment Result
+
         let assessmentDescriptor = FetchDescriptor<CareerAssessmentResultModel>()
         if ((try? context.fetchCount(assessmentDescriptor)) ?? 0) == 0 {
             context.insert(CareerAssessmentResultModel())
         }
-        
+
         try? context.save()
     }
-    
+
     @MainActor
     static func resetAndReseed(context: ModelContext) {
-        // Delete all entities
         if let existingJobs = try? context.fetch(FetchDescriptor<JobApplicationModel>()) {
             for item in existingJobs { context.delete(item) }
         }
@@ -102,8 +95,7 @@ struct SwiftDataSeeder {
             for item in existingAssessments { context.delete(item) }
         }
         try? context.save()
-        
-        // Re-seed all entities
+
         for app in makeSampleApplications() {
             context.insert(app)
         }
@@ -116,10 +108,10 @@ struct SwiftDataSeeder {
         context.insert(UserProfileModel())
         context.insert(TokenBalanceModel())
         context.insert(CareerAssessmentResultModel())
-        
+
         try? context.save()
     }
-    
+
     @MainActor
     static func fetchFirstSample(context: ModelContext) -> JobApplicationModel {
         let descriptor = FetchDescriptor<JobApplicationModel>()
@@ -130,14 +122,14 @@ struct SwiftDataSeeder {
         context.insert(fallback)
         return fallback
     }
-    
+
     static func computeJourneySummary(from applications: [JobApplicationModel]) -> [JourneySummaryModel] {
         let toApplyCount = applications.filter { $0.status == .needToApply }.count
         let appliedCount = applications.filter { $0.status == .applied }.count
         let assessmentCount = applications.filter { $0.status == .assessment }.count
         let interviewCount = applications.filter { $0.status == .interview || $0.status == .postInterview }.count
         let offerCount = applications.filter { $0.status == .offered || $0.status == .accepted }.count
-        
+
         return [
             JourneySummaryModel(title: "To Apply", value: toApplyCount, color: Color(hex: "8E5CA6")),
             JourneySummaryModel(title: "Screening", value: appliedCount, color: Color(hex: "2E9D7E")),
@@ -146,11 +138,11 @@ struct SwiftDataSeeder {
             JourneySummaryModel(title: "Offer", value: offerCount, color: Color(hex: "68BF30"))
         ]
     }
-    
+
     static func makeSampleApplications() -> [JobApplicationModel] {
         let now = Date()
         let calendar = Calendar.current
-        
+
         return [
             JobApplicationModel(
                 company: "Tokopedia",
@@ -187,7 +179,7 @@ struct SwiftDataSeeder {
                     "Portfolio_iOS_2026.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Gojek",
                 position: "Associate Product Manager",
@@ -222,7 +214,7 @@ struct SwiftDataSeeder {
                     "APM_CaseStudy_Gojek.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Traveloka",
                 position: "Data Analyst Intern",
@@ -256,7 +248,7 @@ struct SwiftDataSeeder {
                     "Offer_Letter_Traveloka.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Bukalapak",
                 position: "Senior QA Automation",
@@ -290,7 +282,7 @@ struct SwiftDataSeeder {
                     "Signed_Contract_Bukalapak.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Sea Group",
                 position: "Backend Engineer (Golang)",
@@ -324,7 +316,7 @@ struct SwiftDataSeeder {
                     "Sea_Interview_Notes.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Blibli",
                 position: "UI/UX Designer",
@@ -359,7 +351,7 @@ struct SwiftDataSeeder {
                     "Blibli_Job_Spec.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Stripe",
                 position: "Solutions Architect",
@@ -394,7 +386,7 @@ struct SwiftDataSeeder {
                     "Stripe_Technical_Deck.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Bank Mandiri",
                 position: "Officer Development Program (ODP) IT",
@@ -429,7 +421,7 @@ struct SwiftDataSeeder {
                     "Mandiri_Test_Confirmation.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Tiket.com",
                 position: "DevOps Engineer",
@@ -463,7 +455,7 @@ struct SwiftDataSeeder {
                     "Tiket_Application.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Astra International",
                 position: "System Analyst",
@@ -498,7 +490,7 @@ struct SwiftDataSeeder {
                     "flyer.jpg"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "DANA Indonesia",
                 position: "Mobile iOS Architect",
@@ -532,7 +524,7 @@ struct SwiftDataSeeder {
                     "DANA_Arch_Spec.pdf"
                 ]
             ),
-            
+
             JobApplicationModel(
                 company: "Grab",
                 position: "Lead Product Designer",

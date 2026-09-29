@@ -14,7 +14,7 @@ struct JobCardView: View {
     var showCheckbox: Bool = false
     var isChecked: Bool = false
     var onToggleCheck: (() -> Void)? = nil
-    
+
     var body: some View {
         if showHeader {
             headerCardView
@@ -22,7 +22,7 @@ struct JobCardView: View {
             compactCardView
         }
     }
-    
+
     private var compactCardView: some View {
         HStack(alignment: .top, spacing: 12) {
             if showCheckbox {
@@ -51,7 +51,7 @@ struct JobCardView: View {
                 .buttonStyle(.plain)
                 .padding(.top, 2)
             }
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 HStack(alignment: .center) {
                     Text(job.position)
@@ -63,12 +63,12 @@ struct JobCardView: View {
                         Badge(job.priority.rawValue, color: job.priority.backgroundColor, textColor: job.priority.foregroundColor)
                     }
                 }
-                
+
                 Text(job.company)
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundStyle(.baseText)
-                
+
                 if let info = job.deadlineInfo {
                     HStack(alignment: .center) {
                         HStack(spacing: 6) {
@@ -77,9 +77,9 @@ struct JobCardView: View {
                         }
                         .font(.footnote)
                         .foregroundStyle(.baseText)
-                        
+
                         Spacer()
-                        
+
                         Text(info.relativeStatus)
                             .font(.footnote)
                             .fontWeight(.medium)
@@ -103,7 +103,7 @@ struct JobCardView: View {
                 .stroke(.baseStroke, lineWidth: 1.5)
         )
     }
-    
+
     private var headerCardView: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
@@ -118,7 +118,7 @@ struct JobCardView: View {
                 UnevenRoundedRectangle(topLeadingRadius: 12, topTrailingRadius: 12)
                     .fill(job.status.color)
             )
-            
+
             VStack {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 6) {

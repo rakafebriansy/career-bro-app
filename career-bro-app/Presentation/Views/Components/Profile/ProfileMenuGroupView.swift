@@ -10,13 +10,13 @@ import SwiftUI
 struct ProfileMenuGroupView<Content: View>: View {
     let title: String
     @ViewBuilder let content: () -> Content
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(Color.black)
-            
+
             VStack(spacing: 0) {
                 content()
             }

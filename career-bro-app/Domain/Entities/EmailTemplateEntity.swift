@@ -11,7 +11,7 @@ struct EmailAttachmentEntity: Identifiable, Equatable {
     let id: UUID
     var fileName: String
     var fileSizeString: String
-    
+
     init(id: UUID = UUID(), fileName: String, fileSizeString: String = "200 KB") {
         self.id = id
         self.fileName = fileName
@@ -26,7 +26,7 @@ struct EmailTemplateEntity: Identifiable, Equatable {
     var subject: String
     var body: String
     var attachments: [EmailAttachmentEntity]
-    
+
     init(
         id: UUID = UUID(),
         title: String,

@@ -13,7 +13,7 @@ struct JourneySummaryEntity: Identifiable, Equatable {
     var interviewsScheduledCount: Int
     var offersReceivedCount: Int
     var responseRate: Double
-    
+
     init(
         id: UUID = UUID(),
         activeApplicationsCount: Int = 12,

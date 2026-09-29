@@ -10,7 +10,7 @@ import SwiftUI
 struct RoboChatPromptSuggestionsView: View {
     var categories: [PromptCategoryModel] = PromptCategoryModel.defaultCategories
     var onSelectPrompt: ((String) -> Void)? = nil
-    
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 32) {
@@ -24,19 +24,19 @@ struct RoboChatPromptSuggestionsView: View {
         }
         .scrollDismissesKeyboard(.interactively)
     }
-    
+
     private func categorySection(for category: PromptCategoryModel) -> some View {
         VStack(spacing: 12) {
             HStack(spacing: 8) {
                 Image(systemName: category.iconName)
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(Color(hex: "64748B"))
-                
+
                 Text(category.title)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Color(hex: "64748B"))
             }
-            
+
             VStack(spacing: 10) {
                 ForEach(category.prompts, id: \.self) { prompt in
                     Button {

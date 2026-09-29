@@ -12,17 +12,17 @@ struct EmailTemplatePreviewCardView: View {
     let tags: [String]
     let subject: String
     let bodyText: String
-    
+
     @State private var isExpanded: Bool = true
-    
+
     private var renderedSubject: String {
         subject.isEmpty ? "(No Subject)" : formatSampleVariables(subject)
     }
-    
+
     private var renderedBody: String {
         bodyText.isEmpty ? "(No Body Content)" : formatSampleVariables(bodyText)
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Button {
@@ -35,22 +35,22 @@ struct EmailTemplatePreviewCardView: View {
                         Image(systemName: "eye.fill")
                             .font(.caption)
                             .foregroundStyle(Color.bgPrimary)
-                        
+
                         Text("Live Preview")
                             .font(.caption)
                             .fontWeight(.bold)
                             .foregroundStyle(.textPrimary)
                     }
-                    
+
                     Spacer()
-                    
+
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                         .font(.caption)
                         .foregroundStyle(Color(hex: "#737373"))
                 }
             }
             .buttonStyle(.plain)
-            
+
             if isExpanded {
                 VStack(alignment: .leading, spacing: 12) {
                     if !tags.isEmpty {
@@ -68,27 +68,27 @@ struct EmailTemplatePreviewCardView: View {
                             }
                         }
                     }
-                    
+
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Subject:")
                             .font(.caption2)
                             .fontWeight(.bold)
                             .foregroundStyle(Color(hex: "#737373"))
-                        
+
                         Text(renderedSubject)
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(.textPrimary)
                     }
-                    
+
                     Divider()
                         .foregroundStyle(Color.baseStroke)
-                    
+
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Message Body:")
                             .font(.caption2)
                             .fontWeight(.bold)
                             .foregroundStyle(Color(hex: "#737373"))
-                        
+
                         Text(renderedBody)
                             .font(.system(size: 12))
                             .foregroundStyle(.textPrimary)
@@ -105,7 +105,7 @@ struct EmailTemplatePreviewCardView: View {
             }
         }
     }
-    
+
     private func formatSampleVariables(_ input: String) -> String {
         input
             .replacingOccurrences(of: "[Company Name]", with: "Tech Corp")

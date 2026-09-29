@@ -17,11 +17,11 @@ protocol LocalEmailDataSourceProtocol {
 final class LocalEmailDataSource: LocalEmailDataSourceProtocol {
     private let modelContext: ModelContext?
     private var inMemoryTemplates: [EmailTemplateModel] = EmailTemplateModel.sampleTemplates
-    
+
     init(modelContext: ModelContext? = nil) {
         self.modelContext = modelContext
     }
-    
+
     func fetchTemplates() -> [EmailTemplateModel] {
         guard let context = modelContext else {
             return inMemoryTemplates
@@ -32,7 +32,7 @@ final class LocalEmailDataSource: LocalEmailDataSourceProtocol {
         }
         return inMemoryTemplates
     }
-    
+
     func saveTemplate(_ template: EmailTemplateModel) {
         if let context = modelContext {
             let targetId = template.id
@@ -55,7 +55,7 @@ final class LocalEmailDataSource: LocalEmailDataSourceProtocol {
             }
         }
     }
-    
+
     func deleteTemplate(_ id: UUID) {
         if let context = modelContext {
             let targetId = id

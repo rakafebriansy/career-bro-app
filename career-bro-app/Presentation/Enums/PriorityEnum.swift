@@ -12,7 +12,7 @@ enum PriorityEnum: String, Codable {
     case low = "Low"
     case medium = "Medium"
     case high = "High"
-    
+
     var backgroundColor: Color {
         switch self {
         case .high:   return Color(hex: "FEE1E0")
@@ -20,7 +20,7 @@ enum PriorityEnum: String, Codable {
         case .low:    return Color(hex: "E6F7ED")
         }
     }
-        
+
     var foregroundColor: Color {
         switch self {
         case .high:   return Color(hex: "F33131")

@@ -16,19 +16,19 @@ struct CareerDNAHeroCardView: View {
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundStyle(.baseWhite)
-                    
+
                     Text("An AI powered assesment that maps who you are to where you're meant to go")
                         .font(.caption)
                         .foregroundStyle(.baseWhite.opacity(0.85))
                         .lineSpacing(2)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                
+
                 Spacer(minLength: 60)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
-            
+
             Image(systemName: "suitcase.fill")
                 .resizable()
                 .scaledToFit()

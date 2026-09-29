@@ -11,7 +11,7 @@ struct CareerDNAHistoryItemView: View {
     let title: String
     var date: String = "Oct 12, 2026"
     var action: (() -> Void)? = nil
-    
+
     var body: some View {
         Button {
             action?()
@@ -22,20 +22,20 @@ struct CareerDNAHistoryItemView: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(.bgPrimary)
-                    
+
                     HStack(spacing: 6) {
                         Image(systemName: "calendar")
                             .font(.caption)
                             .foregroundStyle(Color(hex: "#8E8E93"))
-                        
+
                         Text(date)
                             .font(.caption)
                             .foregroundStyle(Color(hex: "#8E8E93"))
                     }
                 }
-                
+
                 Spacer()
-                
+
                 Image(systemName: "chevron.right")
                     .font(.subheadline)
                     .foregroundStyle(Color(hex: "#8E8E93"))

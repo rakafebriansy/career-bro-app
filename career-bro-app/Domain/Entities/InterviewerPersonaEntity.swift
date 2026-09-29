@@ -13,7 +13,7 @@ struct InterviewerPersonaEntity: Identifiable, Equatable {
     var roleDescription: String
     var avatarImageName: String?
     var systemPrompt: String
-    
+
     init(
         id: UUID = UUID(),
         name: String,

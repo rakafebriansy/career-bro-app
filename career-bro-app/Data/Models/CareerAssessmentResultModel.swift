@@ -17,7 +17,7 @@ final class CareerAssessmentResultModel {
     var completedDate: Date
     var roadmapStages: [String]
     var workPreferences: [String]
-    
+
     init(
         id: UUID = UUID(),
         primaryArchetype: String = "The Strategic Builder",

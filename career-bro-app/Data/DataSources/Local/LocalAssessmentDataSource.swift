@@ -17,12 +17,12 @@ protocol LocalAssessmentDataSourceProtocol {
 final class LocalAssessmentDataSource: LocalAssessmentDataSourceProtocol {
     private let modelContext: ModelContext?
     private var cachedResult: CareerAssessmentResultEntity?
-    
+
     init(modelContext: ModelContext? = nil) {
         self.modelContext = modelContext
         self.cachedResult = CareerAssessmentResultEntity()
     }
-    
+
     func loadQuestions() -> [CareerAssessmentQuestionEntity] {
         let loaded = CareerAssessmentLoader.loadQuestions()
         return loaded.map { q in
@@ -33,7 +33,7 @@ final class LocalAssessmentDataSource: LocalAssessmentDataSourceProtocol {
             )
         }
     }
-    
+
     func getLatestResult() -> CareerAssessmentResultEntity? {
         if let context = modelContext {
             let descriptor = FetchDescriptor<CareerAssessmentResultModel>(sortBy: [SortDescriptor(\.completedDate, order: .reverse)])
@@ -58,7 +58,7 @@ final class LocalAssessmentDataSource: LocalAssessmentDataSourceProtocol {
         }
         return cachedResult
     }
-    
+
     func saveResult(_ result: CareerAssessmentResultEntity) {
         cachedResult = result
         if let context = modelContext {

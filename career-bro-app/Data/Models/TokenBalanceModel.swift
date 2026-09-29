@@ -15,7 +15,7 @@ struct TokenTransactionItem: Codable, Identifiable, Hashable {
     var tokenDelta: Int
     var iconName: String
     var timestamp: Date
-    
+
     init(
         id: UUID = UUID(),
         title: String,
@@ -42,7 +42,7 @@ final class TokenBalanceModel {
     var customProvider: String
     var customApiKey: String
     var transactions: [TokenTransactionItem]
-    
+
     init(
         id: UUID = UUID(),
         remainingTokens: Int = 4250,

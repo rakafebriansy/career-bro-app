@@ -17,15 +17,15 @@ final class SearchViewModel {
     var recentSearches: [String] = ["iOS Developer", "SwiftUI", "Product Designer", "Remote"]
     var isLoading: Bool = false
     var errorMessage: String? = nil
-    
+
     private let getJobApplicationsUseCase: GetJobApplicationsUseCase
-    
+
     init(
         getJobApplicationsUseCase: GetJobApplicationsUseCase = GetJobApplicationsUseCase(repository: JobApplicationRepository())
     ) {
         self.getJobApplicationsUseCase = getJobApplicationsUseCase
     }
-    
+
     @MainActor
     func loadApplications() async {
         isLoading = true
@@ -37,7 +37,7 @@ final class SearchViewModel {
         }
         isLoading = false
     }
-    
+
     var filteredApplications: [JobApplicationEntity] {
         var results = applications
         if selectedCategory != "All" {
@@ -56,7 +56,7 @@ final class SearchViewModel {
         }
         return results
     }
-    
+
     func addRecentSearch(_ term: String) {
         let trimmed = term.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
@@ -64,7 +64,7 @@ final class SearchViewModel {
             recentSearches.insert(trimmed, at: 0)
         }
     }
-    
+
     func removeRecentSearch(_ term: String) {
         recentSearches.removeAll { $0 == term }
     }

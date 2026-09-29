@@ -18,9 +18,9 @@ final class EditEmailTemplateViewModel {
     var body: String
     var isSuccess: Bool = false
     var errorMessage: String? = nil
-    
+
     private let updateEmailTemplateUseCase: UpdateEmailTemplateUseCase
-    
+
     init(
         template: EmailTemplateEntity,
         updateEmailTemplateUseCase: UpdateEmailTemplateUseCase = UpdateEmailTemplateUseCase(repository: EmailTemplateRepository())
@@ -32,7 +32,7 @@ final class EditEmailTemplateViewModel {
         self.body = template.body
         self.updateEmailTemplateUseCase = updateEmailTemplateUseCase
     }
-    
+
     @MainActor
     func saveChanges() async {
         let updated = EmailTemplateEntity(
@@ -49,7 +49,7 @@ final class EditEmailTemplateViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     func insertPlaceholder(_ placeholder: String, isSubjectField: Bool) {
         if isSubjectField {
             subject += (subject.isEmpty ? "" : " ") + placeholder

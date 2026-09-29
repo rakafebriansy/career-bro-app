@@ -16,11 +16,11 @@ final class ApplicationDetailViewModel {
     var isDeleteAlertPresented: Bool = false
     var isSaved: Bool = false
     var errorMessage: String? = nil
-    
+
     private let updateJobApplicationUseCase: UpdateJobApplicationUseCase
     private let deleteJobApplicationUseCase: DeleteJobApplicationUseCase
     private let updateJobStageUseCase: UpdateJobStageUseCase
-    
+
     init(
         application: JobApplicationEntity,
         updateJobApplicationUseCase: UpdateJobApplicationUseCase = UpdateJobApplicationUseCase(repository: JobApplicationRepository()),
@@ -32,7 +32,7 @@ final class ApplicationDetailViewModel {
         self.deleteJobApplicationUseCase = deleteJobApplicationUseCase
         self.updateJobStageUseCase = updateJobStageUseCase
     }
-    
+
     @MainActor
     func updateStatus(_ newStatus: JobStatusEnum) async {
         application.status = newStatus
@@ -43,7 +43,7 @@ final class ApplicationDetailViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     @MainActor
     func saveApplication() async {
         do {
@@ -53,7 +53,7 @@ final class ApplicationDetailViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     @MainActor
     func deleteApplication() async {
         do {

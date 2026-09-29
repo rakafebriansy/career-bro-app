@@ -10,24 +10,24 @@ import SwiftUI
 struct CareerAssessmentResultArchetypeCardView: View {
     var archetype: String = "Casper"
     var description: String = "Casper is a person that have their own space to think about everything. They could questioning about benefit, risk, goals, and what they could in the future"
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("You Are..")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             HStack(alignment: .top, spacing: 16) {
                 casperMascotView
                     .frame(width: 58, height: 58)
-                
+
                 VStack(alignment: .leading, spacing: 6) {
                     Text(archetype)
                         .font(.headline)
                         .fontWeight(.bold)
                         .foregroundStyle(Color.bgPrimary)
-                    
+
                     Text(description)
                         .font(.caption)
                         .foregroundStyle(.baseText)
@@ -45,7 +45,7 @@ struct CareerAssessmentResultArchetypeCardView: View {
             )
         }
     }
-    
+
     private var casperMascotView: some View {
         ZStack {
             CasperGhostBodyShape()
@@ -56,7 +56,7 @@ struct CareerAssessmentResultArchetypeCardView: View {
                         endPoint: .bottom
                     )
                 )
-            
+
             VStack(spacing: 4) {
                 HStack(spacing: 8) {
                     Circle()
@@ -67,7 +67,7 @@ struct CareerAssessmentResultArchetypeCardView: View {
                                 .fill(Color.black)
                                 .frame(width: 4, height: 4)
                         )
-                    
+
                     Circle()
                         .fill(Color.white)
                         .frame(width: 8, height: 8)
@@ -77,7 +77,7 @@ struct CareerAssessmentResultArchetypeCardView: View {
                                 .frame(width: 4, height: 4)
                         )
                 }
-                
+
                 Capsule()
                     .fill(Color.black.opacity(0.85))
                     .frame(width: 10, height: 3)
@@ -92,7 +92,7 @@ private struct CasperGhostBodyShape: Shape {
         var path = Path()
         let w = rect.width
         let h = rect.height
-        
+
         path.move(to: CGPoint(x: 0, y: h * 0.45))
         path.addCurve(
             to: CGPoint(x: w, y: h * 0.45),
@@ -100,7 +100,7 @@ private struct CasperGhostBodyShape: Shape {
             control2: CGPoint(x: w, y: -h * 0.08)
         )
         path.addLine(to: CGPoint(x: w, y: h * 0.85))
-        
+
         let ripples = 3
         let rippleW = w / CGFloat(ripples)
         for i in 0..<ripples {
@@ -112,7 +112,7 @@ private struct CasperGhostBodyShape: Shape {
                 control: CGPoint(x: midX, y: h * 1.05)
             )
         }
-        
+
         path.closeSubpath()
         return path
     }

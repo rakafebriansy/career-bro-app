@@ -14,13 +14,13 @@ struct ProfileEditFormFieldView: View {
     var keyboardType: UIKeyboardType = .default
     var textContentType: UITextContentType? = nil
     var autocapitalization: TextInputAutocapitalization = .never
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.system(size: 15, weight: .semibold))
                 .foregroundStyle(Color.black)
-            
+
             TextField(placeholder, text: $text)
                 .font(.system(size: 15, weight: .regular))
                 .foregroundStyle(Color.black)

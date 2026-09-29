@@ -18,41 +18,39 @@ protocol EmailTemplateRepositoryProtocol {
 
 final class EmailTemplateRepository: EmailTemplateRepositoryProtocol {
     private let dataSource: LocalEmailDataSourceProtocol
-    
+
     init(dataSource: LocalEmailDataSourceProtocol = LocalEmailDataSource()) {
         self.dataSource = dataSource
     }
-    
+
     func getTemplates() async throws -> [EmailTemplateEntity] {
         let models = dataSource.fetchTemplates()
         return models.map { mapToEntity($0) }
     }
-    
+
     func getTemplateById(_ id: UUID) async throws -> EmailTemplateEntity? {
         let models = dataSource.fetchTemplates()
         guard let model = models.first(where: { $0.id == id }) else { return nil }
         return mapToEntity(model)
     }
-    
+
     func saveTemplate(_ template: EmailTemplateEntity) async throws {
         let model = mapToModel(template)
         dataSource.saveTemplate(model)
     }
-    
+
     func updateTemplate(_ template: EmailTemplateEntity) async throws {
         let model = mapToModel(template)
         dataSource.saveTemplate(model)
     }
-    
+
     func deleteTemplate(_ id: UUID) async throws {
         dataSource.deleteTemplate(id)
     }
-    
+
     func toggleFavorite(_ id: UUID) async throws {
-        // Toggle if needed
     }
-    
-    // MARK: - Mappers
+
     private func mapToEntity(_ model: EmailTemplateModel) -> EmailTemplateEntity {
         EmailTemplateEntity(
             id: model.id,
@@ -65,7 +63,7 @@ final class EmailTemplateRepository: EmailTemplateRepositoryProtocol {
             }
         )
     }
-    
+
     private func mapToModel(_ entity: EmailTemplateEntity) -> EmailTemplateModel {
         EmailTemplateModel(
             id: entity.id,

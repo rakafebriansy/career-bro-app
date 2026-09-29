@@ -14,7 +14,7 @@ struct TokenTransactionEntity: Identifiable, Equatable {
     var tokenDelta: Int
     var iconName: String
     var timestamp: Date
-    
+
     init(
         id: UUID = UUID(),
         title: String,
@@ -39,7 +39,7 @@ struct TokenBalanceEntity: Equatable {
     var customProvider: String
     var customApiKey: String
     var transactions: [TokenTransactionEntity]
-    
+
     init(
         remainingTokens: Int = 4250,
         totalQuota: Int = 5000,

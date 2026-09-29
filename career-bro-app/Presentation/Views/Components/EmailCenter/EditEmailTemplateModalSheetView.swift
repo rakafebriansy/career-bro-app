@@ -9,15 +9,15 @@ import SwiftUI
 
 struct EditEmailTemplateModalSheetView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var templateTitle: String
     @State private var selectedTags: [String]
     @State private var subjectLine: String
     @State private var bodyContent: String
     @State private var activeFieldIsSubject: Bool = false
-    
+
     var onSave: ((EmailTemplateModel) -> Void)? = nil
-    
+
     init(template: EmailTemplateModel, onSave: ((EmailTemplateModel) -> Void)? = nil) {
         _templateTitle = State(initialValue: template.title)
         _selectedTags = State(initialValue: template.tags)
@@ -25,17 +25,17 @@ struct EditEmailTemplateModalSheetView: View {
         _bodyContent = State(initialValue: template.body)
         self.onSave = onSave
     }
-    
+
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     titleInputField
-                    
+
                     EmailTemplateTagSelectorView(selectedTags: $selectedTags)
-                    
+
                     subjectInputField
-                    
+
                     EmailPlaceholderChipsToolbarView { placeholder in
                         if activeFieldIsSubject {
                             subjectLine += " " + placeholder
@@ -43,7 +43,7 @@ struct EditEmailTemplateModalSheetView: View {
                             bodyContent += " " + placeholder
                         }
                     }
-                    
+
                     bodyInputField
                 }
                 .padding(16)
@@ -58,7 +58,7 @@ struct EditEmailTemplateModalSheetView: View {
                     }
                     .foregroundStyle(Color(hex: "#737373"))
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         let updated = EmailTemplateModel(
@@ -77,14 +77,14 @@ struct EditEmailTemplateModalSheetView: View {
             }
         }
     }
-    
+
     private var titleInputField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Template Title")
                 .font(.caption)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             TextField("Template Name", text: $templateTitle)
                 .font(.system(size: 14))
                 .padding(12)
@@ -96,14 +96,14 @@ struct EditEmailTemplateModalSheetView: View {
                 )
         }
     }
-    
+
     private var subjectInputField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Email Subject")
                 .font(.caption)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             TextField("Subject Line", text: $subjectLine)
                 .font(.system(size: 14))
                 .padding(12)
@@ -118,7 +118,7 @@ struct EditEmailTemplateModalSheetView: View {
                 }
         }
     }
-    
+
     private var bodyInputField: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -126,14 +126,14 @@ struct EditEmailTemplateModalSheetView: View {
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundStyle(.textPrimary)
-                
+
                 Spacer()
-                
+
                 Text("\(bodyContent.count) chars")
                     .font(.caption2)
                     .foregroundStyle(Color(hex: "#737373"))
             }
-            
+
             TextEditor(text: $bodyContent)
                 .font(.system(size: 13))
                 .lineSpacing(4)

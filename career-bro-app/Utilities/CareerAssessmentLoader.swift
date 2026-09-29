@@ -12,15 +12,15 @@ enum CareerAssessmentLoader {
         guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
             return []
         }
-        
+
         guard let data = try? Data(contentsOf: url) else {
             return []
         }
-        
+
         guard let questions = try? JSONDecoder().decode([CareerAssessmentQuestionModel].self, from: data) else {
             return []
         }
-        
+
         return questions
     }
 }

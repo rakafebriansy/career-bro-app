@@ -12,7 +12,7 @@ struct ChatAttachmentModel: Codable, Identifiable, Equatable {
     var id: UUID
     var fileName: String
     var fileSize: String
-    
+
     init(id: UUID = UUID(), fileName: String, fileSize: String) {
         self.id = id
         self.fileName = fileName
@@ -27,7 +27,7 @@ final class ChatSessionModel {
     var preview: String
     var date: Date
     var isPinned: Bool
-    
+
     init(
         id: UUID = UUID(),
         title: String,
@@ -41,7 +41,7 @@ final class ChatSessionModel {
         self.date = date
         self.isPinned = isPinned
     }
-    
+
     static let sampleSessions: [ChatSessionModel] = [
         ChatSessionModel(
             title: "Career Path & CV Review",
@@ -72,7 +72,7 @@ final class ChatMessageItemModel {
     var timestamp: Date
     var attachmentFileName: String?
     var attachmentFileSize: String?
-    
+
     init(
         id: UUID = UUID(),
         text: String,
@@ -96,7 +96,7 @@ struct ChatMessageModel: Identifiable, Equatable {
     let isUser: Bool
     let timestamp: Date
     let attachment: ChatAttachmentModel?
-    
+
     init(
         id: UUID = UUID(),
         text: String,
@@ -110,7 +110,7 @@ struct ChatMessageModel: Identifiable, Equatable {
         self.timestamp = timestamp
         self.attachment = attachment
     }
-    
+
     static let sampleMockupConversation: [ChatMessageModel] = [
         ChatMessageModel(
             text: "I'm not sure which career path fits me",
@@ -145,7 +145,7 @@ struct PromptCategoryModel: Identifiable {
     let title: String
     let iconName: String
     let prompts: [String]
-    
+
     static let defaultCategories: [PromptCategoryModel] = [
         PromptCategoryModel(
             title: "Explore Career",

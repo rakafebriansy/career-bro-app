@@ -10,14 +10,14 @@ import SwiftUI
 struct JobInfoRowView: View {
     let icon: String
     let text: String
-    
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(Color.blue)
                 .frame(width: 20, alignment: .center)
-            
+
             Text(text)
                 .font(.system(size: 14, weight: .regular))
                 .foregroundStyle(Color.black.opacity(0.85))

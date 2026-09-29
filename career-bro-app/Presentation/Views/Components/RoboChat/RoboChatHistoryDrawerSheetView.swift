@@ -9,11 +9,11 @@ import SwiftUI
 
 struct RoboChatHistoryDrawerSheetView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var sessions: [ChatSessionModel] = ChatSessionModel.sampleSessions
     var onSelectSession: ((ChatSessionModel) -> Void)? = nil
     var onNewChat: (() -> Void)? = nil
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -21,7 +21,7 @@ struct RoboChatHistoryDrawerSheetView: View {
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
                     .padding(.bottom, 12)
-                
+
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Recent Conversations")
@@ -30,7 +30,7 @@ struct RoboChatHistoryDrawerSheetView: View {
                             .textCase(.uppercase)
                             .padding(.horizontal, 16)
                             .padding(.top, 8)
-                        
+
                         VStack(spacing: 10) {
                             ForEach(sessions) { session in
                                 sessionRow(session)
@@ -56,7 +56,7 @@ struct RoboChatHistoryDrawerSheetView: View {
         }
         .presentationDetents([.medium, .large])
     }
-    
+
     private var newChatButton: some View {
         Button {
             onNewChat?()
@@ -77,7 +77,7 @@ struct RoboChatHistoryDrawerSheetView: View {
         }
         .buttonStyle(.plain)
     }
-    
+
     private func sessionRow(_ session: ChatSessionModel) -> some View {
         Button {
             onSelectSession?(session)
@@ -88,14 +88,14 @@ struct RoboChatHistoryDrawerSheetView: View {
                     Text(session.title)
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(Color(hex: "1F2937"))
-                    
+
                     Spacer()
-                    
+
                     Text(session.date, format: .dateTime.month(.abbreviated).day())
                         .font(.system(size: 11.5))
                         .foregroundStyle(Color(hex: "9CA3AF"))
                 }
-                
+
                 Text(session.preview)
                     .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(Color(hex: "64748B"))

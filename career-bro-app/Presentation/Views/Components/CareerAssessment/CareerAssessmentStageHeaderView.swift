@@ -12,7 +12,7 @@ struct CareerAssessmentStageHeaderView: View {
     let stageIndex: Int
     let answeredCount: Int
     let totalInStage: Int
-    
+
     private var categoryDetails: (icon: String, description: String, bgColor: String, textColor: String) {
         switch stageTitle.lowercased() {
         case "work style":
@@ -52,7 +52,7 @@ struct CareerAssessmentStageHeaderView: View {
             )
         }
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .center) {
@@ -60,7 +60,7 @@ struct CareerAssessmentStageHeaderView: View {
                     Image(systemName: categoryDetails.icon)
                         .font(.footnote)
                         .fontWeight(.semibold)
-                    
+
                     Text(stageTitle)
                         .font(.footnote)
                         .fontWeight(.semibold)
@@ -70,15 +70,15 @@ struct CareerAssessmentStageHeaderView: View {
                 .padding(.vertical, 5)
                 .background(Color(hex: categoryDetails.bgColor))
                 .clipShape(Capsule())
-                
+
                 Spacer()
-                
+
                 Text("\(answeredCount)/\(totalInStage) completed")
                     .font(.caption)
                     .fontWeight(.medium)
                     .foregroundStyle(answeredCount == totalInStage ? Color.bgPrimary : Color(hex: "#8E8E93"))
             }
-            
+
             Text(categoryDetails.description)
                 .font(.subheadline)
                 .foregroundStyle(.baseText)

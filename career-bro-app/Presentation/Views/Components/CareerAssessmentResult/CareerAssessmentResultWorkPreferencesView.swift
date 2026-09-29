@@ -13,26 +13,26 @@ struct CareerAssessmentResultWorkPreferencesView: View {
         let title: String
         let fitPercentage: Int
     }
-    
+
     var preferences: [(icon: String, text: String)] = [
         ("laptopcomputer", "Hybrid"),
         ("briefcase", "Creative, Tech"),
         ("clock.arrow.2.circlepath", "Iterative Work")
     ]
-    
+
     var recommendations: [RecommendationItem] = [
         RecommendationItem(title: "System Analyst", fitPercentage: 96),
         RecommendationItem(title: "System Analyst", fitPercentage: 88),
         RecommendationItem(title: "System Analyst", fitPercentage: 78)
     ]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Work Preferences & Recomendations")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             VStack(alignment: .leading, spacing: 10) {
                 ForEach(preferences, id: \.text) { item in
                     HStack(spacing: 12) {
@@ -40,7 +40,7 @@ struct CareerAssessmentResultWorkPreferencesView: View {
                             .font(.system(size: 16))
                             .foregroundStyle(Color.bgPrimary)
                             .frame(width: 22, alignment: .center)
-                        
+
                         Text(item.text)
                             .font(.subheadline)
                             .fontWeight(.medium)
@@ -49,7 +49,7 @@ struct CareerAssessmentResultWorkPreferencesView: View {
                 }
             }
             .padding(.bottom, 4)
-            
+
             VStack(spacing: 10) {
                 ForEach(recommendations) { item in
                     recommendationCard(item: item)
@@ -58,16 +58,16 @@ struct CareerAssessmentResultWorkPreferencesView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private func recommendationCard(item: RecommendationItem) -> some View {
         HStack {
             Text(item.title)
                 .font(.subheadline)
                 .fontWeight(.semibold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             Text("\(item.fitPercentage)% fit")
                 .font(.caption)
                 .fontWeight(.bold)

@@ -9,11 +9,11 @@ import Foundation
 
 struct GetJobApplicationsUseCase {
     private let repository: JobApplicationRepositoryProtocol
-    
+
     init(repository: JobApplicationRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute() async throws -> [JobApplicationEntity] {
         try await repository.getApplications()
     }
@@ -21,11 +21,11 @@ struct GetJobApplicationsUseCase {
 
 struct SaveJobApplicationUseCase {
     private let repository: JobApplicationRepositoryProtocol
-    
+
     init(repository: JobApplicationRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ application: JobApplicationEntity) async throws {
         try await repository.saveApplication(application)
     }
@@ -33,11 +33,11 @@ struct SaveJobApplicationUseCase {
 
 struct UpdateJobApplicationUseCase {
     private let repository: JobApplicationRepositoryProtocol
-    
+
     init(repository: JobApplicationRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ application: JobApplicationEntity) async throws {
         try await repository.updateApplication(application)
     }
@@ -45,11 +45,11 @@ struct UpdateJobApplicationUseCase {
 
 struct DeleteJobApplicationUseCase {
     private let repository: JobApplicationRepositoryProtocol
-    
+
     init(repository: JobApplicationRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(_ id: UUID) async throws {
         try await repository.deleteApplication(id)
     }
@@ -57,11 +57,11 @@ struct DeleteJobApplicationUseCase {
 
 struct UpdateJobStageUseCase {
     private let repository: JobApplicationRepositoryProtocol
-    
+
     init(repository: JobApplicationRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(applicationId: UUID, newIndex: Int) async throws {
         try await repository.updateStageIndex(for: applicationId, newIndex: newIndex)
     }

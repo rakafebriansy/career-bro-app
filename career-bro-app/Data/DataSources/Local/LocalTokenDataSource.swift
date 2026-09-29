@@ -18,7 +18,7 @@ protocol LocalTokenDataSourceProtocol {
 final class LocalTokenDataSource: LocalTokenDataSourceProtocol {
     private let modelContext: ModelContext?
     private var inMemoryTokenBalance: TokenBalanceEntity
-    
+
     init(modelContext: ModelContext? = nil) {
         self.modelContext = modelContext
         self.inMemoryTokenBalance = TokenBalanceEntity(
@@ -35,7 +35,7 @@ final class LocalTokenDataSource: LocalTokenDataSourceProtocol {
             ]
         )
     }
-    
+
     func getTokenBalance() -> TokenBalanceEntity {
         if let context = modelContext {
             let descriptor = FetchDescriptor<TokenBalanceModel>()
@@ -61,7 +61,7 @@ final class LocalTokenDataSource: LocalTokenDataSourceProtocol {
         }
         return inMemoryTokenBalance
     }
-    
+
     func deductTokens(count: Int) -> Bool {
         if let context = modelContext {
             let descriptor = FetchDescriptor<TokenBalanceModel>()
@@ -94,7 +94,7 @@ final class LocalTokenDataSource: LocalTokenDataSourceProtocol {
         )
         return true
     }
-    
+
     func updateCustomApiKey(provider: String, key: String, isEnabled: Bool) {
         if let context = modelContext {
             let descriptor = FetchDescriptor<TokenBalanceModel>()
@@ -109,7 +109,7 @@ final class LocalTokenDataSource: LocalTokenDataSourceProtocol {
         inMemoryTokenBalance.customApiKey = key
         inMemoryTokenBalance.isCustomKeyEnabled = isEnabled
     }
-    
+
     func addTokens(count: Int) {
         if let context = modelContext {
             let descriptor = FetchDescriptor<TokenBalanceModel>()

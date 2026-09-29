@@ -9,11 +9,11 @@ import Foundation
 
 struct GetChatSessionsUseCase {
     private let repository: RoboChatRepositoryProtocol
-    
+
     init(repository: RoboChatRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute() async throws -> [ChatSessionEntity] {
         try await repository.getChatSessions()
     }
@@ -21,11 +21,11 @@ struct GetChatSessionsUseCase {
 
 struct GetInterviewerPersonasUseCase {
     private let repository: RoboChatRepositoryProtocol
-    
+
     init(repository: RoboChatRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute() async throws -> [InterviewerPersonaEntity] {
         try await repository.getPersonas()
     }
@@ -33,11 +33,11 @@ struct GetInterviewerPersonasUseCase {
 
 struct SendChatMessageUseCase {
     private let repository: RoboChatRepositoryProtocol
-    
+
     init(repository: RoboChatRepositoryProtocol) {
         self.repository = repository
     }
-    
+
     func execute(prompt: String, attachment: ChatAttachmentEntity?) async throws -> String {
         try await repository.generateReply(for: prompt, attachment: attachment)
     }

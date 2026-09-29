@@ -11,7 +11,7 @@ import SwiftData
 @main
 struct career_bro_appApp: App {
     let container: ModelContainer
-    
+
     init() {
         do {
             container = try ModelContainer(
@@ -28,7 +28,7 @@ struct career_bro_appApp: App {
             fatalError("Failed to initialize ModelContainer: \(error.localizedDescription)")
         }
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()

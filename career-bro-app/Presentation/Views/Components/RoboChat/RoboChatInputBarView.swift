@@ -14,11 +14,11 @@ struct RoboChatInputBarView: View {
     var onSend: () -> Void
     var onAttachmentTap: (() -> Void)? = nil
     var onProfileContextTap: (() -> Void)? = nil
-    
+
     private var isSendEnabled: Bool {
         !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || attachedDocument != nil
     }
-    
+
     var body: some View {
         VStack(spacing: 8) {
             if let document = attachedDocument {
@@ -30,7 +30,7 @@ struct RoboChatInputBarView: View {
                 }
                 .padding(.horizontal, 16)
             }
-            
+
             HStack(spacing: 8) {
                 Button {
                     onAttachmentTap?()
@@ -39,14 +39,14 @@ struct RoboChatInputBarView: View {
                         Circle()
                             .fill(Color.bgPrimary)
                             .frame(width: 28, height: 28)
-                        
+
                         Image(systemName: "plus")
                             .font(.system(size: 13, weight: .bold))
                             .foregroundStyle(.white)
                     }
                 }
                 .buttonStyle(.plain)
-                
+
                 Button {
                     onProfileContextTap?()
                 } label: {
@@ -54,14 +54,14 @@ struct RoboChatInputBarView: View {
                         Circle()
                             .fill(Color.bgPrimary)
                             .frame(width: 28, height: 28)
-                        
+
                         Image(systemName: "person.fill")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundStyle(.white)
                     }
                 }
                 .buttonStyle(.plain)
-                
+
                 TextField("Ask Robo..", text: $text)
                     .font(.system(size: 15, weight: .regular))
                     .foregroundStyle(Color.black)
@@ -70,7 +70,7 @@ struct RoboChatInputBarView: View {
                             onSend()
                         }
                     }
-                
+
                 Button {
                     if isSendEnabled {
                         onSend()

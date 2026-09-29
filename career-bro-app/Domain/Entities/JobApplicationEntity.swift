@@ -32,7 +32,7 @@ struct JobApplicationEntity: Identifiable, Equatable {
     var aiSuggestion: String?
     var jobUrl: String?
     var attachments: [String]?
-    
+
     init(
         id: UUID = UUID(),
         company: String,

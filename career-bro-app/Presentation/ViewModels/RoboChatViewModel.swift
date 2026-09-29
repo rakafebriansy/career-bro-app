@@ -25,12 +25,12 @@ final class RoboChatViewModel {
     var tokensUsed: Int = 5
     var totalTokens: Int = 25
     var errorMessage: String? = nil
-    
+
     private let getChatSessionsUseCase: GetChatSessionsUseCase
     private let getInterviewerPersonasUseCase: GetInterviewerPersonasUseCase
     private let sendChatMessageUseCase: SendChatMessageUseCase
     private let consumeTokenUseCase: ConsumeTokenUseCase
-    
+
     init(
         getChatSessionsUseCase: GetChatSessionsUseCase = GetChatSessionsUseCase(repository: RoboChatRepository()),
         getInterviewerPersonasUseCase: GetInterviewerPersonasUseCase = GetInterviewerPersonasUseCase(repository: RoboChatRepository()),
@@ -53,7 +53,7 @@ final class RoboChatViewModel {
             )
         ]
     }
-    
+
     @MainActor
     func loadInitialData() async {
         do {
@@ -66,33 +66,33 @@ final class RoboChatViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     @MainActor
     func sendMessage(text: String, attachment: ChatAttachmentEntity? = nil) async {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty || attachment != nil else { return }
-        
+
         let userMessage = ChatMessageEntity(
             text: trimmed,
             isUser: true,
             attachment: attachment
         )
-        
+
         withAnimation(.spring(duration: 0.3)) {
             messages.append(userMessage)
             if tokensUsed < totalTokens {
                 tokensUsed += 1
             }
         }
-        
+
         isRoboTyping = true
-        
+
         do {
             _ = try await consumeTokenUseCase.execute(count: 1)
             let replyText = try await sendChatMessageUseCase.execute(prompt: trimmed, attachment: attachment)
-            
+
             try await Task.sleep(nanoseconds: 800_000_000)
-            
+
             let roboMessage = ChatMessageEntity(text: replyText, isUser: false)
             withAnimation(.spring(duration: 0.3)) {
                 isRoboTyping = false
@@ -103,7 +103,7 @@ final class RoboChatViewModel {
             errorMessage = error.localizedDescription
         }
     }
-    
+
     func startNewChat() {
         withAnimation {
             messages.removeAll()
@@ -111,7 +111,7 @@ final class RoboChatViewModel {
             isSidebarOpen = false
         }
     }
-    
+
     func selectSession(_ session: ChatSessionEntity) {
         withAnimation {
             messages = [

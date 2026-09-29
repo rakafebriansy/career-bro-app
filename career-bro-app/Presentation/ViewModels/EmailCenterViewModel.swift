@@ -19,11 +19,11 @@ final class EmailCenterViewModel {
     var selectedTemplateForCompose: EmailTemplateEntity? = nil
     var isLoading: Bool = false
     var errorMessage: String? = nil
-    
+
     private let getEmailTemplatesUseCase: GetEmailTemplatesUseCase
     private let deleteEmailTemplateUseCase: DeleteEmailTemplateUseCase
     private let toggleFavoriteEmailTemplateUseCase: ToggleFavoriteEmailTemplateUseCase
-    
+
     init(
         getEmailTemplatesUseCase: GetEmailTemplatesUseCase = GetEmailTemplatesUseCase(repository: EmailTemplateRepository()),
         deleteEmailTemplateUseCase: DeleteEmailTemplateUseCase = DeleteEmailTemplateUseCase(repository: EmailTemplateRepository()),
@@ -33,7 +33,7 @@ final class EmailCenterViewModel {
         self.deleteEmailTemplateUseCase = deleteEmailTemplateUseCase
         self.toggleFavoriteEmailTemplateUseCase = toggleFavoriteEmailTemplateUseCase
     }
-    
+
     @MainActor
     func fetchTemplates() async {
         isLoading = true
@@ -45,7 +45,7 @@ final class EmailCenterViewModel {
         }
         isLoading = false
     }
-    
+
     var filteredTemplates: [EmailTemplateEntity] {
         var result = templates
         if selectedCategory != "All" {
@@ -60,7 +60,7 @@ final class EmailCenterViewModel {
         }
         return result
     }
-    
+
     @MainActor
     func deleteTemplate(id: UUID) async {
         do {

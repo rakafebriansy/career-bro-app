@@ -13,35 +13,35 @@ struct ApplicationDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showDeleteConfirmation: Bool = false
     @State private var isEditingApplication: Bool = false
-    
+
     let job: JobApplicationModel
-    
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
-            
+
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 18) {
                     ApplicationTimelineStepperView(status: job.status)
                         .padding(.top, 8)
-                    
+
                     JobOverviewCardView(job: job)
-                    
+
                     if let deadlineInfo = job.deadlineInfo {
                         JobDeadlineBannerView(deadlineInfo: deadlineInfo)
                     }
-                    
+
                     jobInformationSection
-                    
+
                     if let suggestion = job.aiSuggestion {
                         AISuggestionCardView(
                             title: "AI Suggestion",
                             message: suggestion
                         )
                     }
-                    
+
                     attachmentSection
-                    
+
                     stageActionSection
                         .padding(.top, 10)
                 }
@@ -66,7 +66,7 @@ struct ApplicationDetailView: View {
             Text("Are you sure you want to delete this job application? This action cannot be undone.")
         }
     }
-    
+
     private var topNavigationBar: some View {
         HStack {
             Button(action: {
@@ -83,22 +83,22 @@ struct ApplicationDetailView: View {
                             .stroke(Color.baseStroke, lineWidth: 1)
                     )
             }
-            
+
             Spacer()
-            
+
             Text("Application Detail")
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(Color.black)
-            
+
             Spacer()
-            
+
             Menu {
                 Button {
                     isEditingApplication = true
                 } label: {
                     Label("Edit Application", systemImage: "pencil")
                 }
-                
+
                 Menu {
                     Section("Active Pipeline") {
                         statusMenuItem(for: .needToApply)
@@ -107,7 +107,7 @@ struct ApplicationDetailView: View {
                         statusMenuItem(for: .interview)
                         statusMenuItem(for: .postInterview)
                     }
-                    
+
                     Section("Outcomes & Decisions") {
                         statusMenuItem(for: .offered)
                         statusMenuItem(for: .accepted)
@@ -117,9 +117,9 @@ struct ApplicationDetailView: View {
                 } label: {
                     Label("Change Stage", systemImage: "arrow.left.arrow.right")
                 }
-                
+
                 Divider()
-                
+
                 Button(role: .destructive) {
                     showDeleteConfirmation = true
                 } label: {
@@ -141,21 +141,21 @@ struct ApplicationDetailView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
     }
-    
+
     private var jobInformationSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Job Information")
                 .font(.system(size: 17, weight: .bold))
                 .foregroundStyle(Color.black)
-            
+
             VStack(alignment: .leading, spacing: 10) {
                 JobInfoRowView(icon: "briefcase", text: job.employment.rawValue)
                 JobInfoRowView(icon: "laptopcomputer", text: job.workLocation.rawValue)
-                
+
                 if let location = job.location {
                     JobInfoRowView(icon: "laptopcomputer", text: location)
                 }
-                
+
                 if let requirements = job.requirements {
                     ForEach(requirements.filter { !isDuplicateWorkLocation($0) }, id: \.self) { req in
                         JobInfoRowView(icon: iconForRequirement(req), text: req)
@@ -163,7 +163,7 @@ struct ApplicationDetailView: View {
                 }
             }
             .padding(.top, 2)
-            
+
             if let description = job.jobDescription {
                 Text(description)
                     .font(.system(size: 13, weight: .regular))
@@ -171,30 +171,30 @@ struct ApplicationDetailView: View {
                     .lineSpacing(3)
                     .padding(.top, 4)
             }
-            
+
             if let keywords = job.keywords, !keywords.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Key Word :")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(Color.black)
-                    
+
                     KeywordChipsFlowView(keywords: keywords)
                 }
                 .padding(.top, 4)
             }
         }
     }
-    
+
     private var attachmentSection: some View {
         let attachmentsList = [job.jobUrl].compactMap { $0 } + (job.attachments ?? [])
-        
+
         return Group {
             if !attachmentsList.isEmpty {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Attachment")
                         .font(.system(size: 17, weight: .bold))
                         .foregroundStyle(Color.black)
-                    
+
                     VStack(spacing: 8) {
                         ForEach(attachmentsList, id: \.self) { item in
                             AttachmentRowView(title: item)
@@ -204,7 +204,7 @@ struct ApplicationDetailView: View {
             }
         }
     }
-    
+
     private var stageActionSection: some View {
         HStack(spacing: 12) {
             Menu {
@@ -215,7 +215,7 @@ struct ApplicationDetailView: View {
                     statusMenuItem(for: .interview)
                     statusMenuItem(for: .postInterview)
                 }
-                
+
                 Section("Outcomes & Decisions") {
                     statusMenuItem(for: .offered)
                     statusMenuItem(for: .accepted)
@@ -242,7 +242,7 @@ struct ApplicationDetailView: View {
                         .stroke(Color.blue.opacity(0.25), lineWidth: 1)
                 )
             }
-            
+
             Button(action: {
                 advanceStage()
             }) {
@@ -262,7 +262,7 @@ struct ApplicationDetailView: View {
             .disabled(isAtFinalStage)
         }
     }
-    
+
     @ViewBuilder
     private func statusMenuItem(for status: JobStatusEnum) -> some View {
         Button {
@@ -276,7 +276,7 @@ struct ApplicationDetailView: View {
             }
         }
     }
-    
+
     private func setStage(_ newStatus: JobStatusEnum) {
         withAnimation(.easeInOut(duration: 0.25)) {
             job.status = newStatus
@@ -284,7 +284,7 @@ struct ApplicationDetailView: View {
             try? modelContext.save()
         }
     }
-    
+
     private func advanceStage() {
         switch job.status {
         case .needToApply:
@@ -303,11 +303,11 @@ struct ApplicationDetailView: View {
             break
         }
     }
-    
+
     private var isAtFinalStage: Bool {
         job.status == .accepted || job.status == .rejected || job.status == .ghosted
     }
-    
+
     private var nextStageTitle: String {
         switch job.status {
         case .needToApply:
@@ -328,12 +328,12 @@ struct ApplicationDetailView: View {
             return "Archive"
         }
     }
-    
+
     private func isDuplicateWorkLocation(_ req: String) -> Bool {
         req.caseInsensitiveCompare(job.employment.rawValue) == .orderedSame ||
         req.caseInsensitiveCompare(job.workLocation.rawValue) == .orderedSame
     }
-    
+
     private func iconForRequirement(_ req: String) -> String {
         let lower = req.lowercased()
         if lower.contains("s1") || lower.contains("degree") || lower.contains("bachelor") || lower.contains("art") || lower.contains("computer") {

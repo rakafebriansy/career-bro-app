@@ -18,7 +18,7 @@ enum JobStatusEnum: String, Codable, CaseIterable {
     case accepted = "Accepted"
     case rejected = "Rejected"
     case ghosted = "Ghosted (No Reply)"
-    
+
     var color: Color {
         switch self {
         case .needToApply:
@@ -39,6 +39,20 @@ enum JobStatusEnum: String, Codable, CaseIterable {
             return Color(hex: "D93838")
         case .ghosted:
             return Color(hex: "737373")
+        }
+    }
+
+    var colorHex: String {
+        switch self {
+        case .needToApply: return "8E5CA6"
+        case .applied: return "2E9D7E"
+        case .assessment: return "D9A21B"
+        case .interview: return "F27F1B"
+        case .postInterview: return "FFBFF0"
+        case .offered: return "68BF30"
+        case .accepted: return "1B8754"
+        case .rejected: return "D93838"
+        case .ghosted: return "737373"
         }
     }
 }

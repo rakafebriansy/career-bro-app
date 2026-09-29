@@ -10,9 +10,9 @@ import MessageUI
 
 struct EmailComposerSheetView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var template: EmailTemplateModel
-    
+
     @State private var recipientText: String = ""
     @State private var subjectText: String = ""
     @State private var bodyContent: String = ""
@@ -22,33 +22,33 @@ struct EmailComposerSheetView: View {
     @State private var isBlastingMode: Bool = false
     @State private var isBlastingInProgress: Bool = false
     @State private var blastingProgress: Double = 0.0
-    
+
     init(template: EmailTemplateModel) {
         self.template = template
         _subjectText = State(initialValue: template.subject)
         _bodyContent = State(initialValue: template.body)
     }
-    
+
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
                     modeToggleSection
-                    
+
                     if isBlastingMode {
                         blastingInfoBanner
                     }
-                    
+
                     recipientField
-                    
+
                     subjectField
-                    
+
                     bodyField
-                    
+
                     if isBlastingInProgress {
                         blastingProgressBar
                     }
-                    
+
                     actionButtonsSection
                 }
                 .padding(16)
@@ -63,7 +63,7 @@ struct EmailComposerSheetView: View {
                     }
                     .foregroundStyle(Color(hex: "#737373"))
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         copyToClipboard()
@@ -92,7 +92,7 @@ struct EmailComposerSheetView: View {
             }
         }
     }
-    
+
     private var modeToggleSection: some View {
         HStack {
             Button {
@@ -112,7 +112,7 @@ struct EmailComposerSheetView: View {
                 .clipShape(Capsule())
             }
             .buttonStyle(.plain)
-            
+
             Button {
                 isBlastingMode = true
             } label: {
@@ -135,13 +135,13 @@ struct EmailComposerSheetView: View {
         .background(Color(hex: "#E2E8F0"))
         .clipShape(Capsule())
     }
-    
+
     private var blastingInfoBanner: some View {
         HStack(spacing: 10) {
             Image(systemName: "info.circle.fill")
                 .font(.subheadline)
                 .foregroundStyle(Color.bgPrimary)
-            
+
             Text("Enter multiple comma-separated emails to blast personalized templates to multiple recruiters.")
                 .font(.caption2)
                 .foregroundStyle(Color(hex: "#4B5563"))
@@ -151,14 +151,14 @@ struct EmailComposerSheetView: View {
         .background(Color(hex: "#EFF6FF"))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
-    
+
     private var recipientField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(isBlastingMode ? "Recipients (separated by comma)" : "Recipient Email")
                 .font(.caption)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             TextField(isBlastingMode ? "recruiter1@company.com, hr@startup.io" : "hiring.manager@company.com", text: $recipientText)
                 .font(.system(size: 14))
                 .keyboardType(.emailAddress)
@@ -173,14 +173,14 @@ struct EmailComposerSheetView: View {
                 )
         }
     }
-    
+
     private var subjectField: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Subject Line")
                 .font(.caption)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             TextField("Enter subject", text: $subjectText)
                 .font(.system(size: 14))
                 .padding(12)
@@ -192,7 +192,7 @@ struct EmailComposerSheetView: View {
                 )
         }
     }
-    
+
     private var bodyField: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -200,14 +200,14 @@ struct EmailComposerSheetView: View {
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundStyle(.textPrimary)
-                
+
                 Spacer()
-                
+
                 Text("\(bodyContent.count) chars")
                     .font(.caption2)
                     .foregroundStyle(Color(hex: "#737373"))
             }
-            
+
             TextEditor(text: $bodyContent)
                 .font(.system(size: 13))
                 .lineSpacing(4)
@@ -221,7 +221,7 @@ struct EmailComposerSheetView: View {
                 )
         }
     }
-    
+
     private var blastingProgressBar: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -229,21 +229,21 @@ struct EmailComposerSheetView: View {
                     .font(.caption2)
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.bgPrimary)
-                
+
                 Spacer()
-                
+
                 Text("\(Int(blastingProgress * 100))%")
                     .font(.caption2)
                     .fontWeight(.bold)
                     .foregroundStyle(Color.bgPrimary)
             }
-            
+
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Capsule()
                         .fill(Color.baseStroke)
                         .frame(height: 6)
-                    
+
                     Capsule()
                         .fill(Color.bgPrimary)
                         .frame(width: geo.size.width * CGFloat(blastingProgress), height: 6)
@@ -255,7 +255,7 @@ struct EmailComposerSheetView: View {
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
-    
+
     private var actionButtonsSection: some View {
         VStack(spacing: 12) {
             if isBlastingMode {
@@ -298,14 +298,14 @@ struct EmailComposerSheetView: View {
         }
         .padding(.top, 8)
     }
-    
+
     private var recipientList: [String] {
         recipientText
             .components(separatedBy: CharacterSet(charactersIn: ",;\n"))
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty && $0.contains("@") }
     }
-    
+
     private func copyToClipboard() {
         let fullContent = "Subject: \(subjectText)\n\n\(bodyContent)"
         UIPasteboard.general.string = fullContent
@@ -315,14 +315,14 @@ struct EmailComposerSheetView: View {
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.prepare()
         generator.impactOccurred()
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             withAnimation {
                 isCopied = false
             }
         }
     }
-    
+
     private func openInNativeMailApp() {
         let recipient = recipientText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let encodedSubject = subjectText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
@@ -331,7 +331,7 @@ struct EmailComposerSheetView: View {
             showMailComposeError = true
             return
         }
-        
+
         let mailtoString = "mailto:\(recipient)?subject=\(encodedSubject)&body=\(encodedBody)"
         if let mailtoUrl = URL(string: mailtoString), UIApplication.shared.canOpenURL(mailtoUrl) {
             UIApplication.shared.open(mailtoUrl)
@@ -340,12 +340,12 @@ struct EmailComposerSheetView: View {
             showMailComposeError = true
         }
     }
-    
+
     private func startEmailBlasting() {
         guard !recipientList.isEmpty else { return }
         isBlastingInProgress = true
         blastingProgress = 0.0
-        
+
         Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { timer in
             if blastingProgress < 1.0 {
                 blastingProgress += 0.25

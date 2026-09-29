@@ -9,11 +9,11 @@ import SwiftUI
 
 struct InterviewPersonaSelectionSheetView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     var personas: [InterviewerPersonaModel] = InterviewerPersonaModel.samplePersonas
     @State private var selectedPersonaId: UUID
     var onConfirm: ((InterviewerPersonaModel) -> Void)? = nil
-    
+
     init(
         personas: [InterviewerPersonaModel] = InterviewerPersonaModel.samplePersonas,
         initialSelected: InterviewerPersonaModel? = nil,
@@ -31,15 +31,15 @@ struct InterviewPersonaSelectionSheetView: View {
         _selectedPersonaId = State(initialValue: defaultId)
         self.onConfirm = onConfirm
     }
-    
+
     private var currentSelectedPersona: InterviewerPersonaModel? {
         personas.first { $0.id == selectedPersonaId }
     }
-    
+
     var body: some View {
         VStack(spacing: 20) {
             headerSection
-            
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 18) {
                     ForEach(personas) { persona in
@@ -56,10 +56,10 @@ struct InterviewPersonaSelectionSheetView: View {
                 .padding(.horizontal, 20)
                 .padding(.vertical, 4)
             }
-            
+
             HStack {
                 Spacer()
-                
+
                 Button {
                     if let selected = currentSelectedPersona {
                         onConfirm?(selected)
@@ -89,15 +89,15 @@ struct InterviewPersonaSelectionSheetView: View {
         .presentationDetents([.height(230), .medium])
         .presentationDragIndicator(.visible)
     }
-    
+
     private var headerSection: some View {
         HStack {
             Text("Interview")
                 .font(.system(size: 19, weight: .bold))
                 .foregroundStyle(Color.black)
-            
+
             Spacer()
-            
+
             Button {
                 dismiss()
             } label: {

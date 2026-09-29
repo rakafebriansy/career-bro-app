@@ -15,19 +15,19 @@ protocol CareerAssessmentRepositoryProtocol {
 
 final class CareerAssessmentRepository: CareerAssessmentRepositoryProtocol {
     private let dataSource: LocalAssessmentDataSourceProtocol
-    
+
     init(dataSource: LocalAssessmentDataSourceProtocol = LocalAssessmentDataSource()) {
         self.dataSource = dataSource
     }
-    
+
     func getAssessmentQuestions() async throws -> [CareerAssessmentQuestionEntity] {
         return dataSource.loadQuestions()
     }
-    
+
     func getLatestResult() async throws -> CareerAssessmentResultEntity? {
         return dataSource.getLatestResult()
     }
-    
+
     func saveAssessmentResult(_ result: CareerAssessmentResultEntity) async throws {
         dataSource.saveResult(result)
     }

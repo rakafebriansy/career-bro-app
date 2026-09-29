@@ -6,28 +6,34 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct EmailCenterView: View {
     @Environment(\.dismiss) private var dismiss
-    
+    @Environment(AppNavigationRouter.self) private var router: AppNavigationRouter?
+    @Query(sort: \EmailTemplateModel.title) private var swiftDataTemplates: [EmailTemplateModel]
+
     @State private var templates: [EmailTemplateModel] = EmailTemplateModel.sampleTemplates
     @State private var selectedTemplateForDetail: EmailTemplateModel? = nil
     @State private var navigateToDetail: Bool = false
     @State private var navigateToCreateTemplate: Bool = false
-    
+
+    private var activeTemplates: [EmailTemplateModel] {
+        swiftDataTemplates.isEmpty ? templates : swiftDataTemplates
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
-            
+
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 18) {
                     headerSection
-                    
+
                     VStack(spacing: 0) {
-                        ForEach(templates) { template in
+                        ForEach(activeTemplates) { template in
                             EmailTemplateRowView(template: template) {
-                                selectedTemplateForDetail = template
-                                navigateToDetail = true
+                                openTemplateDetail(template)
                             }
                         }
                     }
@@ -60,8 +66,31 @@ struct EmailCenterView: View {
                 templates.append(newTemplate)
             }
         }
+        .onChange(of: router?.activeEmailDetailId) { _, newId in
+            DispatchQueue.main.async {
+                checkAndNavigateToTemplate(id: newId)
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.async {
+                checkAndNavigateToTemplate(id: router?.activeEmailDetailId)
+            }
+        }
     }
-    
+
+    private func openTemplateDetail(_ template: EmailTemplateModel) {
+        selectedTemplateForDetail = template
+        navigateToDetail = true
+    }
+
+    private func checkAndNavigateToTemplate(id: UUID?) {
+        guard let id = id else { return }
+        if let matched = activeTemplates.first(where: { $0.id == id }) {
+            openTemplateDetail(matched)
+            router?.activeEmailDetailId = nil
+        }
+    }
+
     private var topNavigationBar: some View {
         HStack {
             Button {
@@ -80,16 +109,16 @@ struct EmailCenterView: View {
                     )
             }
             .buttonStyle(.plain)
-            
+
             Spacer()
-            
+
             Text("Email Center")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             Color.clear
                 .frame(width: 40, height: 40)
         }
@@ -97,23 +126,23 @@ struct EmailCenterView: View {
         .padding(.vertical, 8)
         .background(Color.white)
     }
-    
+
     private var headerSection: some View {
         HStack(alignment: .center) {
             Text("Template")
                 .font(.title3)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             Button {
                 navigateToCreateTemplate = true
             } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "plus")
                         .font(.system(size: 13, weight: .bold))
-                    
+
                     Text("Create New")
                         .font(.system(size: 13, weight: .semibold))
                 }

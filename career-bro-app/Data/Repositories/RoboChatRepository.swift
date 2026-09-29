@@ -16,7 +16,7 @@ protocol RoboChatRepositoryProtocol {
 final class RoboChatRepository: RoboChatRepositoryProtocol {
     private let chatDataSource: LocalChatDataSourceProtocol
     private let aiService: AIServiceProtocol
-    
+
     init(
         chatDataSource: LocalChatDataSourceProtocol = LocalChatDataSource(),
         aiService: AIServiceProtocol = AIService()
@@ -24,15 +24,15 @@ final class RoboChatRepository: RoboChatRepositoryProtocol {
         self.chatDataSource = chatDataSource
         self.aiService = aiService
     }
-    
+
     func getChatSessions() async throws -> [ChatSessionEntity] {
         return chatDataSource.getChatSessions()
     }
-    
+
     func getPersonas() async throws -> [InterviewerPersonaEntity] {
         return chatDataSource.getPersonas()
     }
-    
+
     func generateReply(for prompt: String, attachment: ChatAttachmentEntity?) async throws -> String {
         return await aiService.generateChatResponse(for: prompt, hasAttachment: attachment != nil)
     }

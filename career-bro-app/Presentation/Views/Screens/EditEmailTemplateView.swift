@@ -9,22 +9,22 @@ import SwiftUI
 
 struct EditEmailTemplateView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @State var template: EmailTemplateModel
     var onUpdate: ((EmailTemplateModel) -> Void)? = nil
     var onDelete: ((EmailTemplateModel) -> Void)? = nil
-    
+
     @State private var showDeleteConfirmation: Bool = false
     @State private var showEditSheet: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             topNavigationBar
-            
+
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 24) {
                     EmailTemplateBodyCardView(bodyText: template.body)
-                    
+
                     attachmentSection
                 }
                 .padding(.horizontal, 20)
@@ -32,7 +32,7 @@ struct EditEmailTemplateView: View {
                 .padding(.bottom, 24)
             }
             .background(Color.white)
-            
+
             bottomActionBar
         }
         .navigationBarBackButtonHidden(true)
@@ -53,7 +53,7 @@ struct EditEmailTemplateView: View {
             }
         }
     }
-    
+
     private var topNavigationBar: some View {
         HStack {
             Button {
@@ -72,16 +72,16 @@ struct EditEmailTemplateView: View {
                     )
             }
             .buttonStyle(.plain)
-            
+
             Spacer()
-            
+
             Text(template.title)
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             Spacer()
-            
+
             Color.clear
                 .frame(width: 40, height: 40)
         }
@@ -89,14 +89,14 @@ struct EditEmailTemplateView: View {
         .padding(.vertical, 8)
         .background(Color.white)
     }
-    
+
     private var attachmentSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Attachment")
                 .font(.headline)
                 .fontWeight(.bold)
                 .foregroundStyle(.textPrimary)
-            
+
             if template.attachments.isEmpty {
                 Text("No attachments attached.")
                     .font(.caption)
@@ -117,7 +117,7 @@ struct EditEmailTemplateView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
+
     private var bottomActionBar: some View {
         HStack(spacing: 14) {
             Button {
@@ -141,7 +141,7 @@ struct EditEmailTemplateView: View {
                 )
             }
             .buttonStyle(.plain)
-            
+
             Button {
                 showEditSheet = true
             } label: {

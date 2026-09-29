@@ -12,7 +12,7 @@ struct EmailAttachmentItem: Codable, Identifiable, Hashable {
     var id: UUID
     var fileName: String
     var fileSizeString: String
-    
+
     init(id: UUID = UUID(), fileName: String, fileSizeString: String = "200 KB") {
         self.id = id
         self.fileName = fileName
@@ -28,7 +28,7 @@ final class EmailTemplateModel {
     var subject: String
     var body: String
     var attachments: [EmailAttachmentItem]
-    
+
     init(
         id: UUID = UUID(),
         title: String,
@@ -47,7 +47,7 @@ final class EmailTemplateModel {
         self.body = body
         self.attachments = attachments
     }
-    
+
     static var sampleTemplates: [EmailTemplateModel] {
         [
             EmailTemplateModel(

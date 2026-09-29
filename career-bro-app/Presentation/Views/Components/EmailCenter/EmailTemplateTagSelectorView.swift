@@ -9,11 +9,11 @@ import SwiftUI
 
 struct EmailTemplateTagSelectorView: View {
     @Binding var selectedTags: [String]
-    
+
     @State private var availableTags: [String] = ["Fullstack", "Front-End", "Back-End", "UI/UX", "Mobile", "DevOps", "Data Analyst"]
     @State private var customTagInput: String = ""
     @State private var showCustomTagField: Bool = false
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
@@ -21,9 +21,9 @@ struct EmailTemplateTagSelectorView: View {
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundStyle(.textPrimary)
-                
+
                 Spacer()
-                
+
                 Button {
                     withAnimation(.easeInOut(duration: 0.2)) {
                         showCustomTagField.toggle()
@@ -39,7 +39,7 @@ struct EmailTemplateTagSelectorView: View {
                 }
                 .buttonStyle(.plain)
             }
-            
+
             if showCustomTagField {
                 HStack(spacing: 8) {
                     TextField("Enter tag name (e.g. QA Engineer)", text: $customTagInput)
@@ -52,7 +52,7 @@ struct EmailTemplateTagSelectorView: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.baseStroke, lineWidth: 1)
                         )
-                    
+
                     Button {
                         addCustomTag()
                     } label: {
@@ -69,7 +69,7 @@ struct EmailTemplateTagSelectorView: View {
                     .disabled(customTagInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
-            
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(availableTags, id: \.self) { tag in
@@ -102,7 +102,7 @@ struct EmailTemplateTagSelectorView: View {
             }
         }
     }
-    
+
     private func toggleTag(_ tag: String) {
         if let index = selectedTags.firstIndex(of: tag) {
             selectedTags.remove(at: index)
@@ -110,7 +110,7 @@ struct EmailTemplateTagSelectorView: View {
             selectedTags.append(tag)
         }
     }
-    
+
     private func addCustomTag() {
         let trimmed = customTagInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
